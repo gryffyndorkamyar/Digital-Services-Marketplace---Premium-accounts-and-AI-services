@@ -26,7 +26,7 @@ from .utils import get_related_products, get_trending_products, search_products
 logger = logging.getLogger(__name__)
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryViewSet(viewsets.ModelViewSet):
     """ViewSet برای دسته‌بندی‌ها"""
     queryset = Category.objects.filter(is_active=True, is_deleted=False)
     permission_classes = [IsAuthenticatedOrReadOnly]

@@ -20,6 +20,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from common.routers import urlpatterns as common_urls
 from authenticate.routers import urlpatterns as auth_urls
 from cart.routers import urlpatterns as cart_urls
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,3 +36,5 @@ urlpatterns = [
     path('api/', include(auth_urls)),
     path('api/', include(cart_urls)),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

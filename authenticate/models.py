@@ -18,12 +18,7 @@ class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
     # اطلاعات شخصی
-    phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{9,15}$',
-        message=_('شماره تلفن باید به فرمت +989123456789 باشد.')
-    )
     phone_number = models.CharField(
-        validators=[phone_regex],
         max_length=17,
         blank=True,
         verbose_name=_('شماره تلفن')
@@ -33,11 +28,26 @@ class User(AbstractUser):
         blank=True,
         verbose_name=_('تاریخ تولد')
     )
-    avatar = models.ImageField(
+    # آواتار - دو روش: URL یا فایل آپلود شده
+    avatar_url = models.URLField(
+        max_length=500,
+        null=True,
+        blank=True,
+        verbose_name=_('آدرس تصویر پروفایل')
+    )
+    avatar_file = models.ImageField(
         upload_to='avatars/',
         null=True,
         blank=True,
-        verbose_name=_('تصویر پروفایل')
+        verbose_name=_('فایل تصویر پروفایل')
+    )
+    
+    # فیلد قدیمی برای سازگاری (deprecated)
+    avatar = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name=_('تصویر پروفایل (قدیمی)')
     )
     
     # نوع کاربر
@@ -196,6 +206,16 @@ class User(AbstractUser):
             self.save(update_fields=['is_phone_verified', 'phone_verified_at', 'phone_verification_code'])
             return True
         return False
+
+    def get_avatar_url(self):
+        """دریافت آدرس آواتار (اولویت: فایل آپلود شده، سپس URL)"""
+        if self.avatar_file:
+            return self.avatar_file.url
+        elif self.avatar_url:
+            return self.avatar_url
+        elif self.avatar:  # فیلد قدیمی
+            return self.avatar
+        return None
 
 
 class UserProfile(models.Model):

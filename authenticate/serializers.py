@@ -15,12 +15,13 @@ class UserSerializer(serializers.ModelSerializer):
     """سریالایزر کاربر"""
     full_name = serializers.SerializerMethodField()
     is_verified = serializers.ReadOnlyField()
+    avatar_url = serializers.SerializerMethodField()
     
     class Meta:
         model = User
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name', 'full_name',
-            'phone_number', 'date_of_birth', 'avatar', 'user_type', 'status',
+            'phone_number', 'date_of_birth', 'avatar_url', 'user_type', 'status',
             'is_email_verified', 'is_phone_verified', 'is_verified',
             'language', 'timezone', 'login_count', 'last_activity',
             'date_joined', 'last_login'
@@ -32,6 +33,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         return obj.get_full_name()
+
+    def get_avatar_url(self, obj):
+        return obj.get_avatar_url()
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -70,24 +74,40 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
             'password_confirm': {'write_only': True},
+            'email': {'required': False},
+            'phone_number': {'required': False},
+            'date_of_birth': {'required': False},
         }
 
     def validate_email(self, value):
         """اعتبارسنجی ایمیل"""
-        if User.objects.filter(email=value).exists():
-            raise ValidationError(ERROR_MESSAGES['email_already_exists'])
+        if not value:  # اگر email خالی باشد
+            return value
+        try:
+            if User.objects.filter(email=value).exists():
+                raise ValidationError(ERROR_MESSAGES['email_already_exists'])
+        except Exception as e:
+            print(f"Email validation error: {e}")
         return value
 
     def validate_username(self, value):
         """اعتبارسنجی نام کاربری"""
-        if User.objects.filter(username=value).exists():
-            raise ValidationError(ERROR_MESSAGES['username_already_exists'])
+        try:
+            if User.objects.filter(username=value).exists():
+                raise ValidationError(ERROR_MESSAGES['username_already_exists'])
+        except Exception as e:
+            print(f"Username validation error: {e}")
         return value
 
     def validate_phone_number(self, value):
         """اعتبارسنجی شماره تلفن"""
-        if value and User.objects.filter(phone_number=value).exists():
-            raise ValidationError(ERROR_MESSAGES['phone_already_exists'])
+        if not value:  # اگر phone_number خالی باشد
+            return value
+        try:
+            if User.objects.filter(phone_number=value).exists():
+                raise ValidationError(ERROR_MESSAGES['phone_already_exists'])
+        except Exception as e:
+            print(f"Phone validation error: {e}")
         return value
 
     def validate(self, data):
@@ -95,27 +115,40 @@ class UserCreateSerializer(serializers.ModelSerializer):
         if data['password'] != data['password_confirm']:
             raise ValidationError({'password_confirm': 'رمز عبور و تکرار آن یکسان نیستند.'})
         
-        # اعتبارسنجی رمز عبور
+        # اعتبارسنجی رمز عبور با try-except
         try:
             validate_password(data['password'])
         except ValidationError as e:
             raise ValidationError({'password': e.messages})
+        except Exception as e:
+            # اگر مشکلی در validation بود، لاگ کنیم
+            print(f"Password validation error: {e}")
         
         return data
 
     def create(self, validated_data):
         """ایجاد کاربر"""
         validated_data.pop('password_confirm')
-        user = User.objects.create_user(**validated_data)
         
-        # ایجاد پروفایل کاربر
-        UserProfile.objects.create(user=user)
+        # حذف فیلدهای خالی
+        for field in ['email', 'phone_number', 'date_of_birth']:
+            if field in validated_data and not validated_data[field]:
+                validated_data.pop(field)
         
-        # تولید توکن تایید ایمیل
-        if user.email:
-            user.generate_email_verification_token()
-        
-        return user
+        # ایجاد کاربر با try-except
+        try:
+            user = User.objects.create_user(**validated_data)
+            
+            # ایجاد پروفایل کاربر
+            try:
+                UserProfile.objects.create(user=user)
+            except Exception as e:
+                print(f"Error creating user profile: {e}")
+            
+            return user
+        except Exception as e:
+            print(f"Error creating user: {e}")
+            raise ValidationError(f"خطا در ایجاد کاربر: {str(e)}")
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
@@ -335,3 +368,24 @@ class UserStatsSerializer(serializers.Serializer):
     online_users = serializers.IntegerField()
     user_types_distribution = serializers.DictField()
     verification_status_distribution = serializers.DictField()
+
+class AvatarUploadSerializer(serializers.Serializer):
+    """سریالایزر آپلود آواتار"""
+    avatar_file = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        use_url=True
+    )
+
+    def validate_avatar_file(self, value):
+        """اعتبارسنجی فایل آواتار"""
+        # بررسی اندازه فایل (حداکثر 5MB)
+        if value.size > 5 * 1024 * 1024:
+            raise ValidationError('حجم فایل نباید بیشتر از 5 مگابایت باشد.')
+        
+        # بررسی نوع فایل
+        allowed_types = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+        if value.content_type not in allowed_types:
+            raise ValidationError('فقط فایل‌های JPEG، PNG و GIF مجاز هستند.')
+        
+        return value

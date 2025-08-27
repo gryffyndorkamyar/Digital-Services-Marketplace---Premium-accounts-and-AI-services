@@ -306,6 +306,8 @@ class Product(TimeStampedModel, SoftDeleteModel):
     # رسانه
     main_image = models.ImageField(
         upload_to='products/main/',
+        null=True,
+        blank=True,
         verbose_name=_('تصویر اصلی')
     )
     images = models.JSONField(default=list, blank=True, verbose_name=_('تصاویر اضافی'))

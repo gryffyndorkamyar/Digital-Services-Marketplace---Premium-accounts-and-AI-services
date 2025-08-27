@@ -98,6 +98,27 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSessionSerializer(sessions, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['post'])
+    def upload_avatar(self, request):
+        """آپلود آواتار کاربر"""
+        from .serializers import AvatarUploadSerializer
+        
+        serializer = AvatarUploadSerializer(data=request.data)
+        if serializer.is_valid():
+            # حذف آواتار قبلی
+            if request.user.avatar_file:
+                request.user.avatar_file.delete(save=False)
+            
+            # ذخیره آواتار جدید
+            request.user.avatar_file = serializer.validated_data['avatar_file']
+            request.user.save()
+            
+            return Response({
+                'message': 'آواتار با موفقیت آپلود شد',
+                'avatar_url': request.user.get_avatar_url()
+            })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     @action(detail=True, methods=['post'])
     def terminate_session(self, request, pk=None):
         """خاتمه جلسه"""
