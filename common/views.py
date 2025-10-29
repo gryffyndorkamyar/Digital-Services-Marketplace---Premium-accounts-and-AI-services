@@ -58,10 +58,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
         
         page = self.paginate_queryset(products)
         if page is not None:
-            serializer = ProductListSerializer(page, many=True)
+            serializer = ProductListSerializer(page, many=True, context={'request': request})
             return self.get_paginated_response(serializer.data)
         
-        serializer = ProductListSerializer(products, many=True)
+        serializer = ProductListSerializer(products, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'])
@@ -137,7 +137,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         """محصولات مرتبط"""
         product = self.get_object()
         related_products = get_related_products(product, limit=6)
-        serializer = ProductListSerializer(related_products, many=True)
+        serializer = ProductListSerializer(related_products, many=True, context={'request': request})
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'])
@@ -148,7 +148,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        serializer = self.get_serializer(page, many=True)
+        serializer = self.get_serializer(products, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'])
@@ -273,7 +273,7 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
         )
         page = self.paginate_queryset(products)
         if page is not None:
-            serializer = ProductListSerializer(page, many=True)
+            serializer = ProductListSerializer(page, many=True, context={'request': request})
             return self.get_paginated_response(serializer.data)
-        serializer = ProductListSerializer(products, many=True)
+        serializer = ProductListSerializer(products, many=True, context={'request': request})
         return Response(serializer.data)

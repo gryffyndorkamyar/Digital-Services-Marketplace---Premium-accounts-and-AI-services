@@ -9,10 +9,10 @@ from django.db.models import Q
 
 def generate_unique_sku(product_type):
     """تولید SKU یکتا برای محصولات"""
-    prefix = product_type.upper()[:3]
-    timestamp = timezone.now().strftime('%Y%m%d%H%M')
-    random_suffix = ''.join(random.choices(string.digits, k=2))
-    return f"{prefix}-{timestamp}{random_suffix}"
+    prefix = product_type.upper()[:3] # سه حرف اول نوع محصول
+    timestamp = timezone.now().strftime('%Y%m%d%H%M') # تاریخ و زمان
+    random_suffix = ''.join(random.choices(string.digits, k=2)) # دو رقم تصادفی
+    return f"{prefix}-{timestamp}{random_suffix}" # SKU یکتا و خروجی نهایی
 
 
 def generate_slug(name, model_class, instance=None):

@@ -24,30 +24,67 @@ class CategorySerializer(serializers.ModelSerializer):
     """سریالایزر دسته‌بندی"""
     product_count = serializers.ReadOnlyField()
     children = serializers.SerializerMethodField()
-    parent_name = serializers.CharField(source='parent.name', read_only=True)
+    parent_name = serializers.SerializerMethodField()
+    image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Category
         fields = [
             'id', 'name', 'slug', 'description', 'category_type', 'parent', 'parent_name',
-            'icon', 'image', 'is_active', 'is_featured', 'sort_order', 'product_count',
+            'icon', 'image_url', 'is_active', 'is_featured', 'sort_order', 'product_count',
             'children', 'meta_title', 'meta_description', 'seo_keywords'
         ]
-        read_only_fields = ['id', 'slug', 'product_count']
+        read_only_fields = ['id', 'slug', 'product_count', 'image_url', 'parent_name']
+    
+    def get_parent_name(self, obj):
+        """دریافت نام دسته‌بندی والد"""
+        if obj.parent:
+            return obj.parent.name
+        return None
+    
+    def get_image_url(self, obj):
+        """دریافت URL تصویر"""
+        if obj.image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return None
     
     def get_children(self, obj):
         """دریافت دسته‌بندی‌های فرزند"""
         children = Category.objects.filter(parent=obj, is_active=True, is_deleted=False)
-        return CategorySerializer(children, many=True).data
+        return CategorySerializer(children, many=True, context=self.context).data
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
     """سریالایزر لیست دسته‌بندی‌ها"""
     product_count = serializers.ReadOnlyField()
+    image_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'description', 'category_type', 'icon', 'image', 'product_count']
+        fields = ['id', 'name', 'slug', 'description', 'category_type', 'icon', 'image_url', 'product_count']
+        read_only_fields = ['id', 'slug', 'product_count', 'image_url']
+    
+    def get_image_url(self, obj):
+        if obj.image and hasattr(obj.image, 'url') and obj.image.url:
+            request = self.context.get('request')
+            if request:
+                try:
+                    return request.build_absolute_uri(obj.image.url)
+                except:
+                    return obj.image.url
+            return obj.image.url
+        return None
+    
+    def to_representation(self, instance):
+        """مدیریت نمایش داده‌ها"""
+        data = super().to_representation(instance)
+        # اطمینان از اینکه icon همیشه string باشه
+        if data.get('icon') is None:
+            data['icon'] = ''
+        return data
 
 
 class TagSerializer(serializers.ModelSerializer):

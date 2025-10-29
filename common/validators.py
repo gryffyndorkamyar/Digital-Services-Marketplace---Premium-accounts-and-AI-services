@@ -73,3 +73,4 @@ hex_color_validator = RegexValidator(
     message=_('رنگ باید فرمت هگز معتبر باشد (مثل #3B82F6)'),
     code='invalid_hex_color'
 )
+

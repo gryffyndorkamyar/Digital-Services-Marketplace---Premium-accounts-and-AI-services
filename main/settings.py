@@ -217,9 +217,10 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 CSRF_TRUSTED_ORIGINS = []
 CSRF_USE_SESSIONS = False
+# CSRF_HEADER_NAME را حذف می‌کنیم تا Django از مقدار پیش‌فرض استفاده کند
+# CSRF_HEADER_NAME = None  # این خط رو کامنت می‌کنیم
 CSRF_COOKIE_NAME = None
 CSRF_COOKIE_DOMAIN = None
 CSRF_COOKIE_PATH = None
 CSRF_COOKIE_AGE = None
 CSRF_COOKIE_SAMESITE = None
-CSRF_HEADER_NAME = None
