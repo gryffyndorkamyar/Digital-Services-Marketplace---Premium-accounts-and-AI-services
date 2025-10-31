@@ -414,11 +414,13 @@ class Product(TimeStampedModel, SoftDeleteModel):
         """افزایش تعداد بازدید"""
         self.view_count = F('view_count') + 1
         self.save(update_fields=['view_count'])
+        self.refresh_from_db()
 
     def increment_purchase_count(self):
         """افزایش تعداد خرید"""
         self.purchase_count = F('purchase_count') + 1
         self.save(update_fields=['purchase_count'])
+        self.refresh_from_db()
 
     def update_rating(self):
         """به‌روزرسانی امتیاز از نظرات"""

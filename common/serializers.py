@@ -210,8 +210,14 @@ class ProductListSerializer(serializers.ModelSerializer):
         return is_product_on_sale(obj)
     
     def get_main_image_url(self, obj):
-        if obj.main_image:
-            return self.context['request'].build_absolute_uri(obj.main_image.url)
+        if obj.main_image and hasattr(obj.main_image, 'url') and obj.main_image.url:
+            request = self.context.get('request')
+            if request:
+                try:
+                    return request.build_absolute_uri(obj.main_image.url)
+                except:
+                    return obj.main_image.url
+            return obj.main_image.url
         return None
 
 
@@ -266,8 +272,14 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         return is_product_on_sale(obj)
     
     def get_main_image_url(self, obj):
-        if obj.main_image:
-            return self.context['request'].build_absolute_uri(obj.main_image.url)
+        if obj.main_image and hasattr(obj.main_image, 'url') and obj.main_image.url:
+            request = self.context.get('request')
+            if request:
+                try:
+                    return request.build_absolute_uri(obj.main_image.url)
+                except:
+                    return obj.main_image.url
+            return obj.main_image.url
         return None
     
     def get_related_products(self, obj):

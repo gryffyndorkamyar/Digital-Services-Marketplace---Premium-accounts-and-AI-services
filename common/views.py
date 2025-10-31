@@ -162,7 +162,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(products, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], url_path='new', url_name='new')
     def new_products(self, request):
         """محصولات جدید"""
         products = self.get_queryset().filter(is_new=True)

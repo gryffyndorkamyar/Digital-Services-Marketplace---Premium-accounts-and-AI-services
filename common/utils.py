@@ -85,13 +85,11 @@ def get_trending_products(days=7, limit=10):
     """دریافت محصولات محبوب"""
     from .models import Product
     
-    cutoff_date = timezone.now() - timedelta(days=days)
-    
     trending = Product.objects.filter(
         is_active=True,
         is_deleted=False,
-        created_at__gte=cutoff_date
-    ).order_by('-view_count', '-purchase_count')[:limit]
+        is_trending=True  # فقط محصولاتی که is_trending=True دارند
+    ).order_by('-view_count', '-purchase_count', '-created_at')[:limit]
     
     return trending
 
