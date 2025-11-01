@@ -139,6 +139,21 @@ class AuthViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
     authentication_classes = []  # هیچ authentication class
 
+    def get_authentication_classes(self):
+        """تنظیم authentication برای action های خاص"""
+        from rest_framework_simplejwt.authentication import JWTAuthentication
+        
+        # برای این action‌ها نیاز به JWT authentication داریم
+        if self.action in ['password_change', 'logout']:
+            return [JWTAuthentication]
+        return []
+    
+    def get_permissions(self):
+        """تنظیم مجوزها برای هر action"""
+        if self.action in ['password_change', 'logout']:
+            return [IsAuthenticated()]
+        return [AllowAny()]
+
     def list(self, request):
         """لیست endpoint های موجود"""
         return Response({

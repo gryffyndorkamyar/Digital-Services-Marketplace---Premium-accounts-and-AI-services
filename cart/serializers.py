@@ -53,7 +53,8 @@ class CartCreateSerializer(serializers.ModelSerializer):
     """سریالایزر ایجاد سبد خرید"""
     class Meta:
         model = Cart
-        fields = ['user', 'session_key']
+        fields = ['session_key']
+        # user از request.user میاد و نباید در body باشه
 
 
 class AddToCartSerializer(serializers.Serializer):

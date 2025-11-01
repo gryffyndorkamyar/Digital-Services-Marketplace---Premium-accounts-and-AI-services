@@ -5,7 +5,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, BasePermission
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q, F, Count, Avg
 from django.utils.decorators import method_decorator
@@ -24,6 +24,34 @@ from .serializers import (
 from .utils import get_related_products, get_trending_products, search_products
 
 logger = logging.getLogger(__name__)
+
+
+class IsAdminOrVendor(BasePermission):
+    """Permission برای بررسی اینکه کاربر admin یا vendor است"""
+    
+    def has_permission(self, request, view):
+        # برای خواندن، همه مجازند
+        if request.method in ['GET', 'HEAD', 'OPTIONS']:
+            return True
+        
+        # برای نوشتن، باید login کرده باشه
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        # بررسی نوع کاربر
+        user_type = getattr(request.user, 'user_type', None)
+        is_staff = getattr(request.user, 'is_staff', False)
+        is_superuser = getattr(request.user, 'is_superuser', False)
+        
+        # اگر superuser یا staff باشه، اجازه داره
+        if is_superuser or is_staff:
+            return True
+        
+        # اگر admin یا vendor باشه، اجازه داره
+        if user_type in ['admin', 'vendor']:
+            return True
+        
+        return False
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -81,7 +109,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     """ViewSet برای محصولات"""
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAdminOrVendor]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = [
         'category', 'product_type', 'status', 'is_featured', 

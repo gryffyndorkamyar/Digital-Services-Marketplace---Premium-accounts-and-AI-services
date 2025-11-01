@@ -27,7 +27,7 @@ class CartAdmin(admin.ModelAdmin):
     list_filter = ['status', 'created_at', 'expires_at']
     search_fields = ['user__username', 'user__email', 'session_key']
     readonly_fields = [
-        'id', 'user', 'session_key', 'created_at', 'updated_at', 'expires_at'
+        'id', 'session_key', 'created_at', 'updated_at', 'expires_at'
     ]
     ordering = ['-created_at']
     
@@ -38,6 +38,32 @@ class CartAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+    
+    def save_model(self, request, obj, form, change):
+        """ذخیره مدل با تنظیم user در صورت نبودن"""
+        if not obj.user_id:  # اگر user انتخاب نشده
+            obj.user = request.user  # از ادمین فعلی استفاده کن
+        super().save_model(request, obj, form, change)
+    
+    def save_formset(self, request, form, formset, change):
+        """ذخیره formset با تنظیم price برای CartItem‌ها"""
+        instances = formset.save(commit=False)
+        for instance in instances:
+            # اگر price تنظیم نشده و product وجود داره
+            if not instance.price and instance.product:
+                if instance.variant:
+                    # اگر variant داره، از variant استفاده کن
+                    instance.price = instance.variant.current_price
+                else:
+                    # اگر variant نداره، از product استفاده کن
+                    instance.price = instance.product.current_price
+            
+            # اگر quantity تنظیم نشده، default بذار
+            if not instance.quantity:
+                instance.quantity = 1
+            
+            instance.save()
+        formset.save_m2m()
 
     def total_items(self, obj):
         """تعداد کل آیتم‌ها"""
