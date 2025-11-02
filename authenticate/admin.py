@@ -52,7 +52,8 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('user_type', 'status', 'is_active', 'is_staff', 'is_superuser')
         }),
         (_('تایید'), {
-            'fields': ('is_email_verified', 'is_phone_verified', 'verification_method')
+            'fields': ('is_email_verified', 'is_phone_verified', 'verification_method', 
+                      'email_verification_token', 'phone_verification_code')
         }),
         (_('تنظیمات'), {
             'fields': ('language', 'timezone')
@@ -100,6 +101,28 @@ class UserAdmin(BaseUserAdmin):
         """تعداد جلسات فعال"""
         return obj.sessions.filter(is_active=True).count()
     session_count.short_description = _('جلسات فعال')
+    
+    actions = ['generate_email_token', 'generate_phone_code']
+    
+    def generate_email_token(self, request, queryset):
+        """تولید توکن تایید ایمیل برای کاربران انتخاب شده"""
+        for user in queryset:
+            token = user.generate_email_verification_token()
+            self.message_user(
+                request,
+                f'توکن تایید ایمیل برای {user.username} ساخته شد: {token}'
+            )
+    generate_email_token.short_description = _('تولید توکن تایید ایمیل')
+    
+    def generate_phone_code(self, request, queryset):
+        """تولید کد تایید تلفن برای کاربران انتخاب شده"""
+        for user in queryset:
+            code = user.generate_phone_verification_code()
+            self.message_user(
+                request,
+                f'کد تایید تلفن برای {user.username} ساخته شد: {code}'
+            )
+    generate_phone_code.short_description = _('تولید کد تایید تلفن')
 
 
 @admin.register(UserProfile)

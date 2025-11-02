@@ -312,7 +312,7 @@ class Order(models.Model):
     """مدل سفارش"""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order_number = models.CharField(
-        max_length=20,
+        max_length=30,
         unique=True,
         verbose_name=_('شماره سفارش')
     )
@@ -489,7 +489,9 @@ class OrderItem(models.Model):
 
     def save(self, *args, **kwargs):
         """محاسبه قیمت کل"""
-        self.total_price = (self.quantity * self.price) - self.discount_amount
+        # محاسبه قیمت کل فقط در صورت وجود quantity و price
+        if self.quantity and self.price:
+            self.total_price = (self.quantity * self.price) - (self.discount_amount or 0)
         super().save(*args, **kwargs)
 
 

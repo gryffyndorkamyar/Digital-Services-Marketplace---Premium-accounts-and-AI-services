@@ -1,5 +1,6 @@
 # cart/signals.py
 from django.db.models.signals import post_save, post_delete, pre_save
+from django.db.models import Sum, F
 from django.dispatch import receiver
 from django.core.cache import cache
 from django.utils import timezone
@@ -114,10 +115,10 @@ def update_order_totals(sender, instance, **kwargs):
     """به‌روزرسانی مجموع سفارش"""
     order = instance.order
     order.subtotal = order.items.aggregate(
-        total=models.Sum(models.F('quantity') * models.F('price'))
+        total=Sum(F('quantity') * F('price'))
     )['total'] or 0
     order.discount_amount = order.items.aggregate(
-        total=models.Sum('discount_amount')
+        total=Sum('discount_amount')
     )['total'] or 0
     order.total_amount = order.subtotal - order.discount_amount
     order.save(update_fields=['subtotal', 'discount_amount', 'total_amount'])

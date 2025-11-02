@@ -139,21 +139,6 @@ class AuthViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
     authentication_classes = []  # هیچ authentication class
 
-    def get_authentication_classes(self):
-        """تنظیم authentication برای action های خاص"""
-        from rest_framework_simplejwt.authentication import JWTAuthentication
-        
-        # برای این action‌ها نیاز به JWT authentication داریم
-        if self.action in ['password_change', 'logout']:
-            return [JWTAuthentication]
-        return []
-    
-    def get_permissions(self):
-        """تنظیم مجوزها برای هر action"""
-        if self.action in ['password_change', 'logout']:
-            return [IsAuthenticated()]
-        return [AllowAny()]
-
     def list(self, request):
         """لیست endpoint های موجود"""
         return Response({
@@ -234,6 +219,27 @@ class AuthViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def logout(self, request):
         """خروج کاربر"""
+        # اعمال JWT authentication
+        from rest_framework_simplejwt.authentication import JWTAuthentication
+        
+        authenticator = JWTAuthentication()
+        try:
+            auth_result = authenticator.authenticate(request)
+            if auth_result:
+                user, token = auth_result
+                request.user = user
+            elif not request.user.is_authenticated:
+                return Response(
+                    {'detail': 'Authentication credentials were not provided.'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+        except Exception:
+            if not request.user.is_authenticated:
+                return Response(
+                    {'detail': 'Authentication credentials were not provided.'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+        
         if request.user.is_authenticated:
             # خاتمه همه session های کاربر
             UserSession.objects.filter(
@@ -248,6 +254,27 @@ class AuthViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['post'])
     def password_change(self, request):
         """تغییر رمز عبور"""
+        # اعمال JWT authentication
+        from rest_framework_simplejwt.authentication import JWTAuthentication
+        
+        authenticator = JWTAuthentication()
+        try:
+            auth_result = authenticator.authenticate(request)
+            if auth_result:
+                user, token = auth_result
+                request.user = user
+            elif not request.user.is_authenticated:
+                return Response(
+                    {'detail': 'Authentication credentials were not provided.'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+        except Exception:
+            if not request.user.is_authenticated:
+                return Response(
+                    {'detail': 'Authentication credentials were not provided.'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+        
         serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user = request.user
