@@ -187,10 +187,10 @@ class CartViewSet(viewsets.ModelViewSet):
         
         if variant_id:
             variant = ProductVariant.objects.get(id=variant_id)
-            return variant.price
+            return variant.current_price
         else:
             product = Product.objects.get(id=product_id)
-            return product.get_current_price()
+            return product.current_price
 
     def apply_discount_to_items(self, cart, total_discount):
         """اعمال تخفیف به آیتم‌ها"""
@@ -218,6 +218,10 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """QuerySet سفارشی"""
+        # اگر کاربر staff یا superuser باشه، همه سفارشات رو نشون بده
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return Order.objects.all()
+        # وگرنه فقط سفارشات خود کاربر رو نشون بده
         return Order.objects.filter(user=self.request.user)
 
     def get_serializer_class(self):
@@ -225,9 +229,37 @@ class OrderViewSet(viewsets.ModelViewSet):
             return OrderCreateSerializer
         return OrderSerializer
 
+    def create(self, request, *args, **kwargs):
+        """ساخت سفارش با response کامل"""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        order = self.perform_create(serializer)
+        
+        # برگرداندن response با OrderSerializer
+        response_serializer = OrderSerializer(order, context={'request': request})
+        headers = self.get_success_headers(response_serializer.data)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def perform_create(self, serializer):
         """ایجاد سفارش"""
-        cart = serializer.validated_data['cart']
+        # cart از serializer.validated_data میاد (یا خودکار پیدا شده یا کاربر ارسال کرده)
+        cart = serializer.validated_data.get('cart')
+        
+        # بررسی اینکه cart موجود باشه (باید در serializer validate شده باشه)
+        if not cart:
+            from rest_framework.exceptions import ValidationError
+            raise ValidationError({'cart': 'سبد خرید یافت نشد.'})
+        
+        # بررسی اینکه cart متعلق به کاربر فعلی باشه (امنیت)
+        if cart.user != self.request.user:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied('شما اجازه دسترسی به این سبد خرید را ندارید.')
+        
+        # اگر cart status != 'active' باشه ولی آیتم‌های فعال داشته باشه، active کن
+        if cart.status != 'active' and cart.get_total_items() > 0:
+            cart.status = 'active'
+            cart.save()
+        
         coupon_code = serializer.validated_data.get('coupon_code')
         
         # محاسبه مبالغ
@@ -297,30 +329,168 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def process_payment(self, request, pk=None):
-        """پردازش پرداخت"""
+        """پردازش پرداخت با زرین پال"""
         order = self.get_object()
         
-        # در اینجا کد پردازش پرداخت قرار می‌گیرد
-        # فعلاً فقط یک پرداخت نمونه ایجاد می‌کنیم
+        # بررسی اینکه سفارش قابل پرداخت باشه
+        if order.payment_status == 'completed':
+            return Response(
+                {'error': 'این سفارش قبلاً پرداخت شده است.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
-        payment = Payment.objects.create(
-            order=order,
-            payment_id=f"PAY{timezone.now().strftime('%Y%m%d%H%M%S')}",
-            amount=order.total_amount,
-            payment_method=order.payment_method,
-            status='completed'
+        # بررسی نوع پرداخت
+        if order.payment_method == 'online':
+            # استفاده از درگاه زرین پال
+            from .zarinpal import get_zarinpal_gateway
+            from django.urls import reverse
+            
+            gateway = get_zarinpal_gateway()
+            
+            # ایجاد callback URL
+            callback_url = request.build_absolute_uri(
+                f'/api/orders/{order.id}/zarinpal-callback/'
+            )
+            
+            # اطلاعات کاربر
+            mobile = getattr(order.user, 'phone_number', None)
+            email = getattr(order.user, 'email', None)
+            
+            # ایجاد درخواست پرداخت
+            result = gateway.create_payment_request(
+                amount=order.total_amount,
+                description=f"پرداخت سفارش {order.order_number}",
+                callback_url=callback_url,
+                mobile=mobile,
+                email=email
+            )
+            
+            if result['success']:
+                # ایجاد رکورد پرداخت
+                payment = Payment.objects.create(
+                    order=order,
+                    payment_id=result['authority'],
+                    amount=order.total_amount,
+                    payment_method=order.payment_method,
+                    status='pending',
+                    gateway_response=result.get('data', {})
+                )
+                
+                logger.info(f"Payment request created: {result['authority']} for order {order.order_number}")
+                return Response({
+                    'message': 'درخواست پرداخت با موفقیت ایجاد شد.',
+                    'payment_url': result['payment_url'],
+                    'authority': result['authority'],
+                    'payment_id': payment.id
+                })
+            else:
+                logger.error(f"Payment request failed: {result.get('message', 'Unknown error')}")
+                return Response(
+                    {'error': result.get('message', 'خطا در ایجاد درخواست پرداخت')},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            # برای سایر روش‌های پرداخت (wallet, credit, etc.)
+            payment = Payment.objects.create(
+                order=order,
+                payment_id=f"PAY{timezone.now().strftime('%Y%m%d%H%M%S')}",
+                amount=order.total_amount,
+                payment_method=order.payment_method,
+                status='completed'
+            )
+            
+            order.payment_status = 'completed'
+            order.status = 'paid'
+            order.paid_at = timezone.now()
+            order.save()
+            
+            logger.info(f"Payment processed: {payment.payment_id}")
+            return Response({
+                'message': SUCCESS_MESSAGES['payment_successful'],
+                'payment': PaymentSerializer(payment).data
+            })
+    
+    @action(detail=True, methods=['get', 'post'], url_path='zarinpal-callback')
+    def zarinpal_callback(self, request, pk=None):
+        """Callback از زرین پال"""
+        order = self.get_object()
+        
+        # دریافت authority و status از query parameters
+        authority = request.query_params.get('Authority') or request.data.get('Authority')
+        status_code = request.query_params.get('Status') or request.data.get('Status')
+        
+        if not authority:
+            return Response(
+                {'error': 'Authority parameter is required.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # پیدا کردن payment با authority
+        try:
+            payment = Payment.objects.get(
+                order=order,
+                payment_id=authority,
+                status='pending'
+            )
+        except Payment.DoesNotExist:
+            return Response(
+                {'error': 'پرداخت یافت نشد.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # بررسی status از زرین پال
+        if status_code != 'OK':
+            payment.status = 'failed'
+            payment.gateway_response = {
+                'status': status_code,
+                'message': 'کاربر پرداخت را لغو کرد.'
+            }
+            payment.save()
+            
+            return Response({
+                'message': 'پرداخت لغو شد.',
+                'status': 'cancelled'
+            })
+        
+        # تایید پرداخت با زرین پال
+        from .zarinpal import get_zarinpal_gateway
+        
+        gateway = get_zarinpal_gateway()
+        verify_result = gateway.verify_payment(
+            authority=authority,
+            amount=order.total_amount
         )
         
-        order.payment_status = 'completed'
-        order.status = 'paid'
-        order.paid_at = timezone.now()
-        order.save()
-        
-        logger.info(f"Payment processed: {payment.payment_id}")
-        return Response({
-            'message': SUCCESS_MESSAGES['payment_successful'],
-            'payment': PaymentSerializer(payment).data
-        })
+        if verify_result['success']:
+            # پرداخت موفق
+            payment.status = 'completed'
+            payment.payment_id = verify_result.get('ref_id', authority)
+            payment.gateway_response = verify_result.get('data', {})
+            payment.completed_at = timezone.now()
+            payment.save()
+            
+            order.payment_status = 'completed'
+            order.status = 'paid'
+            order.paid_at = timezone.now()
+            order.save()
+            
+            logger.info(f"Payment verified: {payment.payment_id} for order {order.order_number}")
+            return Response({
+                'message': 'پرداخت با موفقیت انجام شد.',
+                'status': 'success',
+                'payment': PaymentSerializer(payment).data
+            })
+        else:
+            # پرداخت ناموفق
+            payment.status = 'failed'
+            payment.gateway_response = verify_result.get('data', {})
+            payment.save()
+            
+            logger.error(f"Payment verification failed: {verify_result.get('message', 'Unknown')}")
+            return Response({
+                'message': verify_result.get('message', 'خطا در تایید پرداخت'),
+                'status': 'failed'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CouponViewSet(viewsets.ReadOnlyModelViewSet):

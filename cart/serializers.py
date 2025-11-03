@@ -69,7 +69,7 @@ class AddToCartSerializer(serializers.Serializer):
         
         try:
             product = Product.objects.get(id=data['product_id'])
-            if not product.is_active or not product.is_published:
+            if not product.is_active or product.status != 'active':
                 raise ValidationError('محصول در دسترس نیست.')
             
             if data.get('variant_id'):
@@ -78,12 +78,12 @@ class AddToCartSerializer(serializers.Serializer):
                         id=data['variant_id'],
                         product=product
                     )
-                    if variant.stock_quantity < data['quantity']:
+                    if not variant.is_unlimited_stock and variant.stock_quantity < data['quantity']:
                         raise ValidationError(ERROR_MESSAGES['insufficient_stock'])
                 except ProductVariant.DoesNotExist:
                     raise ValidationError('نوع محصول یافت نشد.')
             else:
-                if product.stock_quantity < data['quantity']:
+                if not product.is_unlimited_stock and product.stock_quantity < data['quantity']:
                     raise ValidationError(ERROR_MESSAGES['insufficient_stock'])
         
         except Product.DoesNotExist:
@@ -188,15 +188,78 @@ class OrderSerializer(serializers.ModelSerializer):
 class OrderCreateSerializer(serializers.ModelSerializer):
     """سریالایزر ایجاد سفارش"""
     coupon_code = serializers.CharField(max_length=20, required=False, allow_blank=True)
+    cart = serializers.PrimaryKeyRelatedField(
+        queryset=Cart.objects.none(),  # در متد __init__ override می‌شه
+        required=False,
+        allow_null=True
+    )
     
     class Meta:
         model = Order
         fields = ['cart', 'payment_method', 'notes', 'coupon_code']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # تنظیم queryset برای cart بر اساس request.user
+        # همه سبد خریدهای کاربر رو شامل می‌کنه (نه فقط active)
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            self.fields['cart'].queryset = Cart.objects.filter(
+                user=request.user
+            )
+
     def validate_cart(self, value):
         """اعتبارسنجی سبد خرید"""
-        if not value.can_checkout():
-            raise ValidationError('سبد خرید قابل checkout نیست.')
+        # اگر cart ارسال نشد، خودکار پیدا کن
+        if not value:
+            request = self.context.get('request')
+            if request and request.user.is_authenticated:
+                from .models import Cart, CartItem
+                from django.db.models import Sum
+                
+                # ابتدا دنبال سبد خرید فعال که آیتم فعال داشته باشه بگرد
+                cart_ids_with_items = CartItem.objects.filter(
+                    status='active',
+                    cart__user=request.user,
+                    cart__status='active'
+                ).values('cart_id').annotate(
+                    total=Sum('quantity')
+                ).filter(total__gt=0).values_list('cart_id', flat=True)
+                
+                if cart_ids_with_items:
+                    value = Cart.objects.get(id=cart_ids_with_items[0])
+                else:
+                    # اگر پیدا نکرد، دنبال هر سبد خرید با آیتم‌های فعال بگرد
+                    cart_ids_with_items = CartItem.objects.filter(
+                        status='active',
+                        cart__user=request.user
+                    ).values('cart_id').annotate(
+                        total=Sum('quantity')
+                    ).filter(total__gt=0).values_list('cart_id', flat=True)
+                    
+                    if cart_ids_with_items:
+                        value = Cart.objects.get(id=cart_ids_with_items[0])
+        
+        if not value:
+            raise ValidationError('شما سبد خرید فعالی ندارید. لطفاً ابتدا محصولی به سبد خرید اضافه کنید.')
+        
+        # بررسی شرایط checkout
+        errors = []
+        
+        if value.status == 'converted':
+            errors.append('این سبد خرید قبلاً به سفارش تبدیل شده است. لطفاً یک سبد خرید جدید بسازید.')
+        elif value.status != 'active':
+            errors.append(f'وضعیت سبد خرید باید active باشد (فعلاً: {value.get_status_display()})')
+        
+        if value.is_expired():
+            errors.append('سبد خرید منقضی شده است.')
+        
+        if value.get_total_items() == 0:
+            errors.append('سبد خرید باید حداقل یک آیتم داشته باشد.')
+        
+        if errors:
+            raise ValidationError('. '.join(errors))
+        
         return value
 
     def validate_coupon_code(self, value):
