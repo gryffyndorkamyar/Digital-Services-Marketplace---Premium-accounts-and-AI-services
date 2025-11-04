@@ -174,6 +174,8 @@ class OrderAdmin(admin.ModelAdmin):
     
     def save_formset(self, request, form, formset, change):
         """ذخیره formset با تنظیم price برای OrderItem‌ها"""
+        from django.utils import timezone
+        
         instances = formset.save(commit=False)
         for instance in instances:
             # اگر price تنظیم نشده و product وجود داره
@@ -188,6 +190,10 @@ class OrderAdmin(admin.ModelAdmin):
             # اگر quantity تنظیم نشده، default بذار
             if not instance.quantity:
                 instance.quantity = 1
+            
+            # اگر is_delivered=True شده ولی delivered_at نداره، تاریخ تحویل رو تنظیم کن
+            if instance.is_delivered and not instance.delivered_at:
+                instance.delivered_at = timezone.now()
             
             instance.save()
         formset.save_m2m()
@@ -324,16 +330,70 @@ class PaymentAdmin(admin.ModelAdmin):
     list_filter = ['status', 'payment_method', 'created_at', 'completed_at']
     search_fields = ['payment_id', 'order__order_number', 'order__user__username']
     readonly_fields = [
-        'id', 'order', 'payment_id', 'gateway_response', 'created_at', 'completed_at'
+        'id', 'payment_id', 'gateway_response', 'created_at', 'completed_at'
     ]
     ordering = ['-created_at']
+    
+    fieldsets = (
+        ('اطلاعات پایه', {
+            'fields': ('order', 'payment_id', 'amount', 'payment_method', 'status')
+        }),
+        ('اطلاعات درگاه', {
+            'fields': ('gateway_response',),
+            'classes': ('collapse',)
+        }),
+        ('زمان‌ها', {
+            'fields': ('created_at', 'completed_at'),
+            'classes': ('collapse',)
+        }),
+    )
 
-    def is_successful(self, obj):
-        """آیا پرداخت موفق بوده است؟"""
-        if obj.is_successful():
-            return format_html('<span style="color: green;">✓</span>')
-        return format_html('<span style="color: red;">✗</span>')
-    is_successful.short_description = _('موفق')
+    def get_form(self, request, obj=None, **kwargs):
+        """تنظیم فرم برای محدود کردن انتخاب order"""
+        form = super().get_form(request, obj, **kwargs)
+        
+        # اگر در حال ایجاد payment جدید هستیم (نه ویرایش)
+        if obj is None:
+            # فقط order هایی رو نشون بده که payment_status='pending' یا 'processing' دارن
+            # یا order هایی که payment ندارن
+            form.base_fields['order'].queryset = Order.objects.filter(
+                payment_status__in=['pending', 'processing']
+            ).order_by('-created_at')
+        else:
+            # اگر در حال ویرایش هستیم، فقط order فعلی رو نشون بده
+            form.base_fields['order'].queryset = Order.objects.filter(id=obj.order_id)
+        
+        return form
+
+    def save_model(self, request, obj, form, change):
+        """ذخیره مدل با بررسی order"""
+        # اگر order انتخاب نشده، خطا بده
+        if not obj.order_id:
+            from django.core.exceptions import ValidationError
+            raise ValidationError('لطفاً یک سفارش را انتخاب کنید.')
+        
+        # بررسی اینکه order وجود داره
+        try:
+            order = Order.objects.get(id=obj.order_id)
+        except Order.DoesNotExist:
+            from django.core.exceptions import ValidationError
+            raise ValidationError('سفارش انتخاب شده یافت نشد.')
+        
+        # اگر payment_id تنظیم نشده، یک payment_id منحصر به فرد بساز
+        if not obj.payment_id:
+            import uuid
+            obj.payment_id = f"PAY-{uuid.uuid4().hex[:12].upper()}"
+        
+        # اگر status='completed' شده ولی completed_at نداره، تاریخ رو تنظیم کن
+        if obj.status == 'completed' and not obj.completed_at:
+            from django.utils import timezone
+            obj.completed_at = timezone.now()
+            # همچنین order رو هم به completed تبدیل کن
+            if order.payment_status != 'completed':
+                order.payment_status = 'completed'
+                order.save(update_fields=['payment_status'])
+        
+        super().save_model(request, obj, form, change)
 
     def is_successful(self, obj):
         """آیا پرداخت موفق بوده است؟"""

@@ -46,14 +46,57 @@ def send_order_notification(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Order)
 def update_inventory(sender, instance, **kwargs):
     """به‌روزرسانی موجودی محصولات"""
+    # فقط اگر status به 'paid' تغییر کرده باشه
     if instance.status == 'paid':
+        # بررسی اینکه آیا قبلاً موجودی کم شده یا نه
+        # برای جلوگیری از اجرای تکراری
+        if hasattr(instance, '_inventory_updated') and instance._inventory_updated:
+            return
+        
+        # علامت بزن که موجودی به‌روزرسانی شده
+        instance._inventory_updated = True
+        
         for item in instance.items.all():
             if item.variant:
-                item.variant.stock_quantity -= item.quantity
-                item.variant.save()
+                # بررسی اینکه موجودی نامحدود نباشه
+                if not item.variant.is_unlimited_stock:
+                    # کم کردن موجودی با بررسی حداقل 0 (جلوگیری از منفی شدن)
+                    old_stock = item.variant.stock_quantity
+                    new_stock = max(0, old_stock - item.quantity)
+                    item.variant.stock_quantity = new_stock
+                    item.variant.save()
+                    
+                    if old_stock < item.quantity:
+                        logger.warning(
+                            f"Insufficient stock for variant {item.variant.id} "
+                            f"in order {instance.order_number}. "
+                            f"Had {old_stock}, ordered {item.quantity}, set to {new_stock}"
+                        )
+                    elif new_stock == 0:
+                        logger.warning(
+                            f"Stock depleted for variant {item.variant.id} "
+                            f"in order {instance.order_number}"
+                        )
             else:
-                item.product.stock_quantity -= item.quantity
-                item.product.save()
+                # بررسی اینکه موجودی نامحدود نباشه
+                if not item.product.is_unlimited_stock:
+                    # کم کردن موجودی با بررسی حداقل 0 (جلوگیری از منفی شدن)
+                    old_stock = item.product.stock_quantity
+                    new_stock = max(0, old_stock - item.quantity)
+                    item.product.stock_quantity = new_stock
+                    item.product.save()
+                    
+                    if old_stock < item.quantity:
+                        logger.warning(
+                            f"Insufficient stock for product {item.product.id} "
+                            f"in order {instance.order_number}. "
+                            f"Had {old_stock}, ordered {item.quantity}, set to {new_stock}"
+                        )
+                    elif new_stock == 0:
+                        logger.warning(
+                            f"Stock depleted for product {item.product.id} "
+                            f"in order {instance.order_number}"
+                        )
         
         logger.info(f"Inventory updated for order: {instance.order_number}")
 
