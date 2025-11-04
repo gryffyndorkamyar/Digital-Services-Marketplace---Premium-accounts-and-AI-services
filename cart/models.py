@@ -476,6 +476,32 @@ class OrderItem(models.Model):
         decimal_places=2,
         verbose_name=_('قیمت کل')
     )
+    
+    # محتوای محصول (برای تحویل به کاربر)
+    content = models.TextField(
+        blank=True,
+        verbose_name=_('محتوای محصول'),
+        help_text=_('اطلاعات محصول مثل username/password، کلید محصول، لینک دانلود و...')
+    )
+    download_file = models.FileField(
+        upload_to='orders/files/',
+        null=True,
+        blank=True,
+        verbose_name=_('فایل دانلود')
+    )
+    download_url = models.URLField(
+        blank=True,
+        verbose_name=_('لینک دانلود')
+    )
+    is_delivered = models.BooleanField(
+        default=False,
+        verbose_name=_('تحویل شده')
+    )
+    delivered_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('تاریخ تحویل')
+    )
 
     class Meta:
         verbose_name = _('آیتم سفارش')

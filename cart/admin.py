@@ -116,7 +116,20 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
     readonly_fields = ['discount_amount', 'total_price']
-    fields = ['product', 'variant', 'quantity', 'price', 'discount_amount', 'total_price']
+    fields = [
+        'product', 'variant', 'quantity', 'price', 'discount_amount', 'total_price',
+        'content', 'download_file', 'download_url', 'is_delivered', 'delivered_at'
+    ]
+    
+    def save_formset(self, request, form, formset, change):
+        """ذخیره formset با تنظیم تاریخ تحویل"""
+        instances = formset.save(commit=False)
+        for instance in instances:
+            if instance.is_delivered and not instance.delivered_at:
+                from django.utils import timezone
+                instance.delivered_at = timezone.now()
+            instance.save()
+        formset.save_m2m()
 
 
 @admin.register(Order)
@@ -221,12 +234,33 @@ class OrderItemAdmin(admin.ModelAdmin):
     """مدیریت آیتم‌های سفارش"""
     list_display = [
         'id', 'order', 'product', 'variant', 'quantity', 'price',
-        'discount_amount', 'total_price'
+        'discount_amount', 'total_price', 'is_delivered', 'delivered_at'
     ]
-    list_filter = ['order__status', 'order__created_at']
-    search_fields = ['order__order_number', 'product__name', 'variant__name']
-    readonly_fields = ['id', 'price', 'discount_amount', 'total_price']
+    list_filter = ['order__status', 'order__created_at', 'is_delivered']
+    search_fields = ['order__order_number', 'product__name', 'variant__name', 'content']
+    readonly_fields = ['id', 'price', 'discount_amount', 'total_price', 'delivered_at']
+    fieldsets = (
+        ('اطلاعات سفارش', {
+            'fields': ('order', 'product', 'variant', 'quantity')
+        }),
+        ('قیمت‌گذاری', {
+            'fields': ('price', 'discount_amount', 'total_price')
+        }),
+        ('تحویل محصول', {
+            'fields': ('content', 'download_file', 'download_url', 'is_delivered', 'delivered_at'),
+            'description': 'اطلاعات محصول رو در اینجا وارد کن. بعد از تنظیم، is_delivered رو تیک بزن.'
+        }),
+    )
     ordering = ['-order__created_at']
+    
+    def save_model(self, request, obj, form, change):
+        """ذخیره با تنظیم تاریخ تحویل"""
+        if obj.is_delivered and not obj.delivered_at:
+            from django.utils import timezone
+            obj.delivered_at = timezone.now()
+        elif not obj.is_delivered:
+            obj.delivered_at = None
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Coupon)
@@ -293,6 +327,13 @@ class PaymentAdmin(admin.ModelAdmin):
         'id', 'order', 'payment_id', 'gateway_response', 'created_at', 'completed_at'
     ]
     ordering = ['-created_at']
+
+    def is_successful(self, obj):
+        """آیا پرداخت موفق بوده است؟"""
+        if obj.is_successful():
+            return format_html('<span style="color: green;">✓</span>')
+        return format_html('<span style="color: red;">✗</span>')
+    is_successful.short_description = _('موفق')
 
     def is_successful(self, obj):
         """آیا پرداخت موفق بوده است؟"""

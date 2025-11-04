@@ -151,14 +151,52 @@ class OrderItemSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product.name', read_only=True)
     product_image = serializers.CharField(source='product.main_image', read_only=True)
     variant_name = serializers.CharField(source='variant.name', read_only=True)
+    download_file_url = serializers.SerializerMethodField()
     
     class Meta:
         model = OrderItem
         fields = [
             'id', 'product', 'product_name', 'product_image', 'variant', 'variant_name',
-            'quantity', 'price', 'discount_amount', 'total_price'
+            'quantity', 'price', 'discount_amount', 'total_price',
+            'content', 'download_file_url', 'download_url', 'is_delivered', 'delivered_at'
         ]
-        read_only_fields = ['id', 'price', 'discount_amount', 'total_price']
+        read_only_fields = [
+            'id', 'price', 'discount_amount', 'total_price', 
+            'content', 'download_file_url', 'download_url', 'is_delivered', 'delivered_at'
+        ]
+    
+    def get_download_file_url(self, obj):
+        """URL فایل دانلود"""
+        if obj.download_file and hasattr(obj.download_file, 'url') and obj.download_file.url:
+            request = self.context.get('request')
+            if request:
+                try:
+                    return request.build_absolute_uri(obj.download_file.url)
+                except:
+                    return obj.download_file.url
+            return obj.download_file.url
+        return None
+    
+    def to_representation(self, instance):
+        """نمایش محتوا فقط بعد از پرداخت و تحویل"""
+        data = super().to_representation(instance)
+        
+        request = self.context.get('request')
+        
+        # اگر سفارش پرداخت نشده یا تحویل نشده، محتوا رو نشون نده
+        if instance.order.payment_status != 'completed' or not instance.is_delivered:
+            data['content'] = None
+            data['download_file_url'] = None
+            data['download_url'] = None
+        
+        # اگر کاربر صاحب سفارش نیست و admin هم نیست، محتوا رو نشون نده
+        if request:
+            if request.user != instance.order.user and not (request.user.is_staff or request.user.is_superuser):
+                data['content'] = None
+                data['download_file_url'] = None
+                data['download_url'] = None
+        
+        return data
 
 
 class OrderSerializer(serializers.ModelSerializer):

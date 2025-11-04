@@ -491,6 +491,85 @@ class OrderViewSet(viewsets.ModelViewSet):
                 'message': verify_result.get('message', 'خطا در تایید پرداخت'),
                 'status': 'failed'
             }, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['get'], url_path='items/(?P<item_id>[^/.]+)/content')
+    def item_content(self, request, pk=None, item_id=None):
+        """دریافت محتوای یک آیتم سفارش"""
+        order = self.get_object()
+        
+        # بررسی اینکه سفارش متعلق به کاربر فعلی باشه
+        if order.user != request.user and not (request.user.is_staff or request.user.is_superuser):
+            return Response(
+                {'error': 'شما اجازه دسترسی به این سفارش را ندارید.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        try:
+            item = order.items.get(id=item_id)
+        except OrderItem.DoesNotExist:
+            return Response(
+                {'error': 'آیتم سفارش یافت نشد.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # فقط اگر سفارش پرداخت شده و تحویل شده، محتوا رو نشون بده
+        if order.payment_status != 'completed' or not item.is_delivered:
+            return Response({
+                'message': 'محصول هنوز تحویل نشده است.',
+                'is_delivered': item.is_delivered,
+                'payment_status': order.payment_status
+            })
+        
+        serializer = OrderItemSerializer(item, context={'request': request})
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['post', 'patch'], url_path='items/(?P<item_id>[^/.]+)/upload_content')
+    def upload_item_content(self, request, pk=None, item_id=None):
+        """آپلود محتوای یک آیتم سفارش (فقط برای Admin)"""
+        # بررسی دسترسی admin
+        if not (request.user.is_staff or request.user.is_superuser):
+            return Response(
+                {'error': 'شما اجازه انجام این عملیات را ندارید.'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        order = self.get_object()
+        
+        try:
+            item = order.items.get(id=item_id)
+        except OrderItem.DoesNotExist:
+            return Response(
+                {'error': 'آیتم سفارش یافت نشد.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # به‌روزرسانی محتوا
+        item.content = request.data.get('content', item.content)
+        item.download_url = request.data.get('download_url', item.download_url)
+        
+        # آپلود فایل (اگر ارسال شده)
+        if 'download_file' in request.FILES:
+            item.download_file = request.FILES['download_file']
+        
+        # اگر is_delivered ارسال شده
+        if 'is_delivered' in request.data:
+            is_delivered = request.data.get('is_delivered')
+            if isinstance(is_delivered, str):
+                is_delivered = is_delivered.lower() in ['true', '1', 'yes']
+            item.is_delivered = bool(is_delivered)
+            
+            # اگر تحویل شده ولی تاریخ تحویل نداره، تاریخ رو تنظیم کن
+            if item.is_delivered and not item.delivered_at:
+                item.delivered_at = timezone.now()
+        
+        item.save()
+        
+        logger.info(f"Content uploaded for order item: {item.id} by admin: {request.user.username}")
+        serializer = OrderItemSerializer(item, context={'request': request})
+        return Response({
+            'message': 'محتوای محصول با موفقیت به‌روزرسانی شد.',
+            'item': serializer.data
+        })
 
 
 class CouponViewSet(viewsets.ReadOnlyModelViewSet):
@@ -568,6 +647,44 @@ class CartStatsViewSet(viewsets.ViewSet):
 
 class OrderStatsViewSet(viewsets.ViewSet):
     """ViewSet برای آمار سفارشات"""
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        """آمار سفارشات"""
+        orders = Order.objects.filter(user=request.user)
+        now = timezone.now()
+        
+        stats = {
+            'total_orders': orders.count(),
+            'pending_orders': orders.filter(status='pending').count(),
+            'completed_orders': orders.filter(status='delivered').count(),
+            'cancelled_orders': orders.filter(status='cancelled').count(),
+            'total_revenue': orders.filter(status='delivered').aggregate(
+                total=Sum('total_amount')
+            )['total'] or 0,
+            'average_order_value': orders.aggregate(
+                avg=Avg('total_amount')
+            )['avg'] or 0,
+            'orders_today': orders.filter(created_at__date=now.date()).count(),
+            'orders_this_week': orders.filter(
+                created_at__gte=now - timedelta(days=7)
+            ).count(),
+            'orders_this_month': orders.filter(
+                created_at__gte=now - timedelta(days=30)
+            ).count(),
+            'status_distribution': dict(
+                orders.values('status').annotate(count=Count('id')).values_list('status', 'count')
+            ),
+        }
+        
+        serializer = OrderStatsSerializer(stats)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        """آمار سفارشات (alias)"""
+        return self.list(request)
+
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
