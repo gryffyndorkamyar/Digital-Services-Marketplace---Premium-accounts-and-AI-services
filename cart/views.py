@@ -2,7 +2,7 @@
 from rest_framework import viewsets, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q, Count, Sum, Avg
 from django.utils import timezone
@@ -410,10 +410,18 @@ class OrderViewSet(viewsets.ModelViewSet):
                 'payment': PaymentSerializer(payment).data
             })
     
-    @action(detail=True, methods=['get', 'post'], url_path='zarinpal-callback')
+    @action(detail=True, methods=['get', 'post'], url_path='zarinpal-callback', permission_classes=[AllowAny])
     def zarinpal_callback(self, request, pk=None):
         """Callback از زرین پال"""
-        order = self.get_object()
+        # به جای self.get_object() که نیاز به authentication داره
+        # مستقیم سفارش رو پیدا می‌کنیم چون زرین‌پال token نمی‌فرسته
+        try:
+            order = Order.objects.get(id=pk)
+        except Order.DoesNotExist:
+            return Response(
+                {'error': 'سفارش یافت نشد.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
         
         # دریافت authority و status از query parameters
         authority = request.query_params.get('Authority') or request.data.get('Authority')

@@ -87,6 +87,9 @@ Create a `.env` file in the root directory:
 DEBUG=True
 SECRET_KEY=your-secret-key
 ALLOWED_HOSTS=localhost,127.0.0.1
+#DEBUG=False
+#SECRET_KEY=django-insecure-abc123xyz789... (یک کلید قوی)
+#ALLOWED_HOSTS=mignum.com,www.mignum.com
 
 # Database
 DATABASE_URL=postgresql://user:password@localhost:5432/mignum
