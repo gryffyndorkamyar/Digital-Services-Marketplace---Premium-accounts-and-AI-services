@@ -105,7 +105,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'Space Grotesk', 'system-ui', 'sans-serif'],
+        sans: ['Vazirmatn', 'Samim', 'Shabnam', 'Inter', 'Space Grotesk', 'system-ui', 'sans-serif'],
+        vazir: ['Vazirmatn', 'sans-serif'],
+        samim: ['Samim', 'sans-serif'],
+        shabnam: ['Shabnam', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       animation: {

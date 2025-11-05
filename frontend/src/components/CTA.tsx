@@ -19,7 +19,7 @@ const CTA: React.FC = () => {
           آماده شروع هستی؟
         </h2>
         <p className="text-xl text-gray-300 mb-8">
-          به دنیای <span className="text-neonOrange font-bold">MIGNUM</span> بپیوند و از بهترین خدمات دیجیتال بهره‌مند شو
+          به دنیای <span className="text-neonOrange font-bold">ما</span> بپیوند و از بهترین خدمات دیجیتال بهره‌مند شو
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link

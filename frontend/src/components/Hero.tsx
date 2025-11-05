@@ -13,23 +13,88 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* لوگو */}
-        <div className="flex justify-center mb-8 animate-fade-in">
-          <MignumLogo className="w-32 h-32" />
+        {/* لوگو اصلی */}
+        <div className="relative flex justify-center items-center mb-12 min-h-[400px] md:min-h-[500px]">
+          {/* لوگو در مرکز */}
+          <div className="relative z-20 animate-fade-in">
+            <MignumLogo className="w-64 h-auto md:w-80 md:h-auto" />
+          </div>
+
+          {/* عکس‌های متحرک اطراف لوگو */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            {/* عکس 1 - بالا چپ */}
+            <div className="absolute top-10 left-10 md:top-20 md:left-20 animate-float-slow">
+              <img
+                src="/11d301d4ce8371a4e293255787aff91b.png"
+                alt="Game"
+                className="w-16 h-16 md:w-20 md:h-20 opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* عکس 2 - بالا راست */}
+            <div className="absolute top-10 right-10 md:top-20 md:right-20 animate-float-reverse">
+              <img
+                src="/1d30e9382a09933fefae50b5d8dc1d7a.png"
+                alt="Game"
+                className="w-16 h-16 md:w-20 md:h-20 opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* عکس 3 - پایین چپ */}
+            <div className="absolute bottom-10 left-10 md:bottom-20 md:left-20 animate-float-slow-delayed">
+              <img
+                src="/31c57b54718309a92b5d2900a15ace5b.png"
+                alt="Game"
+                className="w-16 h-16 md:w-20 md:h-20 opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* عکس 4 - پایین راست (ChatGPT) */}
+            <div className="absolute bottom-10 right-10 md:bottom-20 md:right-20 animate-float-reverse-delayed">
+              <img
+                src="/vecteezy_chat-gpt-logo-on-white-polygon_69331175.png"
+                alt="ChatGPT"
+                className="w-16 h-16 md:w-20 md:h-20 opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* عکس 5 - وسط چپ */}
+            <div className="absolute top-1/2 left-5 md:left-10 animate-float-slow" style={{ animationDelay: '0.5s' }}>
+              <img
+                src="/333d58c7e0f288428cf09fed66f50206.png"
+                alt="Game"
+                className="w-12 h-12 md:w-16 md:h-16 opacity-60 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* عکس 6 - وسط راست */}
+            <div className="absolute top-1/2 right-5 md:right-10 animate-float-reverse" style={{ animationDelay: '0.7s' }}>
+              <img
+                src="/c186f8bc6debfb3881f0f72cbc3cc76f.png"
+                alt="Game"
+                className="w-12 h-12 md:w-16 md:h-16 opacity-60 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* عکس 7 - بالا وسط */}
+            <div className="absolute top-5 md:top-10 left-1/2 transform -translate-x-1/2 animate-float-slow" style={{ animationDelay: '1s' }}>
+              <img
+                src="/ed4304c71234a91e510a0bf663995c5a.png"
+                alt="Game"
+                className="w-12 h-12 md:w-16 md:h-16 opacity-60 hover:opacity-100 transition-opacity"
+              />
+            </div>
+
+            {/* عکس 8 - پایین وسط */}
+            <div className="absolute bottom-5 md:bottom-10 left-1/2 transform -translate-x-1/2 animate-float-reverse" style={{ animationDelay: '1.2s' }}>
+              <img
+                src="/f03cbba6cf582970f35cdfad6c6dc671.png"
+                alt="Game"
+                className="w-12 h-12 md:w-16 md:h-16 opacity-60 hover:opacity-100 transition-opacity"
+              />
+            </div>
+          </div>
         </div>
-
-        {/* عنوان اصلی */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 neon-glow animate-slide-up">
-          <span className="text-neonOrange">MIGNUM</span>
-        </h1>
-
-        {/* زیرعنوان */}
-        <p className="text-xl md:text-2xl text-gray-300 mb-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          WHERE GAMERS LEVEL
-        </p>
-        <p className="text-xl md:text-2xl text-neonOrange mb-12 animate-slide-up neon-glow-subtle" style={{ animationDelay: '0.4s' }}>
-          BEYOND LIMITS
-        </p>
 
         {/* دکمه‌ها */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.6s' }}>

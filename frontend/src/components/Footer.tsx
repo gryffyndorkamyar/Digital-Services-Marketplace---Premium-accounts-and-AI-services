@@ -10,11 +10,8 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* درباره ما */}
           <div>
-            <div className="flex items-center space-x-3 space-x-reverse mb-4">
-              <MignumLogo className="w-8 h-8" />
-              <span className="text-xl font-bold text-neonOrange neon-glow-subtle">
-                MIGNUM
-              </span>
+            <div className="flex items-center mb-4">
+              <MignumLogo className="h-8 w-auto" />
             </div>
             <p className="text-gray-400 text-sm mb-4">
               جایی که گیمرها سطح خود را بالا می‌برند و فراتر از محدودیت‌ها می‌روند
@@ -109,7 +106,7 @@ const Footer: React.FC = () => {
         {/* کپی رایت */}
         <div className="border-t border-neonOrange/20 pt-8 text-center">
           <p className="text-gray-400 text-sm">
-            © {new Date().getFullYear()} MIGNUM. تمامی حقوق محفوظ است.
+            © {new Date().getFullYear()} تمامی حقوق محفوظ است.
           </p>
         </div>
       </div>
