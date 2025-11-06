@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingCart, Package, User, Grid } from 'lucide-react';
 import MignumLogo from './MignumLogo';
 
 const Navbar: React.FC = () => {
@@ -24,10 +24,31 @@ const Navbar: React.FC = () => {
               خانه
             </Link>
             <Link
+              to="/categories"
+              className="text-white hover:text-neonOrange transition-colors duration-200 font-medium flex items-center gap-1"
+            >
+              <Grid className="w-4 h-4" />
+              دسته‌بندی‌ها
+            </Link>
+            <Link
               to="/products"
               className="text-white hover:text-neonOrange transition-colors duration-200 font-medium"
             >
               محصولات
+            </Link>
+            <Link
+              to="/cart"
+              className="text-white hover:text-neonOrange transition-colors duration-200 font-medium flex items-center gap-1 relative"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              سبد خرید
+            </Link>
+            <Link
+              to="/orders"
+              className="text-white hover:text-neonOrange transition-colors duration-200 font-medium flex items-center gap-1"
+            >
+              <Package className="w-4 h-4" />
+              سفارشات
             </Link>
             <Link
               to="/about"
@@ -40,6 +61,13 @@ const Navbar: React.FC = () => {
               className="text-white hover:text-neonOrange transition-colors duration-200 font-medium"
             >
               تماس با ما
+            </Link>
+            <Link
+              to="/profile"
+              className="text-white hover:text-neonOrange transition-colors duration-200 font-medium flex items-center gap-1"
+            >
+              <User className="w-4 h-4" />
+              پروفایل
             </Link>
             <Link
               to="/login"
@@ -69,11 +97,35 @@ const Navbar: React.FC = () => {
               خانه
             </Link>
             <Link
+              to="/categories"
+              className="block text-white hover:text-neonOrange transition-colors flex items-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Grid className="w-4 h-4" />
+              دسته‌بندی‌ها
+            </Link>
+            <Link
               to="/products"
               className="block text-white hover:text-neonOrange transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               محصولات
+            </Link>
+            <Link
+              to="/cart"
+              className="block text-white hover:text-neonOrange transition-colors flex items-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <ShoppingCart className="w-4 h-4" />
+              سبد خرید
+            </Link>
+            <Link
+              to="/orders"
+              className="block text-white hover:text-neonOrange transition-colors flex items-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <Package className="w-4 h-4" />
+              سفارشات
             </Link>
             <Link
               to="/about"
@@ -88,6 +140,14 @@ const Navbar: React.FC = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               تماس با ما
+            </Link>
+            <Link
+              to="/profile"
+              className="block text-white hover:text-neonOrange transition-colors flex items-center gap-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <User className="w-4 h-4" />
+              پروفایل
             </Link>
             <Link
               to="/login"
