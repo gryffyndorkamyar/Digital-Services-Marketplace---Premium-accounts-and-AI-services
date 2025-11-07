@@ -23,8 +23,8 @@ const CategoriesPage: React.FC = () => {
       try {
         setLoading(true);
         const [allCategories, featured] = await Promise.all([
-          categoriesAPI.getAll(),
-          categoriesAPI.getFeatured(),
+          categoriesAPI.getAll<Category>(),
+          categoriesAPI.getFeatured<Category>(),
         ]);
         setCategories(allCategories);
         setFeaturedCategories(featured);

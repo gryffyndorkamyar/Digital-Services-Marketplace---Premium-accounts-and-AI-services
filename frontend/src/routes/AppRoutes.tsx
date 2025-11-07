@@ -6,6 +6,7 @@ import LoginPage from '../pages/LoginPage';
 import AboutPage from '../pages/AboutPage';
 import ContactPage from '../pages/ContactPage';
 import CategoriesPage from '../pages/CategoriesPage';
+import ProductsPage from '../pages/ProductsPage';
 import CartPage from '../pages/CartPage';
 import OrdersPage from '../pages/OrdersPage';
 import ProfilePage from '../pages/ProfilePage';
@@ -18,6 +19,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/about" element={<Layout><AboutPage /></Layout>} />
       <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
       <Route path="/categories" element={<Layout><CategoriesPage /></Layout>} />
+      <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
       <Route path="/cart" element={<Layout><CartPage /></Layout>} />
       <Route path="/orders" element={<Layout><OrdersPage /></Layout>} />
       <Route path="/profile" element={<Layout><ProfilePage /></Layout>} />

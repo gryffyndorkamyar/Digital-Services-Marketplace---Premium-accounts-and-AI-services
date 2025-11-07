@@ -33,7 +33,7 @@ const OrdersPage: React.FC = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const ordersData = await ordersAPI.getAll();
+      const ordersData = await ordersAPI.getAll<Order>();
       setOrders(ordersData);
     } catch (error) {
       console.error('Error fetching orders:', error);

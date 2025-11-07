@@ -25,6 +25,14 @@ async function apiCall<T>(
   return response.json();
 }
 
+const extractList = <T>(data: any): T[] => {
+  if (Array.isArray(data)) return data as T[];
+  if (data && Array.isArray(data.results)) return data.results as T[];
+  if (data && Array.isArray(data.data)) return data.data as T[];
+  if (data && Array.isArray(data.items)) return data.items as T[];
+  return [] as T[];
+};
+
 // Auth API
 export const authAPI = {
   login: (username: string, password: string) =>
@@ -41,32 +49,32 @@ export const authAPI = {
 
 // Categories API
 export const categoriesAPI = {
-  getAll: () => apiCall<any[]>('/categories/'),
+  getAll: async <T = any>() => extractList<T>(await apiCall<any>('/categories/')),
   getById: (id: string) => apiCall<any>(`/categories/${id}/`),
-  getFeatured: () => apiCall<any[]>('/categories/featured/'),
+  getFeatured: async <T = any>() => extractList<T>(await apiCall<any>('/categories/featured/')),
   getTree: () => apiCall<any>('/categories/tree/'),
-  getProducts: (id: string) => apiCall<any[]>(`/categories/${id}/products/`),
+  getProducts: async <T = any>(id: string) => extractList<T>(await apiCall<any>(`/categories/${id}/products/`)),
 };
 
 // Products API
 export const productsAPI = {
-  getAll: () => apiCall<any[]>('/products/'),
+  getAll: async <T = any>() => extractList<T>(await apiCall<any>('/products/')),
   getById: (id: string) => apiCall<any>(`/products/${id}/`),
-  getFeatured: () => apiCall<any[]>('/products/featured/'),
-  getTrending: () => apiCall<any[]>('/products/trending/'),
-  getNew: () => apiCall<any[]>('/products/new/'),
-  getBestsellers: () => apiCall<any[]>('/products/bestsellers/'),
-  getOnSale: () => apiCall<any[]>('/products/on_sale/'),
-  search: (query: string) => apiCall<any[]>(`/products/search/?q=${query}`),
-  getRelated: (id: string) => apiCall<any[]>(`/products/${id}/related/`),
+  getFeatured: async <T = any>() => extractList<T>(await apiCall<any>('/products/featured/')),
+  getTrending: async <T = any>() => extractList<T>(await apiCall<any>('/products/trending/')),
+  getNew: async <T = any>() => extractList<T>(await apiCall<any>('/products/new/')),
+  getBestsellers: async <T = any>() => extractList<T>(await apiCall<any>('/products/bestsellers/')),
+  getOnSale: async <T = any>() => extractList<T>(await apiCall<any>('/products/on_sale/')),
+  search: async <T = any>(query: string) => extractList<T>(await apiCall<any>(`/products/search/?q=${query}`)),
+  getRelated: async <T = any>(id: string) => extractList<T>(await apiCall<any>(`/products/${id}/related/`)),
 };
 
 // Cart API
 export const cartAPI = {
-  getAll: () => apiCall<any[]>('/carts/'),
+  getAll: async <T = any>() => extractList<T>(await apiCall<any>('/carts/')),
   getActive: () => apiCall<any>('/carts/active/'),
   getById: (id: string) => apiCall<any>(`/carts/${id}/`),
-  create: (data: any) =>
+  create: (data: any = {}) =>
     apiCall<any>('/carts/', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -99,7 +107,7 @@ export const cartAPI = {
 
 // Orders API
 export const ordersAPI = {
-  getAll: () => apiCall<any[]>('/orders/'),
+  getAll: async <T = any>() => extractList<T>(await apiCall<any>('/orders/')),
   getById: (id: string) => apiCall<any>(`/orders/${id}/`),
   create: (data: any) =>
     apiCall<any>('/orders/', {
@@ -133,6 +141,11 @@ export const usersAPI = {
       method: 'PATCH',
       body: JSON.stringify(data),
     }),
+  register: (data: { username: string; email: string; password: string; password_confirm?: string }) =>
+    apiCall<any>('/users/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
   uploadAvatar: (file: File) => {
     const formData = new FormData();
     formData.append('avatar', file);
@@ -146,7 +159,7 @@ export const usersAPI = {
 
 // Reviews API
 export const reviewsAPI = {
-  getAll: () => apiCall<any[]>('/reviews/'),
+  getAll: async <T = any>() => extractList<T>(await apiCall<any>('/reviews/')),
   getById: (id: string) => apiCall<any>(`/reviews/${id}/`),
   create: (data: any) =>
     apiCall<any>('/reviews/', {

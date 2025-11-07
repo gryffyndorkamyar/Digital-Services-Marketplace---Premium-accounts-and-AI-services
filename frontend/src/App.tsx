@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Toaster } from 'react-hot-toast';
 import AppRoutes from './routes/AppRoutes';
+import { AuthProvider } from './context/AuthContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,33 +18,35 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <div className="min-h-screen bg-dark-dark neon-bg">
-          <AppRoutes />
-          <Toaster
-            position="top-center"
-            toastOptions={{
-              duration: 3000,
-              style: {
-                background: '#1a1a1a',
-                color: '#fff',
-                border: '1px solid #ff6b35',
-                boxShadow: '0 0 10px rgba(255, 107, 53, 0.3)',
-              },
-              success: {
-                iconTheme: {
-                  primary: '#ff6b35',
-                  secondary: '#fff',
+        <AuthProvider>
+          <div className="min-h-screen bg-dark-dark neon-bg">
+            <AppRoutes />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  background: '#1a1a1a',
+                  color: '#fff',
+                  border: '1px solid #ff6b35',
+                  boxShadow: '0 0 10px rgba(255, 107, 53, 0.3)',
                 },
-              },
-              error: {
-                iconTheme: {
-                  primary: '#ef4444',
-                  secondary: '#fff',
+                success: {
+                  iconTheme: {
+                    primary: '#ff6b35',
+                    secondary: '#fff',
+                  },
                 },
-              },
-            }}
-          />
-        </div>
+                error: {
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#fff',
+                  },
+                },
+              }}
+            />
+          </div>
+        </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
