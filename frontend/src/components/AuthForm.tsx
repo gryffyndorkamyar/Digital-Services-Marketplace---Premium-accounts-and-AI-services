@@ -45,11 +45,18 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
       return;
     }
 
+    const phoneValue = formData.phone.trim();
+    const phoneRegex = /^\+?\d{10,15}$/;
+    if (!phoneRegex.test(phoneValue)) {
+      toast.error('شماره موبایل باید فقط شامل ارقام باشد و بین ۱۰ تا ۱۵ رقم باشد');
+      return;
+    }
+
     await usersAPI.register({
       username: formData.username.trim(),
       email: formData.email.trim(),
-      phone: formData.phone.trim(),
-      phone_number: formData.phone.trim(),
+      phone: phoneValue,
+      phone_number: phoneValue,
       password: formData.password,
       password_confirm: formData.confirmPassword,
     });
@@ -144,7 +151,6 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    pattern="^\\d{10,15}$"
                     className="auth-input pr-10"
                     placeholder="مثال: 09123456789"
                   />

@@ -17,6 +17,7 @@ async function apiCall<T>(
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers,
+    credentials: options.credentials ?? 'include',
   });
 
   let data: any = null;
@@ -34,7 +35,10 @@ async function apiCall<T>(
       (data && typeof data === 'object' && !Array.isArray(data) &&
         (data.detail || data.error || Object.values(data)[0])) ||
       (typeof data === 'string' ? data : response.statusText || 'خطای ناشناخته');
-    throw new Error(`API Error: ${message}`);
+    const error = new Error(`API Error: ${message}`) as Error & { status?: number; payload?: any };
+    error.status = response.status;
+    error.payload = data;
+    throw error;
   }
 
   return data as T;

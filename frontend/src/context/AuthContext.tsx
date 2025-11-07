@@ -17,26 +17,26 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => Boolean(localStorage.getItem('token')));
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [authModalVisible, setAuthModalVisible] = useState<boolean>(false);
   const [modalCallback, setModalCallback] = useState<(() => void) | null>(null);
 
   const fetchProfile = useCallback(async () => {
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
     try {
       setLoading(true);
       const profile = await usersAPI.getProfile();
       setUser(profile);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error('Error fetching profile:', error);
-      localStorage.removeItem('token');
-      setToken(null);
       setUser(null);
+      setIsAuthenticated(false);
+      if (token) {
+        localStorage.removeItem('token');
+        setToken(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -57,14 +57,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         response?.data?.token;
 
       if (rawToken) {
-        const normalizedToken = rawToken.startsWith('Token ') || rawToken.startsWith('Bearer ')
-          ? rawToken
-          : `Token ${rawToken}`;
+        let normalizedToken = rawToken;
+        if (!/^token\s+/i.test(rawToken) && !/^bearer\s+/i.test(rawToken)) {
+          const tokenType =
+            (typeof response?.token_type === 'string' && response.token_type.trim()) ||
+            (rawToken.includes('.') ? 'Bearer' : 'Token');
+          normalizedToken = `${tokenType} ${rawToken}`;
+        }
         localStorage.setItem('token', normalizedToken);
         setToken(normalizedToken);
+        setIsAuthenticated(true);
       }
       if (response?.user) {
         setUser(response.user);
+        setIsAuthenticated(true);
       } else {
         await fetchProfile();
       }
@@ -83,6 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
+    setIsAuthenticated(false);
     toast.success('با موفقیت خارج شدید');
   }, []);
 
@@ -100,7 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      isAuthenticated: Boolean(token),
+      isAuthenticated,
       user,
       loading,
       login,
@@ -108,7 +115,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       showAuthModal,
       hideAuthModal,
     }),
-    [token, user, loading, login, logout, showAuthModal, hideAuthModal]
+    [isAuthenticated, user, loading, login, logout, showAuthModal, hideAuthModal]
   );
 
   return (
