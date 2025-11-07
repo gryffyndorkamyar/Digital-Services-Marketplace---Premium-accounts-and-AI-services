@@ -144,7 +144,7 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    pattern="^\d{10,15}$"
+                    pattern="^\\d{10,15}$"
                     className="auth-input pr-10"
                     placeholder="مثال: 09123456789"
                   />

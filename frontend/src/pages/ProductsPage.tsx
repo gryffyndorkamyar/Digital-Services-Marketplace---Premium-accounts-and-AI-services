@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Search, SlidersHorizontal, Loader, Sparkles, Flame, Star, Minus, Plus, X } from 'lucide-react';
-import { toast } from 'react-hot-toast';
-import { productsAPI, cartAPI } from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
+import { Search, SlidersHorizontal, Loader, Sparkles, Flame, Star } from 'lucide-react';
+import { productsAPI } from '../services/api';
+import QuickPurchaseModal from '../components/QuickPurchaseModal';
+import { useQuickPurchase } from '../hooks/useQuickPurchase';
 
 interface Product {
   id: string;
@@ -21,12 +21,7 @@ const ProductsPage: React.FC = () => {
   const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [purchaseLoading, setPurchaseLoading] = useState(false);
-
-  const { isAuthenticated, showAuthModal } = useAuth();
-  const navigate = useNavigate();
+  const { openQuickPurchase, quickPurchaseState } = useQuickPurchase();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -61,57 +56,6 @@ const ProductsPage: React.FC = () => {
       product.description?.toLowerCase().includes(term)
     );
   }, [products, searchTerm]);
-
-  const openQuickPurchase = (product: Product) => {
-    setSelectedProduct(product);
-    setQuantity(1);
-  };
-
-  const handleQuickBuy = (product: Product) => {
-    if (!isAuthenticated) {
-      toast('برای خرید ابتدا وارد حساب شوید', { icon: '⚠️' });
-      showAuthModal({
-        onSuccess: () => openQuickPurchase(product),
-      });
-      return;
-    }
-    openQuickPurchase(product);
-  };
-
-  const ensureCart = async () => {
-    try {
-      const active = await cartAPI.getActive();
-      if (active?.id) {
-        return active;
-      }
-    } catch (error) {
-      // در صورت نبود سبد فعال به مرحله بعد می‌رویم
-    }
-    return cartAPI.create();
-  };
-
-  const handlePurchase = async () => {
-    if (!selectedProduct) return;
-    try {
-      setPurchaseLoading(true);
-      const cart = await ensureCart();
-      if (!cart?.id) {
-        throw new Error('عدم توانایی در ایجاد سبد خرید');
-      }
-      await cartAPI.addItem(cart.id, {
-        product_id: selectedProduct.id,
-        quantity,
-      });
-      toast.success('محصول به سبد خرید اضافه شد');
-      setSelectedProduct(null);
-      navigate('/cart');
-    } catch (error: any) {
-      console.error('Quick purchase error:', error);
-      toast.error(error?.message || 'در خرید محصول خطایی رخ داد');
-    } finally {
-      setPurchaseLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen pt-16 pb-20 px-4 relative overflow-hidden">
@@ -157,7 +101,7 @@ const ProductsPage: React.FC = () => {
                 <ProductCard
                   key={`featured-${product.id}`}
                   product={product}
-                  onQuickBuy={() => handleQuickBuy(product)}
+                  onQuickBuy={() => openQuickPurchase(product)}
                 />
               ))}
             </div>
@@ -175,7 +119,7 @@ const ProductsPage: React.FC = () => {
                 <ProductCard
                   key={`trending-${product.id}`}
                   product={product}
-                  onQuickBuy={() => handleQuickBuy(product)}
+                  onQuickBuy={() => openQuickPurchase(product)}
                 />
               ))}
             </div>
@@ -198,7 +142,7 @@ const ProductsPage: React.FC = () => {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  onQuickBuy={() => handleQuickBuy(product)}
+                  onQuickBuy={() => openQuickPurchase(product)}
                 />
               ))}
             </div>
@@ -210,14 +154,14 @@ const ProductsPage: React.FC = () => {
         </section>
       </div>
 
-      {selectedProduct && (
+      {quickPurchaseState.product && (
         <QuickPurchaseModal
-          product={selectedProduct}
-          quantity={quantity}
-          onQuantityChange={setQuantity}
-          onClose={() => setSelectedProduct(null)}
-          onConfirm={handlePurchase}
-          loading={purchaseLoading}
+          product={quickPurchaseState.product}
+          quantity={quickPurchaseState.quantity}
+          onQuantityChange={(value) => quickPurchaseState.setQuantity(value)}
+          onClose={quickPurchaseState.close}
+          onConfirm={quickPurchaseState.confirm}
+          loading={quickPurchaseState.loading}
         />
       )}
     </div>
@@ -269,85 +213,6 @@ const ProductCard: React.FC<{ product: Product; onQuickBuy: () => void }> = ({ p
         خرید سریع
       </button>
     </Link>
-  );
-};
-
-interface QuickPurchaseModalProps {
-  product: Product;
-  quantity: number;
-  onQuantityChange: (quantity: number) => void;
-  onClose: () => void;
-  onConfirm: () => Promise<void> | void;
-  loading?: boolean;
-}
-
-const QuickPurchaseModal: React.FC<QuickPurchaseModalProps> = ({
-  product,
-  quantity,
-  onQuantityChange,
-  onClose,
-  onConfirm,
-  loading,
-}) => {
-  return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
-      <div className="relative max-w-lg w-full bg-dark-card/95 border border-neonOrange/30 rounded-2xl p-8 shadow-2xl">
-        <button
-          onClick={onClose}
-          className="absolute top-3 left-3 text-gray-400 hover:text-neonOrange transition-colors"
-          aria-label="close quick purchase"
-        >
-          <X className="w-5 h-5" />
-        </button>
-        <h3 className="text-2xl font-bold text-neonOrange mb-4">خرید سریع</h3>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            {product.image && (
-              <img src={product.image} alt={product.name} className="w-24 h-24 object-cover rounded-xl" />
-            )}
-            <div>
-              <h4 className="text-xl font-bold text-white mb-2">{product.name}</h4>
-              <p className="text-neonOrange font-bold">
-                {parseFloat(product.price).toLocaleString()} تومان
-              </p>
-            </div>
-          </div>
-          {product.description && (
-            <p className="text-gray-400 text-sm leading-6 bg-dark-surface/60 border border-neonOrange/20 rounded-xl p-4">
-              {product.description}
-            </p>
-          )}
-          <div className="flex items-center justify-between">
-            <span className="text-gray-300">تعداد</span>
-            <div className="flex items-center gap-3 bg-dark-surface border border-neonOrange/30 rounded-lg px-3 py-2">
-              <button
-                type="button"
-                onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
-                className="text-neonOrange hover:text-neonOrange-light"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-              <span className="text-white font-bold w-6 text-center">{quantity}</span>
-              <button
-                type="button"
-                onClick={() => onQuantityChange(quantity + 1)}
-                className="text-neonOrange hover:text-neonOrange-light"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onConfirm}
-            disabled={loading}
-            className="w-full py-3 neon-button rounded-lg text-white font-bold text-lg transition-all hover:scale-105 disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            {loading ? 'در حال پردازش...' : 'افزودن به سبد و ادامه خرید'}
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };
 

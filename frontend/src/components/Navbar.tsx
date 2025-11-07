@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated, logout, showAuthModal } = useAuth();
+  const { isAuthenticated, user, logout, showAuthModal } = useAuth();
   const navigate = useNavigate();
 
   const handleAuthAction = async () => {
@@ -57,13 +57,28 @@ const Navbar: React.FC = () => {
                 پروفایل
               </Link>
             )}
-            <button
-              onClick={handleAuthAction}
-              className="flex items-center gap-2 px-4 py-2 neon-button rounded-lg text-white font-medium"
-            >
-              {isAuthenticated ? <LogOut className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
-              {isAuthenticated ? 'خروج' : 'ورود / ثبت‌نام'}
-            </button>
+            {isAuthenticated ? (
+              <div className="flex items-center gap-3">
+                {user?.username && (
+                  <span className="text-sm text-gray-300">سلام، {user.username}</span>
+                )}
+                <button
+                  onClick={handleAuthAction}
+                  className="flex items-center gap-2 px-4 py-2 neon-button rounded-lg text-white font-medium"
+                >
+                  <LogOut className="w-4 h-4" />
+                  خروج
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleAuthAction}
+                className="flex items-center gap-2 px-4 py-2 neon-button rounded-lg text-white font-medium"
+              >
+                <LogIn className="w-4 h-4" />
+                ورود / ثبت‌نام
+              </button>
+            )}
           </div>
 
           <button
@@ -98,13 +113,23 @@ const Navbar: React.FC = () => {
                 پروفایل
               </Link>
             )}
-            <button
-              onClick={handleAuthAction}
-              className="w-full px-4 py-3 neon-button rounded-lg text-white font-medium text-center flex items-center justify-center gap-2"
-            >
-              {isAuthenticated ? <LogOut className="w-4 h-4" /> : <LogIn className="w-4 h-4" />}
-              {isAuthenticated ? 'خروج' : 'ورود / ثبت‌نام'}
-            </button>
+            {isAuthenticated ? (
+              <button
+                onClick={handleAuthAction}
+                className="w-full px-4 py-3 neon-button rounded-lg text-white font-medium text-center flex items-center justify-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                خروج
+              </button>
+            ) : (
+              <button
+                onClick={handleAuthAction}
+                className="w-full px-4 py-3 neon-button rounded-lg text-white font-medium text-center flex items-center justify-center gap-2"
+              >
+                <LogIn className="w-4 h-4" />
+                ورود / ثبت‌نام
+              </button>
+            )}
           </div>
         )}
       </div>

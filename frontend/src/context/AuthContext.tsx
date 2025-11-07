@@ -49,9 +49,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = useCallback(
     async (username: string, password: string) => {
       const response = await authAPI.login(username, password);
-      if (response?.token) {
-        localStorage.setItem('token', response.token);
-        setToken(response.token);
+      const rawToken =
+        response?.token ??
+        response?.key ??
+        response?.access ??
+        response?.auth_token ??
+        response?.data?.token;
+
+      if (rawToken) {
+        const normalizedToken = rawToken.startsWith('Token ') || rawToken.startsWith('Bearer ')
+          ? rawToken
+          : `Token ${rawToken}`;
+        localStorage.setItem('token', normalizedToken);
+        setToken(normalizedToken);
       }
       if (response?.user) {
         setUser(response.user);

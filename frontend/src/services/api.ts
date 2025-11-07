@@ -6,10 +6,11 @@ async function apiCall<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = localStorage.getItem('token');
-  
+  const isFormData = options.body instanceof FormData;
+
   const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...(token && { Authorization: `Bearer ${token}` }),
+    ...(token && { Authorization: token }),
+    ...(!isFormData && { 'Content-Type': 'application/json' }),
     ...options.headers,
   };
 
@@ -50,7 +51,7 @@ const extractList = <T>(data: any): T[] => {
 // Auth API
 export const authAPI = {
   login: (username: string, password: string) =>
-    apiCall<{ token: string; user: any }>('/auth/login/', {
+    apiCall<any>('/auth/login/', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
     }),
