@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Package, Eye, X, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { Package, Eye, X, CheckCircle, Clock, AlertCircle, LogIn } from 'lucide-react';
 import { ordersAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 interface OrderItem {
   id: string;
@@ -25,12 +26,9 @@ interface Order {
 const OrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isAuthenticated, loading: authLoading, showAuthModal } = useAuth();
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       setLoading(true);
       const ordersData = await ordersAPI.getAll<Order>();
@@ -40,7 +38,16 @@ const OrdersPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setLoading(false);
+      setOrders([]);
+      return;
+    }
+    fetchOrders();
+  }, [isAuthenticated, fetchOrders]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -67,6 +74,42 @@ const OrdersPage: React.FC = () => {
         return <AlertCircle className="w-5 h-5" />;
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen pt-16 pb-20 flex items-center justify-center">
+        <div className="text-center">
+          <Package className="w-16 h-16 text-neonOrange mx-auto mb-4 animate-spin" />
+          <p className="text-gray-300">در حال بررسی حساب کاربری...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen pt-16 pb-20 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 neon-bg">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto text-center pt-20">
+          <Package className="w-24 h-24 text-neonOrange mx-auto mb-6" />
+          <h2 className="text-3xl font-bold mb-4 text-neonOrange">ابتدا وارد حساب شوید</h2>
+          <p className="text-gray-300 mb-8">
+            برای مشاهده سفارشات، لطفاً وارد حساب کاربری خود شوید یا ثبت‌نام کنید.
+          </p>
+          <button
+            onClick={() => showAuthModal()}
+            className="inline-flex items-center gap-2 px-6 py-3 neon-button rounded-lg text-white font-bold"
+          >
+            <LogIn className="w-5 h-5" />
+            ورود / ثبت‌نام
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

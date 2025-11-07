@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LogIn, UserPlus, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { LogIn, UserPlus, Mail, Lock, Eye, EyeOff, Phone } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { usersAPI } from '../services/api';
@@ -20,6 +20,7 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
   });
@@ -30,7 +31,7 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
   };
 
   const resetState = () => {
-    setFormData({ username: '', email: '', password: '', confirmPassword: '' });
+    setFormData({ username: '', email: '', phone: '', password: '', confirmPassword: '' });
     setShowPassword(false);
   };
 
@@ -47,6 +48,8 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
     await usersAPI.register({
       username: formData.username.trim(),
       email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      phone_number: formData.phone.trim(),
       password: formData.password,
       password_confirm: formData.confirmPassword,
     });
@@ -123,8 +126,27 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full pr-10 pl-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white caret-neonOrange placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all"
+                    className="auth-input pr-10"
                     placeholder="example@email.com"
+                  />
+                </div>
+              </div>
+            )}
+
+            {authMode === 'register' && (
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">شماره موبایل</label>
+                <div className="relative">
+                  <Phone className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neonOrange w-5 h-5" />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    pattern="^\d{10,15}$"
+                    className="auth-input pr-10"
+                    placeholder="مثال: 09123456789"
                   />
                 </div>
               </div>
@@ -140,7 +162,7 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
                   value={formData.username}
                   onChange={handleChange}
                   required
-                  className="w-full pr-10 pl-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white caret-neonOrange placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all"
+                  className="auth-input pr-10"
                   placeholder="نام کاربری"
                 />
               </div>
@@ -156,7 +178,7 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full pr-10 pl-10 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white caret-neonOrange placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all"
+                  className="auth-input pr-10 pl-10"
                   placeholder="گذرواژه"
                 />
                 <button
@@ -180,7 +202,7 @@ const AuthForm: React.FC<Props> = ({ mode = 'page', onSuccess, onClose }) => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
-                    className="w-full pr-10 pl-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white caret-neonOrange placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all"
+                    className="auth-input pr-10"
                     placeholder="تکرار گذرواژه"
                   />
                 </div>

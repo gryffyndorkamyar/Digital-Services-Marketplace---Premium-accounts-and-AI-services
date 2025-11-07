@@ -18,11 +18,25 @@ async function apiCall<T>(
     headers,
   });
 
-  if (!response.ok) {
-    throw new Error(`API Error: ${response.statusText}`);
+  let data: any = null;
+  const text = await response.text();
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch (error) {
+      data = text;
+    }
   }
 
-  return response.json();
+  if (!response.ok) {
+    const message =
+      (data && typeof data === 'object' && !Array.isArray(data) &&
+        (data.detail || data.error || Object.values(data)[0])) ||
+      (typeof data === 'string' ? data : response.statusText || 'خطای ناشناخته');
+    throw new Error(`API Error: ${message}`);
+  }
+
+  return data as T;
 }
 
 const extractList = <T>(data: any): T[] => {
@@ -141,7 +155,7 @@ export const usersAPI = {
       method: 'PATCH',
       body: JSON.stringify(data),
     }),
-  register: (data: { username: string; email: string; password: string; password_confirm?: string }) =>
+  register: (data: { username: string; email: string; phone?: string; phone_number?: string; password: string; password_confirm?: string }) =>
     apiCall<any>('/users/', {
       method: 'POST',
       body: JSON.stringify(data),

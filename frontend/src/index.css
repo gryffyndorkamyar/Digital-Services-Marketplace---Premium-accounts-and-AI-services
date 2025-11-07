@@ -38,6 +38,27 @@ body {
   direction: rtl;
 }
 
+.auth-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background-color: var(--dark-surface);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  color: #ffffff;
+  caret-color: var(--neon-orange);
+  transition: all 0.3s ease;
+}
+
+.auth-input::placeholder {
+  color: #9ca3af;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--neon-orange);
+  box-shadow: 0 0 12px rgba(255, 107, 53, 0.35);
+}
+
 code {
   font-family: 'JetBrains Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
