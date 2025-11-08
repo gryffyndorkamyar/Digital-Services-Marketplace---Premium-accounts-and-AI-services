@@ -54,12 +54,13 @@ export const formatPriceLabel = (value: number | null | undefined): string => {
 
 export const isProductAvailable = (product: any): boolean => {
   if (!product) return false;
+  if (product.is_active === false) return false;
   if (product.is_available !== undefined) return Boolean(product.is_available);
   if (product.available !== undefined) return Boolean(product.available);
   if (product.can_purchase !== undefined) return Boolean(product.can_purchase);
   if (product.status) {
     const status = String(product.status).toLowerCase();
-    if (['draft', 'inactive', 'disabled', 'archived'].includes(status)) return false;
+    if (status !== 'active') return false;
   }
   const stockFields = ['stock_quantity', 'stock', 'inventory', 'remaining_stock'];
   for (const key of stockFields) {
@@ -83,7 +84,7 @@ export const isProductAvailable = (product: any): boolean => {
 
 export const buildQuickPurchasePayload = (product: any) => {
   const price = extractPriceValue(product);
-  const image = resolveMediaUrl(product?.image);
+  const image = resolveMediaUrl(product?.image) || resolveMediaUrl(product?.main_image);
   const variantId = product?.default_variant?.id || product?.default_variant_id || null;
   const priceLabel = formatPriceLabel(price);
 

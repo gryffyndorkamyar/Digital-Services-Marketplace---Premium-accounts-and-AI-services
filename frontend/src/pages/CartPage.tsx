@@ -1,22 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Tag } from 'lucide-react';
 import { cartAPI } from '../services/api';
+import { resolveMediaUrl } from '../utils/product';
 
 interface CartItem {
   id: string;
   product: any;
   quantity: number;
-  price: string;
-  total_price: string;
+  price: any;
+  total_price: any;
+  final_price?: any;
+  product_name?: string;
+  product_image?: string;
+  variant_name?: string;
 }
 
 interface Cart {
   id: string;
   items: CartItem[];
-  subtotal: string;
-  discount_amount: string;
-  total_amount: string;
+  subtotal: any;
+  discount_amount: any;
+  total?: any;
   coupon?: any;
 }
 
@@ -24,6 +29,22 @@ const CartPage: React.FC = () => {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [couponCode, setCouponCode] = useState('');
+
+  const parseAmount = (value: any): number => {
+    if (value === null || value === undefined) return 0;
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    if (typeof value === 'string') {
+      const normalized = value.replace(/[^0-9.-]/g, '');
+      const parsed = Number.parseFloat(normalized);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+    return 0;
+  };
+
+  const formatAmount = (value: any): string => {
+    const amount = parseAmount(value);
+    return `${amount.toLocaleString('fa-IR')} تومان`;
+  };
 
   useEffect(() => {
     fetchCart();
@@ -40,6 +61,39 @@ const CartPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const normalizedCart = useMemo(() => {
+    if (!cart) return null;
+    const normalizedItems = (cart.items || []).map((item) => {
+      const unitPrice = parseAmount(item.price ?? item.final_price);
+      const totalPrice = parseAmount(item.total_price ?? item.final_price ?? unitPrice * item.quantity);
+      const image = resolveMediaUrl(item.product_image) || resolveMediaUrl(item.product?.main_image) || resolveMediaUrl(item.product?.image);
+      return {
+        ...item,
+        unitPrice,
+        totalPrice,
+        unitPriceLabel: formatAmount(unitPrice),
+        totalPriceLabel: formatAmount(totalPrice),
+        productName: item.product_name || item.product?.name,
+        productImage: image,
+      };
+    });
+
+    const subtotalValue = parseAmount((cart as any).subtotal ?? (cart as any).total ?? (cart as any).total_amount ?? 0);
+    const discountValue = parseAmount((cart as any).discount_amount ?? 0);
+    const totalValue = parseAmount((cart as any).total ?? (cart as any).total_amount ?? subtotalValue - discountValue);
+
+    return {
+      ...cart,
+      items: normalizedItems,
+      subtotalValue,
+      discountValue,
+      totalValue,
+      subtotalLabel: formatAmount(subtotalValue),
+      discountLabel: formatAmount(discountValue),
+      totalLabel: formatAmount(totalValue),
+    };
+  }, [cart]);
 
   const handleUpdateQuantity = async (itemId: string, newQuantity: number) => {
     if (!cart || newQuantity < 1) return;
@@ -83,7 +137,7 @@ const CartPage: React.FC = () => {
     );
   }
 
-  if (!cart || cart.items.length === 0) {
+  if (!normalizedCart || normalizedCart.items.length === 0) {
     return (
       <div className="min-h-screen pt-16 pb-20 px-4 relative overflow-hidden">
         <div className="absolute inset-0 neon-bg">
@@ -130,26 +184,35 @@ const CartPage: React.FC = () => {
         <div className="grid md:grid-cols-3 gap-8">
           {/* لیست محصولات */}
           <div className="md:col-span-2 space-y-4">
-            {cart.items.map((item) => (
+            {normalizedCart.items.map((item) => (
               <div
                 key={item.id}
                 className="bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-xl p-6 hover:border-neonOrange/50 transition-all"
               >
                 <div className="flex gap-6">
-                  {item.product?.image && (
-                    <img
-                      src={item.product.image}
-                      alt={item.product.name}
-                      className="w-24 h-24 object-cover rounded-lg"
-                    />
-                  )}
+                  <div className="w-24 h-24 rounded-lg overflow-hidden bg-dark-surface border border-neonOrange/20 flex-shrink-0">
+                    {item.productImage ? (
+                      <img
+                        src={item.productImage}
+                        alt={item.productName || 'محصول'}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-sm text-gray-500">
+                        بدون تصویر
+                      </div>
+                    )}
+                  </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-bold mb-2 text-neonOrange">
-                      {item.product?.name || 'محصول'}
+                      {item.productName || 'محصول'}
                     </h3>
-                    <p className="text-gray-300 mb-4">
-                      قیمت واحد: {parseFloat(item.price).toLocaleString()} تومان
+                    <p className="text-gray-300 mb-1">
+                      قیمت واحد: {item.unitPriceLabel}
                     </p>
+                    {item.variant_name && (
+                      <p className="text-gray-400 text-sm mb-3">نوع: {item.variant_name}</p>
+                    )}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <button
@@ -168,7 +231,7 @@ const CartPage: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="text-white font-bold">
-                          {parseFloat(item.total_price).toLocaleString()} تومان
+                          {item.totalPriceLabel}
                         </span>
                         <button
                           onClick={() => handleRemoveItem(item.id)}
@@ -209,7 +272,7 @@ const CartPage: React.FC = () => {
                     <Tag className="w-5 h-5" />
                   </button>
                 </div>
-                {cart.coupon && (
+                {cart?.coupon && (
                   <p className="text-sm text-neonOrange mt-2">
                     کد تخفیف اعمال شد: {cart.coupon.code}
                   </p>
@@ -220,17 +283,17 @@ const CartPage: React.FC = () => {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-gray-300">
                   <span>جمع کل:</span>
-                  <span>{parseFloat(cart.subtotal).toLocaleString()} تومان</span>
+                  <span>{normalizedCart.subtotalLabel}</span>
                 </div>
-                {parseFloat(cart.discount_amount) > 0 && (
+                {normalizedCart.discountValue > 0 && (
                   <div className="flex justify-between text-neonOrange">
                     <span>تخفیف:</span>
-                    <span>-{parseFloat(cart.discount_amount).toLocaleString()} تومان</span>
+                    <span>-{normalizedCart.discountLabel}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-xl font-bold text-neonOrange pt-3 border-t border-neonOrange/30">
                   <span>مبلغ قابل پرداخت:</span>
-                  <span>{parseFloat(cart.total_amount).toLocaleString()} تومان</span>
+                  <span>{normalizedCart.totalLabel}</span>
                 </div>
               </div>
 
