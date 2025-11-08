@@ -11,8 +11,10 @@ interface CartItem {
   price: any;
   total_price: any;
   final_price?: any;
+  final_price_discount?: any;
   product_name?: string;
   product_image?: string;
+  discount_amount?: any;
   variant_name?: string;
 }
 
@@ -65,13 +67,19 @@ const CartPage: React.FC = () => {
   const normalizedCart = useMemo(() => {
     if (!cart) return null;
     const normalizedItems = (cart.items || []).map((item) => {
+      const quantity = item.quantity ?? 1;
       const unitPrice = parseAmount(item.price ?? item.final_price);
-      const totalPrice = parseAmount(item.total_price ?? item.final_price ?? unitPrice * item.quantity);
+      const discountAmount = parseAmount(item.discount_amount ?? item.final_price_discount ?? 0);
+      const subtotal = unitPrice * quantity;
+      const totalPrice = parseAmount(item.total_price ?? item.final_price ?? subtotal - discountAmount);
       const image = resolveMediaUrl(item.product_image) || resolveMediaUrl(item.product?.main_image) || resolveMediaUrl(item.product?.image);
       return {
         ...item,
+        quantity,
         unitPrice,
         totalPrice,
+        subtotal,
+        discountAmount,
         unitPriceLabel: formatAmount(unitPrice),
         totalPriceLabel: formatAmount(totalPrice),
         productName: item.product_name || item.product?.name,
@@ -79,9 +87,15 @@ const CartPage: React.FC = () => {
       };
     });
 
-    const subtotalValue = parseAmount((cart as any).subtotal ?? (cart as any).total ?? (cart as any).total_amount ?? 0);
-    const discountValue = parseAmount((cart as any).discount_amount ?? 0);
-    const totalValue = parseAmount((cart as any).total ?? (cart as any).total_amount ?? subtotalValue - discountValue);
+    const subtotalValueFromBackend = parseAmount((cart as any).subtotal ?? (cart as any).total ?? (cart as any).total_amount ?? 0);
+    const subtotalSum = normalizedItems.reduce((sum, item) => sum + item.subtotal, 0);
+    const subtotalValue = normalizedItems.length > 0 ? subtotalSum : subtotalValueFromBackend;
+    const discountValueFromBackend = parseAmount((cart as any).discount_amount ?? 0);
+    const discountSum = normalizedItems.reduce((sum, item) => sum + item.discountAmount, 0);
+    const discountValue = normalizedItems.length > 0 ? discountSum : discountValueFromBackend;
+    const totalValueFromBackend = parseAmount((cart as any).total ?? (cart as any).total_amount ?? 0);
+    const totalComputed = subtotalValue - discountValue;
+    const totalValue = normalizedItems.length > 0 ? totalComputed : totalValueFromBackend;
 
     return {
       ...cart,
