@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import { authAPI, usersAPI } from '../services/api';
 import AuthModal from '../components/AuthModal';
 import { toast } from 'react-hot-toast';
+import { authTokenStore } from '../services/authToken';
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -16,27 +17,33 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => Boolean(localStorage.getItem('token')));
+  const [token, setToken] = useState<string | null>(() => authTokenStore.get());
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => Boolean(authTokenStore.get()));
   const [user, setUser] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [authModalVisible, setAuthModalVisible] = useState<boolean>(false);
   const [modalCallback, setModalCallback] = useState<(() => void) | null>(null);
 
   const fetchProfile = useCallback(async () => {
+    if (!token) {
+      setUser(null);
+      setIsAuthenticated(false);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const profile = await usersAPI.getProfile();
       setUser(profile);
       setIsAuthenticated(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching profile:', error);
       setUser(null);
       setIsAuthenticated(false);
-      if (token) {
-        localStorage.removeItem('token');
-        setToken(null);
-      }
+      localStorage.removeItem('token');
+      authTokenStore.clear();
+      setToken(null);
     } finally {
       setLoading(false);
     }
@@ -46,6 +53,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchProfile();
   }, [fetchProfile]);
 
+  useEffect(() => {
+    if (token) {
+      authTokenStore.set(token);
+    }
+  }, [token]);
+
   const login = useCallback(
     async (username: string, password: string) => {
       const response = await authAPI.login(username, password);
@@ -53,8 +66,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         response?.token ??
         response?.key ??
         response?.access ??
+        response?.access_token ??
         response?.auth_token ??
-        response?.data?.token;
+        response?.data?.token ??
+        response?.data?.access_token;
+
+      const refreshToken =
+        response?.refresh ??
+        response?.refresh_token ??
+        response?.data?.refresh ??
+        response?.data?.refresh_token;
 
       if (rawToken) {
         let normalizedToken = rawToken;
@@ -65,8 +86,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           normalizedToken = `${tokenType} ${rawToken}`;
         }
         localStorage.setItem('token', normalizedToken);
+        authTokenStore.set(normalizedToken);
         setToken(normalizedToken);
         setIsAuthenticated(true);
+      }
+      if (refreshToken) {
+        localStorage.setItem('refresh_token', refreshToken);
       }
       if (response?.user) {
         setUser(response.user);
@@ -87,6 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Error during logout:', error);
     }
     localStorage.removeItem('token');
+    authTokenStore.clear();
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);

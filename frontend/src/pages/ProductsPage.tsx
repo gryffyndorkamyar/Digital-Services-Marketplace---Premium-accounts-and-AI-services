@@ -4,15 +4,23 @@ import { Search, SlidersHorizontal, Loader, Sparkles, Flame, Star } from 'lucide
 import { productsAPI } from '../services/api';
 import QuickPurchaseModal from '../components/QuickPurchaseModal';
 import { useQuickPurchase } from '../hooks/useQuickPurchase';
+import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable } from '../utils/product';
+import { toast } from 'react-hot-toast';
 
 interface Product {
   id: string;
   name: string;
   description?: string;
-  price: string;
+  price?: any;
+  discount_price?: any;
+  final_price?: any;
   image?: string;
   rating?: number;
   tags?: string[];
+  priceValue?: number | null;
+  priceLabel?: string;
+  isPurchasable?: boolean;
+  [key: string]: any;
 }
 
 const ProductsPage: React.FC = () => {
@@ -32,9 +40,20 @@ const ProductsPage: React.FC = () => {
           productsAPI.getFeatured<Product>(),
           productsAPI.getTrending<Product>(),
         ]);
-        setProducts(all);
-        setFeaturedProducts(featured);
-        setTrendingProducts(trending);
+        const normalize = (list: Product[]) =>
+          list.map((item) => {
+            const priceValue = extractPriceValue(item);
+            return {
+              ...item,
+              image: resolveMediaUrl(item.image) ?? item.image,
+              priceValue,
+              priceLabel: formatPriceLabel(priceValue),
+              isPurchasable: isProductAvailable(item),
+            };
+          });
+        setProducts(normalize(all));
+        setFeaturedProducts(normalize(featured));
+        setTrendingProducts(normalize(trending));
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
@@ -170,16 +189,19 @@ const ProductsPage: React.FC = () => {
 
 const ProductCard: React.FC<{ product: Product; onQuickBuy: () => void }> = ({ product, onQuickBuy }) => {
   const hasRating = typeof product.rating === 'number';
+  const imageSrc = resolveMediaUrl(product.image) ?? product.image;
+  const priceLabel = product.priceLabel ?? formatPriceLabel(product.priceValue ?? extractPriceValue(product));
+  const isPurchasable = product.isPurchasable ?? isProductAvailable(product);
 
   return (
     <Link
       to={`/products/${product.id}`}
       className="group bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-2xl p-6 hover:border-neonOrange transition-all hover:scale-[1.02] flex flex-col gap-4"
     >
-      {product.image && (
+      {imageSrc && (
         <div className="relative overflow-hidden rounded-xl">
           <img
-            src={product.image}
+            src={imageSrc}
             alt={product.name}
             className="w-full h-48 object-cover group-hover:scale-110 transition-transform"
           />
@@ -192,9 +214,7 @@ const ProductCard: React.FC<{ product: Product; onQuickBuy: () => void }> = ({ p
         <p className="text-gray-400 text-sm line-clamp-2">{product.description}</p>
       )}
       <div className="flex items-center justify-between mt-auto">
-        <span className="text-neonOrange font-bold text-lg">
-          {parseFloat(product.price).toLocaleString()} تومان
-        </span>
+        <span className="text-neonOrange font-bold text-lg">{priceLabel}</span>
         {hasRating && (
           <span className="flex items-center gap-1 text-yellow-400">
             <Star className="w-4 h-4" />
@@ -206,11 +226,16 @@ const ProductCard: React.FC<{ product: Product; onQuickBuy: () => void }> = ({ p
         type="button"
         onClick={(event) => {
           event.preventDefault();
+          if (!isPurchasable) {
+            toast('این محصول در حال حاضر موجود نیست', { icon: 'ℹ️' });
+            return;
+          }
           onQuickBuy();
         }}
-        className="mt-4 w-full py-2 border border-neonOrange/50 text-neonOrange rounded-lg hover:bg-neonOrange/20 transition-colors"
+        disabled={!isPurchasable}
+        className="mt-4 w-full py-2 border border-neonOrange/50 text-neonOrange rounded-lg hover:bg-neonOrange/20 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        خرید سریع
+        {isPurchasable ? 'خرید سریع' : 'ناموجود'}
       </button>
     </Link>
   );

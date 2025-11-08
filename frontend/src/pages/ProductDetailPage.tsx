@@ -4,20 +4,25 @@ import { Loader, ArrowRight, Star, Sparkles } from 'lucide-react';
 import { productsAPI } from '../services/api';
 import QuickPurchaseModal from '../components/QuickPurchaseModal';
 import { useQuickPurchase } from '../hooks/useQuickPurchase';
+import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable } from '../utils/product';
 
 interface ProductDetail {
   id: string;
   name: string;
   description?: string;
   short_description?: string;
-  price: string;
-  discount_price?: string;
+  price?: any;
+  discount_price?: any;
+  final_price?: any;
   image?: string;
   gallery?: string[];
   rating?: number;
   tags?: Array<{ id: string; name: string }>;
   categories?: Array<{ id: string; name: string }>;
   is_featured?: boolean;
+  priceValue?: number | null;
+  priceLabel?: string;
+  isPurchasable?: boolean;
 }
 
 const ProductDetailPage: React.FC = () => {
@@ -39,8 +44,29 @@ const ProductDetailPage: React.FC = () => {
           productsAPI.getById(id),
           productsAPI.getRelated(id),
         ]);
-        setProduct(details);
-        setRelated(relatedProducts);
+        const priceValue = extractPriceValue(details);
+        const normalizedProduct: ProductDetail = {
+          ...details,
+          image: resolveMediaUrl(details.image) ?? details.image,
+          gallery: Array.isArray(details.gallery)
+            ? details.gallery.map((img: any) => resolveMediaUrl(img) ?? img)
+            : [],
+          priceValue,
+          priceLabel: formatPriceLabel(priceValue),
+          isPurchasable: isProductAvailable(details),
+        };
+        const normalizedRelated = (relatedProducts || []).map((item: any) => {
+          const relatedPrice = extractPriceValue(item);
+          return {
+            ...item,
+            image: resolveMediaUrl(item.image) ?? item.image,
+            priceValue: relatedPrice,
+            priceLabel: formatPriceLabel(relatedPrice),
+            isPurchasable: isProductAvailable(item),
+          };
+        });
+        setProduct(normalizedProduct);
+        setRelated(normalizedRelated);
       } catch (err: any) {
         console.error('Error loading product detail:', err);
         setError(err?.message || 'در بارگذاری محصول خطایی رخ داد');
@@ -84,6 +110,10 @@ const ProductDetailPage: React.FC = () => {
       </div>
     );
   }
+
+  const priceLabel = product.priceLabel ?? formatPriceLabel(product.priceValue ?? extractPriceValue(product));
+  const originalPriceValue = extractPriceValue({ price: product.price });
+  const originalPriceLabel = originalPriceValue !== null ? formatPriceLabel(originalPriceValue) : null;
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 relative overflow-hidden">
@@ -139,13 +169,9 @@ const ProductDetailPage: React.FC = () => {
             <div className="flex items-center gap-4 bg-dark-surface border border-neonOrange/20 rounded-2xl p-4">
               <div>
                 <p className="text-sm text-gray-400">قیمت</p>
-                <p className="text-2xl font-bold text-neonOrange">
-                  {parseFloat(product.discount_price || product.price).toLocaleString()} تومان
-                </p>
-                {product.discount_price && (
-                  <p className="text-sm text-gray-400 line-through">
-                    {parseFloat(product.price).toLocaleString()} تومان
-                  </p>
+                <p className="text-2xl font-bold text-neonOrange">{priceLabel}</p>
+                {product.discount_price && originalPriceLabel && (
+                  <p className="text-sm text-gray-400 line-through">{originalPriceLabel}</p>
                 )}
               </div>
             </div>
@@ -166,16 +192,11 @@ const ProductDetailPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 type="button"
-                className="flex-1 neon-button py-3 rounded-xl text-lg font-bold text-white"
-                onClick={() => openQuickPurchase({
-                  id: product.id,
-                  name: product.name,
-                  price: product.discount_price || product.price,
-                  description: product.description,
-                  image: galleryImages[0],
-                })}
+                className="flex-1 neon-button py-3 rounded-xl text-lg font-bold text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                onClick={() => openQuickPurchase(product)}
+                disabled={!product.isPurchasable}
               >
-                خرید سریع
+                {product.isPurchasable ? 'خرید سریع' : 'ناموجود'}
               </button>
               <Link
                 to="/cart"
@@ -203,13 +224,7 @@ const ProductDetailPage: React.FC = () => {
                   key={item.id}
                   product={item}
                   onQuickBuy={() =>
-                    openQuickPurchase({
-                      id: item.id,
-                      name: item.name,
-                      price: item.discount_price || item.price,
-                      description: item.description,
-                      image: item.image,
-                    })
+                    openQuickPurchase(item)
                   }
                 />
               ))}
@@ -239,20 +254,21 @@ const RelatedProductCard: React.FC<{
   onQuickBuy: () => void;
 }> = ({ product, onQuickBuy }) => {
   const hasRating = typeof product.rating === 'number';
+  const priceLabel = product.priceLabel ?? formatPriceLabel(product.priceValue ?? extractPriceValue(product));
+  const imageSrc = resolveMediaUrl(product.image) ?? product.image;
+  const isPurchasable = product.isPurchasable ?? isProductAvailable(product);
 
   return (
     <div className="group bg-dark-100/60 border border-neonOrange/20 hover:border-neonOrange/60 rounded-2xl p-5 transition-all duration-300 backdrop-blur-xl">
       <div className="aspect-video rounded-xl overflow-hidden mb-4 bg-dark-surface">
-        {product.image ? (
-          <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+        {imageSrc ? (
+          <img src={imageSrc} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">بدون تصویر</div>
         )}
       </div>
       <h3 className="text-lg font-bold text-white mb-2 line-clamp-1">{product.name}</h3>
-      <p className="text-neonOrange font-semibold mb-3">
-        {parseFloat(product.discount_price || product.price).toLocaleString()} تومان
-      </p>
+      <p className="text-neonOrange font-semibold mb-3">{priceLabel}</p>
       {hasRating && (
         <div className="text-yellow-400 text-sm mb-3 flex items-center gap-1">
           <Star className="w-4 h-4" />
@@ -268,10 +284,11 @@ const RelatedProductCard: React.FC<{
         </Link>
         <button
           type="button"
-          className="px-3 py-2 bg-neonOrange/20 hover:bg-neonOrange/40 text-white rounded-lg text-sm"
+          className="px-3 py-2 bg-neonOrange/20 hover:bg-neonOrange/40 text-white rounded-lg text-sm disabled:opacity-60 disabled:cursor-not-allowed"
           onClick={onQuickBuy}
+          disabled={!isPurchasable}
         >
-          خرید سریع
+          {isPurchasable ? 'خرید سریع' : 'ناموجود'}
         </button>
       </div>
     </div>

@@ -1,15 +1,19 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import { cartAPI } from '../services/api';
+import { cartAPI, productsAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { buildQuickPurchasePayload, isProductAvailable } from '../utils/product';
 
 export interface QuickPurchaseProduct {
   id: string;
   name: string;
-  price: string;
+  price: number | null;
+  priceLabel: string;
   description?: string;
   image?: string;
+  variantId?: string | null;
+  raw?: any;
 }
 
 export const useQuickPurchase = () => {
@@ -21,14 +25,40 @@ export const useQuickPurchase = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const openQuickPurchase = useCallback(
-    (product: QuickPurchaseProduct, skipAuthCheck = false) => {
+    async (productLike: any, skipAuthCheck = false) => {
       if (!skipAuthCheck && !isAuthenticated) {
         toast('برای خرید ابتدا وارد حساب شوید', { icon: '⚠️' });
-        showAuthModal({ onSuccess: () => openQuickPurchase(product, true) });
+        showAuthModal({ onSuccess: () => openQuickPurchase(productLike, true) });
         return;
       }
-      setProduct(product);
-      setQuantity(1);
+
+      if (!productLike?.id) {
+        toast.error('اطلاعات محصول نامعتبر است');
+        return;
+      }
+
+      try {
+        setLoading(true);
+        let sourceProduct = productLike;
+        if (!isProductAvailable(productLike)) {
+          sourceProduct = await productsAPI.getById(productLike.id);
+        }
+
+        const payload = buildQuickPurchasePayload(sourceProduct);
+
+        if (!payload.price || !isProductAvailable(sourceProduct)) {
+          toast.error('این محصول در حال حاضر موجود نیست یا امکان خرید آن فراهم نشده است');
+          return;
+        }
+
+        setProduct(payload);
+        setQuantity(1);
+      } catch (error: any) {
+        console.error('Quick purchase init error:', error);
+        toast.error(error?.message || 'در آماده‌سازی خرید سریع خطایی رخ داد');
+      } finally {
+        setLoading(false);
+      }
     },
     [isAuthenticated, showAuthModal]
   );
@@ -58,16 +88,23 @@ export const useQuickPurchase = () => {
       if (!cart?.id) {
         throw new Error('عدم توانایی در ایجاد سبد خرید');
       }
-      await cartAPI.addItem(cart.id, {
+      const payload: Record<string, any> = {
         product_id: product.id,
         quantity,
-      });
+      };
+      if (product.variantId) {
+        payload.variant_id = product.variantId;
+      }
+
+      await cartAPI.addItem(cart.id, payload);
       toast.success('محصول به سبد خرید اضافه شد');
       closeQuickPurchase();
       navigate('/cart');
     } catch (error: any) {
       console.error('Quick purchase error:', error);
-      toast.error(error?.message || 'در خرید محصول خطایی رخ داد');
+      const backendMessage = error?.payload?.detail || error?.payload?.error;
+      const message = backendMessage || String(error?.message || 'در خرید محصول خطایی رخ داد').replace(/^API Error:\s*/i, '');
+      toast.error(message);
     } finally {
       setLoading(false);
     }

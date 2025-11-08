@@ -1,11 +1,12 @@
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+import { authTokenStore } from './authToken';
+export const API_BASE_URL = 'http://127.0.0.1:8000/api';
 
 // Helper function for API calls
 async function apiCall<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = localStorage.getItem('token');
+  const token = authTokenStore.get();
   const isFormData = options.body instanceof FormData;
 
   const headers: HeadersInit = {

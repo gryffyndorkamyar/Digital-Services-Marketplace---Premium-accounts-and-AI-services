@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Loader, ArrowRight, Star } from 'lucide-react';
 import { categoriesAPI } from '../services/api';
+import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable } from '../utils/product';
 
 interface Product {
   id: string;
   name: string;
   description?: string;
-  price: string;
+  price?: any;
+  discount_price?: any;
+  final_price?: any;
   image?: string;
   rating?: number;
+  priceValue?: number | null;
+  priceLabel?: string;
+  isPurchasable?: boolean;
 }
 
 interface Category {
@@ -34,7 +40,17 @@ const CategoryProductsPage: React.FC = () => {
           categoriesAPI.getProducts<Product>(id),
         ]);
         setCategory(categoryDetail);
-        setProducts(categoryProducts);
+        const normalized = categoryProducts.map((item) => {
+          const priceValue = extractPriceValue(item);
+          return {
+            ...item,
+            image: resolveMediaUrl(item.image) ?? item.image,
+            priceValue,
+            priceLabel: formatPriceLabel(priceValue),
+            isPurchasable: isProductAvailable(item),
+          };
+        });
+        setProducts(normalized);
       } catch (error) {
         console.error('Error loading category products:', error);
       } finally {
@@ -110,7 +126,7 @@ const CategoryProductsPage: React.FC = () => {
                 )}
                 <div className="flex items-center justify-between mt-auto">
                   <span className="text-neonOrange font-bold text-lg">
-                    {parseFloat(product.price).toLocaleString()} تومان
+                    {product.priceLabel ?? formatPriceLabel(product.priceValue)}
                   </span>
                   {typeof product.rating === 'number' && (
                     <span className="flex items-center gap-1 text-yellow-400">
@@ -119,6 +135,9 @@ const CategoryProductsPage: React.FC = () => {
                     </span>
                   )}
                 </div>
+                {!product.isPurchasable && (
+                  <span className="text-xs text-red-400">ناموجود</span>
+                )}
               </Link>
             ))}
           </div>

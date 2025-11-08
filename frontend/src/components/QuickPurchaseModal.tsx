@@ -1,6 +1,7 @@
 import React from 'react';
 import { Minus, Plus, X, Star } from 'lucide-react';
 import { QuickPurchaseProduct } from '../hooks/useQuickPurchase';
+import { resolveMediaUrl } from '../utils/product';
 
 interface QuickPurchaseModalProps {
   product: QuickPurchaseProduct;
@@ -19,7 +20,9 @@ const QuickPurchaseModal: React.FC<QuickPurchaseModalProps> = ({
   onConfirm,
   loading,
 }) => {
-  const hasRating = typeof (product as any).rating === 'number';
+  const hasRating = typeof (product as any)?.raw?.rating === 'number' || typeof (product as any).rating === 'number';
+  const ratingValue = (product as any)?.raw?.rating ?? (product as any).rating;
+  const imageSrc = resolveMediaUrl(product.image) ?? product.image;
 
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
@@ -34,18 +37,16 @@ const QuickPurchaseModal: React.FC<QuickPurchaseModalProps> = ({
         <h3 className="text-2xl font-bold text-neonOrange mb-4">خرید سریع</h3>
         <div className="space-y-4">
           <div className="flex items-center gap-4">
-            {product.image && (
-              <img src={product.image} alt={product.name} className="w-24 h-24 object-cover rounded-xl" />
+            {imageSrc && (
+              <img src={imageSrc} alt={product.name} className="w-24 h-24 object-cover rounded-xl" />
             )}
             <div>
               <h4 className="text-xl font-bold text-white mb-2">{product.name}</h4>
-              <p className="text-neonOrange font-bold">
-                {parseFloat(product.price).toLocaleString()} تومان
-              </p>
-              {hasRating && (
+              <p className="text-neonOrange font-bold">{product.priceLabel}</p>
+              {hasRating && typeof ratingValue === 'number' && (
                 <span className="inline-flex items-center gap-1 text-yellow-400 text-sm">
                   <Star className="w-4 h-4" />
-                  {(product as any).rating.toFixed(1)}
+                  {Number(ratingValue).toFixed(1)}
                 </span>
               )}
             </div>
