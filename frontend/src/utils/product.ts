@@ -6,7 +6,10 @@ export const resolveMediaUrl = (path?: string | null): string | undefined => {
   if (!path) return undefined;
   if (/^https?:\/\//i.test(path)) return path;
   if (path.startsWith('//')) return `http:${path}`;
-  const normalized = path.startsWith('/') ? path : `/${path}`;
+  let normalized = path.startsWith('/') ? path : `/${path}`;
+  if (!normalized.startsWith('/media/')) {
+    normalized = `/media${normalized}`.replace(/\/{2,}/g, '/');
+  }
   return `${API_ORIGIN}${normalized}`;
 };
 
