@@ -124,6 +124,7 @@ const ProfilePage: React.FC = () => {
       setSaving(true);
       await Promise.all([
         usersAPI.updateMe({
+          username: formData.username,
           first_name: formData.first_name,
           last_name: formData.last_name,
           phone_number: formData.phone,
@@ -139,7 +140,8 @@ const ProfilePage: React.FC = () => {
       fetchProfile();
     } catch (error: any) {
       console.error('Error updating profile:', error);
-      toast.error(error?.message || 'خطا در ذخیره اطلاعات');
+      const backendMessage = error?.payload?.detail || error?.payload?.error;
+      toast.error(backendMessage || error?.message || 'خطا در ذخیره اطلاعات');
     } finally {
       setSaving(false);
     }
@@ -272,8 +274,9 @@ const ProfilePage: React.FC = () => {
                   <input
                     type="text"
                     value={formData.username}
-                    readOnly
-                    className={inputClass(false)}
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                    readOnly={!isEditing}
+                    className={inputClass(isEditing)}
                   />
                 </div>
               </div>

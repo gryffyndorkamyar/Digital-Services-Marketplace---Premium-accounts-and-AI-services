@@ -156,9 +156,15 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'first_name', 'last_name', 'phone_number', 'date_of_birth',
+            'username', 'first_name', 'last_name', 'phone_number', 'date_of_birth',
             'avatar', 'language', 'timezone'
         ]
+
+    def validate_username(self, value):
+        user = self.instance
+        if value and User.objects.filter(username=value).exclude(id=user.id).exists():
+            raise ValidationError(ERROR_MESSAGES['username_already_exists'])
+        return value
 
     def validate_phone_number(self, value):
         """اعتبارسنجی شماره تلفن"""
