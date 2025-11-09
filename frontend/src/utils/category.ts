@@ -5,6 +5,9 @@ const API_ORIGIN = API_BASE_URL.replace(/\/?api\/?$/, '');
 
 export const getCategoryImage = (category: any): string | undefined => {
   if (!category) return undefined;
+  if (category.imageUrl) {
+    return resolveMediaUrl(category.imageUrl) ?? category.imageUrl;
+  }
   if (category.image_url) {
     return resolveMediaUrl(category.image_url) ?? category.image_url;
   }
