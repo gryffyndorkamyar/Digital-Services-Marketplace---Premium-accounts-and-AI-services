@@ -4,7 +4,7 @@ import { Loader, ArrowRight, Star, Sparkles } from 'lucide-react';
 import { productsAPI } from '../services/api';
 import QuickPurchaseModal from '../components/QuickPurchaseModal';
 import { useQuickPurchase } from '../hooks/useQuickPurchase';
-import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable } from '../utils/product';
+import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable, getProductPrimaryImage, getProductGalleryImages } from '../utils/product';
 
 interface ProductDetail {
   id: string;
@@ -45,21 +45,21 @@ const ProductDetailPage: React.FC = () => {
           productsAPI.getRelated(id),
         ]);
         const priceValue = extractPriceValue(details);
+        const primaryImage = getProductPrimaryImage(details);
         const normalizedProduct: ProductDetail = {
           ...details,
-          image: resolveMediaUrl(details.image) ?? details.image,
-          gallery: Array.isArray(details.gallery)
-            ? details.gallery.map((img: any) => resolveMediaUrl(img) ?? img)
-            : [],
+          image: primaryImage,
+          gallery: getProductGalleryImages(details),
           priceValue,
           priceLabel: formatPriceLabel(priceValue),
           isPurchasable: isProductAvailable(details),
         };
         const normalizedRelated = (relatedProducts || []).map((item: any) => {
           const relatedPrice = extractPriceValue(item);
+          const primaryRelatedImage = getProductPrimaryImage(item);
           return {
             ...item,
-            image: resolveMediaUrl(item.image) ?? item.image,
+            image: primaryRelatedImage,
             priceValue: relatedPrice,
             priceLabel: formatPriceLabel(relatedPrice),
             isPurchasable: isProductAvailable(item),
@@ -78,17 +78,7 @@ const ProductDetailPage: React.FC = () => {
     fetchData();
   }, [id]);
 
-  const galleryImages = useMemo(() => {
-    if (!product) return [] as string[];
-    const images: string[] = [];
-    if (product.image) images.push(product.image);
-    if (Array.isArray(product.gallery)) {
-      product.gallery.forEach((img) => {
-        if (img && !images.includes(img)) images.push(img);
-      });
-    }
-    return images;
-  }, [product]);
+  const galleryImages = useMemo(() => getProductGalleryImages(product), [product]);
 
   if (loading) {
     return (
@@ -255,7 +245,7 @@ const RelatedProductCard: React.FC<{
 }> = ({ product, onQuickBuy }) => {
   const hasRating = typeof product.rating === 'number';
   const priceLabel = product.priceLabel ?? formatPriceLabel(product.priceValue ?? extractPriceValue(product));
-  const imageSrc = resolveMediaUrl(product.image) ?? product.image;
+  const imageSrc = product.image ?? getProductPrimaryImage(product);
   const isPurchasable = product.isPurchasable ?? isProductAvailable(product);
 
   return (

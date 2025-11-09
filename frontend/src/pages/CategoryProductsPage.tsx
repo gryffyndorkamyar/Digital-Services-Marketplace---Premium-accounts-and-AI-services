@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Loader, ArrowRight, Star } from 'lucide-react';
 import { categoriesAPI } from '../services/api';
-import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable } from '../utils/product';
+import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable, getProductPrimaryImage } from '../utils/product';
 
 interface Product {
   id: string;
@@ -16,6 +16,7 @@ interface Product {
   priceValue?: number | null;
   priceLabel?: string;
   isPurchasable?: boolean;
+  primaryImage?: string;
 }
 
 interface Category {
@@ -42,12 +43,13 @@ const CategoryProductsPage: React.FC = () => {
         setCategory(categoryDetail);
         const normalized = categoryProducts.map((item) => {
           const priceValue = extractPriceValue(item);
+          const primaryImage = getProductPrimaryImage(item);
           return {
             ...item,
-            image: resolveMediaUrl(item.image) ?? item.image,
             priceValue,
             priceLabel: formatPriceLabel(priceValue),
             isPurchasable: isProductAvailable(item),
+            primaryImage,
           };
         });
         setProducts(normalized);
@@ -109,10 +111,10 @@ const CategoryProductsPage: React.FC = () => {
                 to={`/products/${product.id}`}
                 className="group bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-2xl p-6 hover:border-neonOrange transition-all hover:scale-[1.02] flex flex-col gap-4"
               >
-                {product.image && (
+                {(product.primaryImage || product.image) && (
                   <div className="relative overflow-hidden rounded-xl">
                     <img
-                      src={product.image}
+                      src={product.primaryImage ?? resolveMediaUrl(product.image) ?? product.image}
                       alt={product.name}
                       className="w-full h-48 object-cover group-hover:scale-110 transition-transform"
                     />

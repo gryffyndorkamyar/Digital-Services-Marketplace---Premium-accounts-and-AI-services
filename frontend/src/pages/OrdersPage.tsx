@@ -3,13 +3,16 @@ import { Link } from 'react-router-dom';
 import { Package, Eye, X, CheckCircle, Clock, AlertCircle, LogIn } from 'lucide-react';
 import { ordersAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { formatPriceLabel, extractPriceValue, getProductPrimaryImage } from '../utils/product';
 
 interface OrderItem {
   id: string;
   product: any;
   quantity: number;
-  price: string;
-  total_price: string;
+  price: any;
+  total_price: any;
+  product_name?: string;
+  product_image?: string;
 }
 
 interface Order {
@@ -17,7 +20,7 @@ interface Order {
   order_number: string;
   status: string;
   payment_status: string;
-  total_amount: string;
+  total_amount: any;
   items: OrderItem[];
   created_at: string;
   can_cancel: boolean;
@@ -184,7 +187,7 @@ const OrdersPage: React.FC = () => {
                   <div className="text-right">
                     <p className="text-sm text-gray-400">مبلغ کل:</p>
                     <p className="text-xl font-bold text-neonOrange">
-                      {parseFloat(order.total_amount).toLocaleString()} تومان
+                      {formatPriceLabel(extractPriceValue({ price: order.total_amount }) ?? Number.parseFloat(String(order.total_amount)))}
                     </p>
                   </div>
                 </div>
@@ -192,31 +195,44 @@ const OrdersPage: React.FC = () => {
 
               {/* محصولات */}
               <div className="space-y-4 mb-6">
-                {order.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center gap-4 bg-dark-surface/50 rounded-lg p-4"
-                  >
-                    {item.product?.image && (
-                      <img
-                        src={item.product.image}
-                        alt={item.product.name}
-                        className="w-16 h-16 object-cover rounded-lg"
-                      />
-                    )}
-                    <div className="flex-1">
-                      <h4 className="font-bold text-white">{item.product?.name || 'محصول'}</h4>
-                      <p className="text-sm text-gray-400">
-                        تعداد: {item.quantity} × {parseFloat(item.price).toLocaleString()} تومان
-                      </p>
+                {order.items.map((item) => {
+                  const productName = item.product?.name || item.product_name;
+                  const productImage = item.product_image || getProductPrimaryImage(item.product);
+                  const unitPrice = extractPriceValue({ price: item.price }) ?? Number.parseFloat(String(item.price));
+                  const totalPrice = extractPriceValue({ price: item.total_price }) ?? Number.parseFloat(String(item.total_price));
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-4 bg-dark-surface/50 rounded-lg p-4"
+                    >
+                      <div className="w-20 h-20 rounded-lg overflow-hidden bg-dark-100 border border-neonOrange/20 flex-shrink-0">
+                        {productImage ? (
+                          <img src={productImage} alt={productName || 'محصول'} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">بدون تصویر</div>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <h4 className="text-lg font-bold text-white">
+                              {productName || 'محصول'}
+                            </h4>
+                            <p className="text-gray-400 text-sm">
+                              قیمت واحد: {formatPriceLabel(unitPrice)}
+                            </p>
+                          </div>
+                          <span className="text-neonOrange font-bold">
+                            {formatPriceLabel(totalPrice)}
+                          </span>
+                        </div>
+                        <div className="text-gray-400 text-sm">
+                          تعداد: {item.quantity}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-left">
-                      <p className="font-bold text-neonOrange">
-                        {parseFloat(item.total_price).toLocaleString()} تومان
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* دکمه‌های عملیات */}

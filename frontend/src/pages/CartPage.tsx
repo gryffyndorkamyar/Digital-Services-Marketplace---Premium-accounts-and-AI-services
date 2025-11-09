@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Tag } from 'lucide-react';
 import { cartAPI } from '../services/api';
-import { resolveMediaUrl } from '../utils/product';
+import { resolveMediaUrl, getProductPrimaryImage } from '../utils/product';
 
 interface CartItem {
   id: string;
@@ -72,7 +72,7 @@ const CartPage: React.FC = () => {
       const discountAmount = parseAmount(item.discount_amount ?? item.final_price_discount ?? 0);
       const subtotal = unitPrice * quantity;
       const totalPrice = parseAmount(item.total_price ?? item.final_price ?? subtotal - discountAmount);
-      const image = resolveMediaUrl(item.product_image) || resolveMediaUrl(item.product?.main_image) || resolveMediaUrl(item.product?.image);
+      const image = resolveMediaUrl(item.product_image) || getProductPrimaryImage(item.product);
       return {
         ...item,
         quantity,

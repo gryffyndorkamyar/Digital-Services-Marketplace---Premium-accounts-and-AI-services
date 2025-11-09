@@ -85,9 +85,68 @@ export const isProductAvailable = (product: any): boolean => {
   return extractPriceValue(product) !== null;
 };
 
+const imageCandidateKeys = ['main_image_url', 'product_image', 'image_url', 'image', 'main_image', 'thumbnail'];
+
+export const extractImageUrl = (source: any): string | undefined => {
+  if (!source) return undefined;
+  if (typeof source === 'string') {
+    return resolveMediaUrl(source) ?? source;
+  }
+  if (source?.image_url) {
+    return resolveMediaUrl(source.image_url) ?? source.image_url;
+  }
+  if (source?.image) {
+    return resolveMediaUrl(source.image) ?? source.image;
+  }
+  return undefined;
+};
+
+export const getProductPrimaryImage = (product: any): string | undefined => {
+  if (!product) return undefined;
+  for (const key of imageCandidateKeys) {
+    if (product[key]) {
+      const url = extractImageUrl(product[key]);
+      if (url) return url;
+    }
+  }
+  if (Array.isArray(product.images)) {
+    for (const image of product.images) {
+      const url = extractImageUrl(image);
+      if (url) return url;
+    }
+  }
+  return undefined;
+};
+
+export const getProductGalleryImages = (product: any): string[] => {
+  const images: string[] = [];
+  const addImage = (value: any) => {
+    const url = extractImageUrl(value);
+    if (url && !images.includes(url)) {
+      images.push(url);
+    }
+  };
+
+  if (!product) return images;
+
+  for (const key of ['gallery', 'images']) {
+    const value = product[key];
+    if (Array.isArray(value)) {
+      value.forEach((item) => addImage(item));
+    }
+  }
+
+  const primary = getProductPrimaryImage(product);
+  if (primary && !images.includes(primary)) {
+    images.unshift(primary);
+  }
+
+  return images;
+};
+
 export const buildQuickPurchasePayload = (product: any) => {
   const price = extractPriceValue(product);
-  const image = resolveMediaUrl(product?.image) || resolveMediaUrl(product?.main_image);
+  const image = getProductPrimaryImage(product);
   const variantId = product?.default_variant?.id || product?.default_variant_id || null;
   const priceLabel = formatPriceLabel(price);
 

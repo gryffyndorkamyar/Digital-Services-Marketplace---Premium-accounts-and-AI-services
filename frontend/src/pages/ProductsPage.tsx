@@ -4,7 +4,7 @@ import { Search, SlidersHorizontal, Loader, Sparkles, Flame, Star } from 'lucide
 import { productsAPI } from '../services/api';
 import QuickPurchaseModal from '../components/QuickPurchaseModal';
 import { useQuickPurchase } from '../hooks/useQuickPurchase';
-import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable } from '../utils/product';
+import { resolveMediaUrl, extractPriceValue, formatPriceLabel, isProductAvailable, getProductPrimaryImage } from '../utils/product';
 import { toast } from 'react-hot-toast';
 
 interface Product {
@@ -20,6 +20,7 @@ interface Product {
   priceValue?: number | null;
   priceLabel?: string;
   isPurchasable?: boolean;
+  primaryImage?: string;
   [key: string]: any;
 }
 
@@ -43,12 +44,13 @@ const ProductsPage: React.FC = () => {
         const normalize = (list: Product[]) =>
           list.map((item) => {
             const priceValue = extractPriceValue(item);
+            const primaryImage = getProductPrimaryImage(item);
             return {
               ...item,
-              image: resolveMediaUrl(item.image) ?? item.image,
               priceValue,
               priceLabel: formatPriceLabel(priceValue),
               isPurchasable: isProductAvailable(item),
+              primaryImage,
             };
           });
         setProducts(normalize(all));
@@ -189,7 +191,7 @@ const ProductsPage: React.FC = () => {
 
 const ProductCard: React.FC<{ product: Product; onQuickBuy: () => void }> = ({ product, onQuickBuy }) => {
   const hasRating = typeof product.rating === 'number';
-  const imageSrc = resolveMediaUrl(product.image) ?? product.image;
+  const imageSrc = product.primaryImage ?? getProductPrimaryImage(product) ?? resolveMediaUrl(product.image) ?? product.image;
   const priceLabel = product.priceLabel ?? formatPriceLabel(product.priceValue ?? extractPriceValue(product));
   const isPurchasable = product.isPurchasable ?? isProductAvailable(product);
 
