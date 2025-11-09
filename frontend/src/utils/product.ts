@@ -144,6 +144,20 @@ export const getProductGalleryImages = (product: any): string[] => {
   return images;
 };
 
+export const getCategoryImage = (category: any): string | undefined => {
+  if (!category) return undefined;
+  if (category.image_url) {
+    return resolveMediaUrl(category.image_url) ?? category.image_url;
+  }
+  if (category.image) {
+    return resolveMediaUrl(category.image) ?? category.image;
+  }
+  if (category.thumbnail) {
+    return resolveMediaUrl(category.thumbnail) ?? category.thumbnail;
+  }
+  return undefined;
+};
+
 export const buildQuickPurchasePayload = (product: any) => {
   const price = extractPriceValue(product);
   const image = getProductPrimaryImage(product);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, List, Loader } from 'lucide-react';
 import { categoriesAPI } from '../services/api';
+import { getCategoryImage } from '../utils/category';
 
 interface Category {
   id: string;
@@ -93,10 +94,10 @@ const CategoriesPage: React.FC = () => {
                   to={`/categories/${category.id}/products`}
                   className="bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-2xl p-6 hover:border-neonOrange hover:scale-105 transition-all group"
                 >
-                  {category.image && (
+                  {getCategoryImage(category) && (
                     <div className="mb-4 overflow-hidden rounded-lg">
                       <img
-                        src={category.image}
+                        src={getCategoryImage(category)}
                         alt={category.name}
                         className="w-full h-48 object-cover group-hover:scale-110 transition-transform"
                       />
@@ -119,54 +120,60 @@ const CategoriesPage: React.FC = () => {
           <h2 className="text-2xl font-bold mb-6 text-neonOrange">همه دسته‌بندی‌ها</h2>
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {categories.map((category) => (
-                <Link
-                  key={category.id}
-                  to={`/categories/${category.id}/products`}
-                  className="bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-xl p-6 hover:border-neonOrange hover:scale-105 transition-all group text-center"
-                >
-                  {category.image && (
-                    <div className="mb-4 overflow-hidden rounded-lg">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="w-full h-32 object-cover group-hover:scale-110 transition-transform"
-                      />
-                    </div>
-                  )}
-                  <h3 className="text-lg font-bold text-neonOrange group-hover:text-neonOrange-light transition-colors">
-                    {category.name}
-                  </h3>
-                </Link>
-              ))}
+              {categories.map((category) => {
+                const imageSrc = getCategoryImage(category);
+                return (
+                  <Link
+                    key={category.id}
+                    to={`/categories/${category.id}/products`}
+                    className="group bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-2xl p-6 hover:border-neonOrange transition-all hover:scale-[1.02] flex flex-col gap-4"
+                  >
+                    {imageSrc && (
+                      <div className="relative overflow-hidden rounded-xl">
+                        <img
+                          src={imageSrc}
+                          alt={category.name}
+                          className="w-full h-48 object-cover group-hover:scale-110 transition-transform"
+                        />
+                      </div>
+                    )}
+                    <h3 className="text-lg font-bold text-neonOrange group-hover:text-neonOrange-light transition-colors">
+                      {category.name}
+                    </h3>
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div className="space-y-4">
-              {categories.map((category) => (
-                <Link
-                  key={category.id}
-                  to={`/categories/${category.id}/products`}
-                  className="bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-xl p-6 hover:border-neonOrange transition-all flex items-center gap-6 group"
-                >
-                  {category.image && (
-                    <div className="w-24 h-24 overflow-hidden rounded-lg flex-shrink-0">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                      />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-2 text-neonOrange group-hover:text-neonOrange-light transition-colors">
-                      {category.name}
-                    </h3>
-                    {category.description && (
-                      <p className="text-gray-300 text-sm">{category.description}</p>
+              {categories.map((category) => {
+                const imageSrc = getCategoryImage(category);
+                return (
+                  <Link
+                    key={category.id}
+                    to={`/categories/${category.id}/products`}
+                    className="bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-xl p-6 hover:border-neonOrange transition-all flex items-center gap-6 group"
+                  >
+                    {imageSrc && (
+                      <div className="w-24 h-24 overflow-hidden rounded-lg flex-shrink-0">
+                        <img
+                          src={imageSrc}
+                          alt={category.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                        />
+                      </div>
                     )}
-                  </div>
-                </Link>
-              ))}
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold mb-2 text-neonOrange group-hover:text-neonOrange-light transition-colors">
+                        {category.name}
+                      </h3>
+                      {category.description && (
+                        <p className="text-gray-300 text-sm">{category.description}</p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>
