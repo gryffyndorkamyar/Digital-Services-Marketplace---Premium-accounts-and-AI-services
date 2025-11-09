@@ -19,6 +19,7 @@ async function apiCall<T>(
     ...options,
     headers,
     credentials: options.credentials ?? 'include',
+    cache: options.cache ?? 'no-store',
   });
 
   let data: any = null;

@@ -10,6 +10,8 @@ interface Category {
   name_en?: string;
   description?: string;
   image?: string;
+  image_url?: string;
+  updated_at?: string;
   is_featured?: boolean;
 }
 

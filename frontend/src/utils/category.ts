@@ -1,18 +1,31 @@
-import { API_BASE_URL } from '../services/api';
 import { resolveMediaUrl } from './product';
 
-const API_ORIGIN = API_BASE_URL.replace(/\/?api\/?$/, '');
+const appendCacheBuster = (url: string, key?: any): string => {
+  if (!key) return url;
+  const cacheKey = typeof key === 'string' ? key : JSON.stringify(key);
+  if (!cacheKey) return url;
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}v=${encodeURIComponent(cacheKey)}`;
+};
 
 export const getCategoryImage = (category: any): string | undefined => {
   if (!category) return undefined;
-  if (category.imageUrl) {
-    return resolveMediaUrl(category.imageUrl) ?? category.imageUrl;
+  const baseKeys = [category.imageUrl, category.image_url, category.image];
+  const versionKey =
+    category.updated_at ||
+    category.updatedAt ||
+    category.modified_at ||
+    category.modifiedAt ||
+    category.updated;
+
+  for (const candidate of baseKeys) {
+    if (!candidate) continue;
+    const resolved = resolveMediaUrl(candidate) ?? candidate;
+    if (resolved) {
+      const cacheKey = versionKey || `${candidate}-${Date.now()}`;
+      return appendCacheBuster(resolved, cacheKey);
+    }
   }
-  if (category.image_url) {
-    return resolveMediaUrl(category.image_url) ?? category.image_url;
-  }
-  if (category.image) {
-    return resolveMediaUrl(category.image) ?? category.image;
-  }
+
   return undefined;
 };
