@@ -13,6 +13,8 @@ interface UserProfile {
   phone_number?: string;
   avatar?: string;
   address?: string;
+  bio?: string;
+  website?: string;
 }
 
 interface DeliverableItem {
@@ -44,16 +46,21 @@ const ProfilePage: React.FC = () => {
     address: '',
   });
 
-  const sanitizedProfile = useCallback((data: any): UserProfile => ({
-    username: data?.username || '',
-    email: data?.email || '',
-    first_name: data?.first_name || '',
-    last_name: data?.last_name || '',
-    phone: data?.phone || data?.phone_number || '',
-    phone_number: data?.phone_number || data?.phone || '',
-    address: data?.address || data?.profile?.address || '',
-    avatar: data?.avatar || data?.avatar_url || data?.profile?.avatar_url || '',
-  }), []);
+  const sanitizedProfile = useCallback((data: any): UserProfile => {
+    const user = data?.user || {};
+    return {
+      username: user.username || '',
+      email: user.email || '',
+      first_name: user.first_name || '',
+      last_name: user.last_name || '',
+      phone: user.phone_number || '',
+      phone_number: user.phone_number || '',
+      avatar: user.avatar_url || '',
+      address: data?.location || '',
+      bio: data?.bio || '',
+      website: data?.website || '',
+    };
+  }, []);
 
   const fetchProfile = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -115,16 +122,18 @@ const ProfilePage: React.FC = () => {
     if (!isAuthenticated) return;
     try {
       setSaving(true);
-      const payload = {
-        username: formData.username,
-        email: formData.email,
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        phone: formData.phone,
-        phone_number: formData.phone,
-        address: formData.address,
-      };
-      await usersAPI.updateProfile(payload);
+      await Promise.all([
+        usersAPI.updateMe({
+          first_name: formData.first_name,
+          last_name: formData.last_name,
+          phone_number: formData.phone,
+        }),
+        usersAPI.updateProfile({
+          location: formData.address,
+          bio: formData.bio,
+          website: formData.website,
+        }),
+      ]);
       toast.success('پروفایل با موفقیت به‌روزرسانی شد');
       setIsEditing(false);
       fetchProfile();
@@ -200,6 +209,9 @@ const ProfilePage: React.FC = () => {
     );
   }
 
+  const inputClass = (editable: boolean) =>
+    `auth-input ${editable ? 'text-white' : 'text-gray-300 cursor-not-allowed opacity-80'} `;
+
   return (
     <div className="min-h-screen pt-16 pb-20 px-4 relative overflow-hidden">
       {/* پس‌زمینه نئونی */}
@@ -260,9 +272,8 @@ const ProfilePage: React.FC = () => {
                   <input
                     type="text"
                     value={formData.username}
-                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                    disabled={!isEditing}
-                    className="w-full pr-10 pl-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all disabled:opacity-50"
+                    readOnly
+                    className={inputClass(false)}
                   />
                 </div>
               </div>
@@ -271,13 +282,7 @@ const ProfilePage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-300 mb-2">ایمیل</label>
                 <div className="relative">
                   <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neonOrange w-5 h-5" />
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    disabled={!isEditing}
-                    className="w-full pr-10 pl-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all disabled:opacity-50"
-                  />
+                  <input type="email" value={formData.email} readOnly className={inputClass(false)} />
                 </div>
               </div>
 
@@ -287,8 +292,8 @@ const ProfilePage: React.FC = () => {
                   type="text"
                   value={formData.first_name || ''}
                   onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                  disabled={!isEditing}
-                  className="w-full px-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all disabled:opacity-50"
+                  readOnly={!isEditing}
+                  className={inputClass(isEditing)}
                 />
               </div>
 
@@ -298,8 +303,8 @@ const ProfilePage: React.FC = () => {
                   type="text"
                   value={formData.last_name || ''}
                   onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                  disabled={!isEditing}
-                  className="w-full px-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all disabled:opacity-50"
+                  readOnly={!isEditing}
+                  className={inputClass(isEditing)}
                 />
               </div>
 
@@ -310,9 +315,9 @@ const ProfilePage: React.FC = () => {
                   <input
                     type="tel"
                     value={formData.phone || ''}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    disabled={!isEditing}
-                    className="w-full pr-10 pl-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all disabled:opacity-50"
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value, phone_number: e.target.value })}
+                    readOnly={!isEditing}
+                    className={inputClass(isEditing)}
                   />
                 </div>
               </div>
@@ -325,10 +330,31 @@ const ProfilePage: React.FC = () => {
                     type="text"
                     value={formData.address || ''}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    disabled={!isEditing}
-                    className="w-full pr-10 pl-4 py-3 bg-dark-surface border border-neonOrange/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonOrange focus:ring-2 focus:ring-neonOrange/50 transition-all disabled:opacity-50"
+                    readOnly={!isEditing}
+                    className={inputClass(isEditing)}
                   />
                 </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">بیوگرافی (اختیاری)</label>
+                <textarea
+                  value={formData.bio || ''}
+                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                  readOnly={!isEditing}
+                  className={`${inputClass(isEditing)} min-h-[120px] resize-y`}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">وب‌سایت</label>
+                <input
+                  type="url"
+                  value={formData.website || ''}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                  readOnly={!isEditing}
+                  className={inputClass(isEditing)}
+                />
               </div>
             </div>
 
