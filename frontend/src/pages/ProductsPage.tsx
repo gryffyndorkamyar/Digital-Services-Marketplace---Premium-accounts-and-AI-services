@@ -158,7 +158,7 @@ const ProductsPage: React.FC = () => {
               <Loader className="w-12 h-12 text-neonOrange animate-spin" />
             </div>
           ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -201,24 +201,24 @@ const ProductCard: React.FC<{ product: Product; onQuickBuy: () => void }> = ({ p
       className="group bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-2xl p-6 hover:border-neonOrange transition-all hover:scale-[1.02] flex flex-col gap-4"
     >
       {imageSrc && (
-        <div className="relative overflow-hidden rounded-xl">
+        <div className="relative overflow-hidden rounded-xl bg-dark-surface h-48 flex items-center justify-center">
           <img
             src={imageSrc}
             alt={product.name}
-            className="w-full h-48 object-cover group-hover:scale-110 transition-transform"
+            className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
           />
         </div>
       )}
-      <h3 className="text-xl font-bold text-white group-hover:text-neonOrange transition-colors">
-        {product.name}
-      </h3>
-      {product.description && (
-        <p className="text-gray-400 text-sm line-clamp-2">{product.description}</p>
-      )}
-      <div className="flex items-center justify-between mt-auto">
+      <div className="flex flex-col items-center text-center gap-3 flex-1">
+        <h3 className="text-lg font-bold text-white group-hover:text-neonOrange transition-colors line-clamp-1">
+          {product.name}
+        </h3>
+        {product.description && (
+          <p className="text-gray-400 text-sm line-clamp-2 min-h-[40px]">{product.description}</p>
+        )}
         <span className="text-neonOrange font-bold text-lg">{priceLabel}</span>
         {hasRating && (
-          <span className="flex items-center gap-1 text-yellow-400">
+          <span className="flex items-center gap-1 text-yellow-400 text-sm">
             <Star className="w-4 h-4" />
             {product.rating!.toFixed(1)}
           </span>
