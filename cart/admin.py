@@ -22,17 +22,18 @@ class CartAdmin(admin.ModelAdmin):
     inlines = [CartItemInline]
     list_display = [
         'id', 'user', 'status', 'total_items', 'subtotal', 'total',
-        'is_expired', 'created_at'
+        'latest_payment_status', 'latest_order_date', 'is_expired', 'created_at'
     ]
     list_filter = ['status', 'created_at', 'expires_at']
     search_fields = ['user__username', 'user__email', 'session_key']
     readonly_fields = [
-        'id', 'session_key', 'created_at', 'updated_at', 'expires_at'
+        'id', 'session_key', 'created_at', 'updated_at', 'expires_at',
+        'latest_payment_status', 'latest_order_date'
     ]
     ordering = ['-created_at']
     
     fieldsets = (
-        (None, {'fields': ('user', 'session_key', 'status')}),
+        (None, {'fields': ('user', 'session_key', 'status', 'latest_payment_status', 'latest_order_date')}),
         (_('زمان‌ها'), {
             'fields': ('created_at', 'updated_at', 'expires_at'),
             'classes': ('collapse',)
@@ -79,6 +80,26 @@ class CartAdmin(admin.ModelAdmin):
         """مجموع نهایی"""
         return obj.get_total()
     total.short_description = _('مجموع نهایی')
+
+    def latest_order(self, obj):
+        return obj.orders.order_by('-created_at').first()
+
+    def latest_payment_status(self, obj):
+        order = self.latest_order(obj)
+        if not order:
+            return _('هیچ سفارشی ندارد')
+        status_display = dict(Order._meta.get_field('payment_status').choices).get(order.payment_status, order.payment_status)
+        color = 'green' if order.payment_status == 'completed' else ('orange' if order.payment_status == 'processing' else 'red')
+        return format_html('<span style="color:{};">{}</span>', color, status_display)
+    latest_payment_status.short_description = _('وضعیت پرداخت')
+
+    def latest_order_date(self, obj):
+        order = self.latest_order(obj)
+        if not order:
+            return '---'
+        return order.created_at
+    latest_order_date.short_description = _('تاریخ آخرین سفارش')
+    latest_order_date.admin_order_field = 'orders__created_at'
 
     def is_expired(self, obj):
         """آیا منقضی شده است؟"""
