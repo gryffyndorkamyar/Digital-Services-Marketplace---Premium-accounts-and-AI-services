@@ -441,14 +441,9 @@ const ProfilePage: React.FC = () => {
                   <div key={item.itemId} className="border border-neonOrange/20 rounded-xl p-5 bg-dark-surface/50">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                       <div>
-                        <p className="text-sm text-gray-400">{item.reference}</p>
                         <h3 className="text-lg font-bold text-white">{item.productName}</h3>
+                        <p className="text-sm text-gray-400">{item.reference}</p>
                         <p className="text-sm text-gray-500">تاریخ تحویل: {deliveredDate}</p>
-                        {item.source === 'cart' && (
-                          <p className="text-xs text-neonOrange/70 mt-1">
-                            این محتوا از طریق سبد خرید (بدون نیاز به پرداخت) ارسال شده است.
-                          </p>
-                        )}
                       </div>
                       <div className="flex flex-wrap gap-3">
                         {item.downloadFileUrl && (

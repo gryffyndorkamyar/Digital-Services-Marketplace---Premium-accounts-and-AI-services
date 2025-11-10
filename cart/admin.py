@@ -106,11 +106,22 @@ class CartAdmin(admin.ModelAdmin):
     def latest_payment_status(self, obj):
         order = self.latest_order(obj)
         if not order:
-            return _('هیچ سفارشی ندارد')
-        status_display = dict(Order._meta.get_field('payment_status').choices).get(order.payment_status, order.payment_status)
-        color = 'green' if order.payment_status == 'completed' else ('orange' if order.payment_status == 'processing' else 'red')
-        return format_html('<span style="color:{};">{}</span>', color, status_display)
-    latest_payment_status.short_description = _('وضعیت پرداخت')
+            return format_html('<strong style="color:red;">{}</strong>', _('هنوز پرداختی انجام نشده است'))
+
+        status_map = {
+            'completed': _('پرداخت با موفقیت انجام شده'),
+            'processing': _('پرداخت در حال پردازش است'),
+            'pending': _('هنوز پرداخت نشده است'),
+            'failed': _('پرداخت ناموفق بوده است'),
+            'refunded': _('پرداخت عودت داده شده است'),
+            'canceled': _('پرداخت لغو شده است'),
+        }
+        text = status_map.get(order.payment_status, order.payment_status)
+        color = 'green' if order.payment_status == 'completed' else (
+            'orange' if order.payment_status in ['processing'] else 'red'
+        )
+        return format_html('<strong style="color:{};">{}</strong>', color, text)
+    latest_payment_status.short_description = _('وضعیت آخرین پرداخت')
 
     def latest_order_date(self, obj):
         order = self.latest_order(obj)
