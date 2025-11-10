@@ -16,15 +16,44 @@ class CartItemSerializer(serializers.ModelSerializer):
     total_price = serializers.ReadOnlyField()
     final_price = serializers.ReadOnlyField()
     is_available = serializers.ReadOnlyField()
+    download_file_url = serializers.SerializerMethodField()
     
     class Meta:
         model = CartItem
         fields = [
             'id', 'product', 'product_name', 'product_image', 'variant', 'variant_name',
             'quantity', 'price', 'discount_amount', 'total_price', 'final_price',
-            'status', 'is_available', 'added_at', 'updated_at'
+            'status', 'is_available', 'content', 'download_file', 'download_file_url',
+            'download_url', 'is_delivered', 'delivered_at', 'added_at', 'updated_at'
         ]
-        read_only_fields = ['id', 'price', 'discount_amount', 'status', 'added_at', 'updated_at']
+        read_only_fields = [
+            'id', 'price', 'discount_amount', 'status', 'added_at', 'updated_at', 'delivered_at',
+            'download_file', 'download_file_url'
+        ]
+
+    def get_download_file_url(self, obj):
+        if obj.download_file and hasattr(obj.download_file, 'url') and obj.download_file.url:
+            request = self.context.get('request')
+            if request:
+                try:
+                    return request.build_absolute_uri(obj.download_file.url)
+                except Exception:
+                    return obj.download_file.url
+            return obj.download_file.url
+        return None
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        user = getattr(request, 'user', None)
+
+        # نمایش محتوا فقط در صورتی که تحویل شده باشد و کاربر صاحب سبد یا ادمین باشد
+        is_owner = user and (user.is_staff or user.is_superuser or instance.cart.user == user)
+        if not instance.is_delivered or not is_owner:
+            data['content'] = None
+            data['download_file_url'] = None
+            data['download_url'] = None
+        return data
 
 
 class CartSerializer(serializers.ModelSerializer):

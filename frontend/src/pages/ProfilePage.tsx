@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { User, Mail, Phone, MapPin, Camera, Save, Edit, LogIn, ClipboardCopy, Download, Shield, Eye } from 'lucide-react';
-import { usersAPI, ordersAPI } from '../services/api';
+import { usersAPI, ordersAPI, cartAPI } from '../services/api';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
@@ -18,8 +18,11 @@ interface UserProfile {
 }
 
 interface DeliverableItem {
-  orderId: string;
-  orderNumber: string;
+  source: 'order' | 'cart';
+  reference: string;
+  orderId?: string;
+  cartId?: string;
+  orderNumber?: string;
   itemId: string;
   productName: string;
   deliveredAt?: string | null;
@@ -44,6 +47,8 @@ const ProfilePage: React.FC = () => {
     last_name: '',
     phone: '',
     address: '',
+    bio: '',
+    website: '',
   });
 
   const sanitizedProfile = useCallback((data: any): UserProfile => {
@@ -83,7 +88,9 @@ const ProfilePage: React.FC = () => {
     try {
       setDeliverablesLoading(true);
       const orders = await ordersAPI.getAll<any>();
+      const carts = await cartAPI.getAll<any>();
       const items: DeliverableItem[] = [];
+
       orders.forEach((order: any) => {
         const orderItems = order?.items || [];
         orderItems.forEach((item: any) => {
@@ -91,6 +98,8 @@ const ProfilePage: React.FC = () => {
           const hasContent = item?.content || item?.download_file_url || item?.download_url;
           if (isDelivered && hasContent) {
             items.push({
+              source: 'order',
+              reference: `سفارش #${order.order_number}`,
               orderId: order.id,
               orderNumber: order.order_number,
               itemId: item.id,
@@ -103,6 +112,29 @@ const ProfilePage: React.FC = () => {
           }
         });
       });
+
+      carts.forEach((cart: any) => {
+        const cartItems = cart?.items || [];
+        cartItems.forEach((item: any) => {
+          const isDelivered = item?.is_delivered;
+          const hasContent = item?.content || item?.download_file_url || item?.download_url;
+          if (isDelivered && hasContent) {
+            const cartLabel = cart.id ? String(cart.id).split('-')[0] : 'سبد';
+            items.push({
+              source: 'cart',
+              reference: `سبد خرید (${cartLabel})`,
+              cartId: cart.id,
+              itemId: item.id,
+              productName: item.product_name || item.product?.name || 'محصول',
+              deliveredAt: item.delivered_at || item.updated_at || cart.updated_at,
+              content: item.content,
+              downloadFileUrl: item.download_file_url,
+              downloadUrl: item.download_url,
+            });
+          }
+        });
+      });
+
       setDeliverables(items);
     } catch (error: any) {
       console.error('Error fetching deliverables:', error);
@@ -409,9 +441,14 @@ const ProfilePage: React.FC = () => {
                   <div key={item.itemId} className="border border-neonOrange/20 rounded-xl p-5 bg-dark-surface/50">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                       <div>
-                        <p className="text-sm text-gray-400">شماره سفارش: {item.orderNumber}</p>
+                        <p className="text-sm text-gray-400">{item.reference}</p>
                         <h3 className="text-lg font-bold text-white">{item.productName}</h3>
                         <p className="text-sm text-gray-500">تاریخ تحویل: {deliveredDate}</p>
+                        {item.source === 'cart' && (
+                          <p className="text-xs text-neonOrange/70 mt-1">
+                            این محتوا از طریق سبد خرید (بدون نیاز به پرداخت) ارسال شده است.
+                          </p>
+                        )}
                       </div>
                       <div className="flex flex-wrap gap-3">
                         {item.downloadFileUrl && (

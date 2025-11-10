@@ -163,12 +163,39 @@ class CartItem(models.Model):
         auto_now=True,
         verbose_name=_('تاریخ بروزرسانی')
     )
+    content = models.TextField(
+        blank=True,
+        verbose_name=_('محتوای محصول'),
+        help_text=_('اطلاعات یا توضیحاتی که باید به کاربر تحویل داده شود (اختیاری)')
+    )
+    download_file = models.FileField(
+        upload_to='carts/files/',
+        null=True,
+        blank=True,
+        verbose_name=_('فایل دانلودی')
+    )
+    download_url = models.URLField(
+        blank=True,
+        verbose_name=_('لینک دانلود')
+    )
+    is_delivered = models.BooleanField(
+        default=False,
+        verbose_name=_('تحویل داده شده')
+    )
+    delivered_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name=_('تاریخ تحویل')
+    )
 
     class Meta:
         verbose_name = _('آیتم سبد خرید')
         verbose_name_plural = _('آیتم‌های سبد خرید')
         ordering = ['-added_at']
         unique_together = ['cart', 'product', 'variant']
+        indexes = [
+            models.Index(fields=['cart', 'is_delivered']),
+        ]
         indexes = [
             models.Index(fields=['cart', 'status']),
             models.Index(fields=['product', 'status']),
@@ -190,6 +217,13 @@ class CartItem(models.Model):
         if self.variant:
             return self.variant.stock_quantity >= self.quantity
         return self.product.stock_quantity >= self.quantity
+
+    def save(self, *args, **kwargs):
+        if self.is_delivered and not self.delivered_at:
+            self.delivered_at = timezone.now()
+        if not self.is_delivered and self.delivered_at:
+            self.delivered_at = None
+        super().save(*args, **kwargs)
 
 
 class Coupon(models.Model):

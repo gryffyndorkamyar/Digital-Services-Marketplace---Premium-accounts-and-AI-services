@@ -8,12 +8,31 @@ from django.utils import timezone
 from .models import Cart, CartItem, Order, OrderItem, Coupon, Payment
 
 
-class CartItemInline(admin.TabularInline):
+class CartItemInline(admin.StackedInline):
     """Inline برای آیتم‌های سبد خرید"""
     model = CartItem
     extra = 0
-    readonly_fields = ['price', 'discount_amount', 'added_at', 'updated_at']
-    fields = ['product', 'variant', 'quantity', 'price', 'discount_amount', 'status']
+    readonly_fields = ['price', 'discount_amount', 'added_at', 'updated_at', 'delivered_at']
+    fieldsets = (
+        (None, {
+            'fields': ('product', 'variant', 'quantity', 'price', 'discount_amount', 'status')
+        }),
+        (_('تحویل محصول'), {
+            'fields': ('content', 'download_file', 'download_url', 'is_delivered', 'delivered_at'),
+            'description': _('در صورت تکمیل محصول، اطلاعات را وارد کرده و گزینه تحویل شده را فعال کنید.')
+        }),
+    )
+
+    def save_formset(self, request, form, formset, change):
+        """ذخیره formset با تنظیم تاریخ تحویل"""
+        instances = formset.save(commit=False)
+        for instance in instances:
+            if instance.is_delivered and not instance.delivered_at:
+                instance.delivered_at = timezone.now()
+            elif not instance.is_delivered and instance.delivered_at:
+                instance.delivered_at = None
+            instance.save()
+        formset.save_m2m()
 
 
 @admin.register(Cart)
@@ -114,12 +133,21 @@ class CartItemAdmin(admin.ModelAdmin):
     """مدیریت آیتم‌های سبد خرید"""
     list_display = [
         'id', 'cart', 'product', 'variant', 'quantity', 'price',
-        'total_price', 'final_price', 'status', 'added_at'
+        'total_price', 'final_price', 'status', 'is_delivered', 'delivered_at', 'added_at'
     ]
-    list_filter = ['status', 'added_at', 'updated_at']
+    list_filter = ['status', 'is_delivered', 'added_at', 'updated_at']
     search_fields = ['cart__user__username', 'product__name', 'variant__name']
-    readonly_fields = ['id', 'price', 'discount_amount', 'added_at', 'updated_at']
+    readonly_fields = ['id', 'price', 'discount_amount', 'added_at', 'updated_at', 'delivered_at']
     ordering = ['-added_at']
+    fieldsets = (
+        (None, {
+            'fields': ('cart', 'product', 'variant', 'quantity', 'price', 'discount_amount', 'status')
+        }),
+        (_('تحویل محصول'), {
+            'fields': ('content', 'download_file', 'download_url', 'is_delivered', 'delivered_at'),
+            'description': _('اطلاعات تحویل را می‌توانید حتی قبل از پرداخت ثبت کنید.')
+        }),
+    )
 
     def total_price(self, obj):
         """قیمت کل آیتم"""
