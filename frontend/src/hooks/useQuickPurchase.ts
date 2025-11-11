@@ -53,7 +53,13 @@ export const useQuickPurchase = () => {
         setLoading(true);
         let sourceProduct = productLike;
         if (!productLike?.pricingLoaded) {
+        try {
           sourceProduct = await productsAPI.getById(productLike.id);
+        } catch (detailError: any) {
+          console.error('Error loading product details:', detailError);
+          sourceProduct = productLike;
+          toast('جزئیات کامل محصول در دسترس نیست، در صورت بروز خطا با پشتیبانی تماس بگیرید.', { icon: 'ℹ️' });
+        }
         }
 
         const payload = buildQuickPurchasePayload(sourceProduct);

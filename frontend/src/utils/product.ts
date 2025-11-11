@@ -61,10 +61,6 @@ export const isProductAvailable = (product: any): boolean => {
   if (product.is_available !== undefined) return Boolean(product.is_available);
   if (product.available !== undefined) return Boolean(product.available);
   if (product.can_purchase !== undefined) return Boolean(product.can_purchase);
-  if (product.status) {
-    const status = String(product.status).toLowerCase();
-    if (status !== 'active') return false;
-  }
   const stockFields = ['stock_quantity', 'stock', 'inventory', 'remaining_stock'];
   for (const key of stockFields) {
     if (product[key] !== undefined) {
@@ -75,14 +71,20 @@ export const isProductAvailable = (product: any): boolean => {
   if (product.default_variant) {
     const variant = product.default_variant;
     if (variant.is_available === false) return false;
-    for (const key of stockFields) {
+    const variantStockFields = ['stock_quantity', 'stock', 'inventory', 'remaining_stock'];
+    let hasVariantStockField = false;
+    for (const key of variantStockFields) {
       if (variant[key] !== undefined) {
+        hasVariantStockField = true;
         const numeric = Number(variant[key]);
         if (Number.isFinite(numeric) && numeric <= 0) return false;
       }
     }
+    if (!hasVariantStockField && variant.is_unlimited_stock === false) {
+      return false;
+    }
   }
-  return extractPriceValue(product) !== null;
+  return true;
 };
 
 const imageCandidateKeys = ['main_image_url', 'product_image', 'image_url', 'image', 'main_image', 'thumbnail'];
