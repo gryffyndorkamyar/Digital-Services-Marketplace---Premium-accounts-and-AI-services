@@ -37,19 +37,26 @@ export const useQuickPurchase = () => {
         return;
       }
 
+      const initialStockFlag = productLike?.is_in_stock;
+      const initialVariantStock =
+        (productLike?.is_unlimited_stock === true) ||
+        (productLike?.stock_quantity ?? productLike?.inventory ?? 0) > 0 ||
+        (productLike?.default_variant?.is_unlimited_stock === true) ||
+        (productLike?.default_variant?.stock_quantity ?? productLike?.default_variant?.inventory ?? 0) > 0;
+
+      if (initialStockFlag === false || (initialStockFlag === undefined && !initialVariantStock)) {
+        toast('این محصول در حال حاضر موجود نیست. بزودی موجود خواهد شد.', { icon: '🕒' });
+        return;
+      }
+
       try {
         setLoading(true);
         let sourceProduct = productLike;
-        if (!isProductAvailable(productLike)) {
+        if (!productLike?.pricingLoaded) {
           sourceProduct = await productsAPI.getById(productLike.id);
         }
 
         const payload = buildQuickPurchasePayload(sourceProduct);
-
-        if (!payload.price || !isProductAvailable(sourceProduct)) {
-          toast('این محصول در حال حاضر موجود نیست. بزودی موجود خواهد شد.', { icon: '🕒' });
-          return;
-        }
 
         setProduct(payload);
         setQuantity(1);
