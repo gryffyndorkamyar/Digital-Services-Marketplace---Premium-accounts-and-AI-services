@@ -228,16 +228,11 @@ const ProductCard: React.FC<{ product: Product; onQuickBuy: () => void }> = ({ p
         type="button"
         onClick={(event) => {
           event.preventDefault();
-          if (!isPurchasable) {
-            toast('این محصول در حال حاضر موجود نیست', { icon: 'ℹ️' });
-            return;
-          }
           onQuickBuy();
         }}
-        disabled={!isPurchasable}
-        className="mt-4 w-full py-2 border border-neonOrange/50 text-neonOrange rounded-lg hover:bg-neonOrange/20 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        className="mt-4 w-full py-2 border border-neonOrange/50 text-neonOrange rounded-lg hover:bg-neonOrange/20 transition-colors"
       >
-        {isPurchasable ? 'خرید سریع' : 'ناموجود'}
+        خرید سریع
       </button>
     </Link>
   );

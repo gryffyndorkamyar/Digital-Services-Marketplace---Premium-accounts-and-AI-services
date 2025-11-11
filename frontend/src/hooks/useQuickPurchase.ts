@@ -47,7 +47,7 @@ export const useQuickPurchase = () => {
         const payload = buildQuickPurchasePayload(sourceProduct);
 
         if (!payload.price || !isProductAvailable(sourceProduct)) {
-          toast.error('این محصول در حال حاضر موجود نیست یا امکان خرید آن فراهم نشده است');
+          toast('این محصول در حال حاضر موجود نیست. بزودی موجود خواهد شد.', { icon: '🕒' });
           return;
         }
 
