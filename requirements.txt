@@ -1,19 +1,46 @@
 # Django and Core
-Django==5.2.5
-djangorestframework==3.14.0
-django-cors-headers==4.3.1
-django-filter==23.5
+Django==4.2.11
+asgiref==3.9.1
 django-extensions==3.2.3
+sqlparse==0.5.3
+typing_extensions==4.14.1
+tzdata==2025.2
 
-# Database
-psycopg2-binary==2.9.9
-redis==5.0.1
-django-redis==5.4.0
+# REST & API
+djangorestframework==3.16.1
+djangorestframework-simplejwt==5.5.1
+drf-yasg==1.21.10
+django-cors-headers==4.7.0
+django-filter==23.2
+inflection==0.5.1
+uritemplate==4.2.0
 
 # Authentication & Security
-djangorestframework-simplejwt==5.3.0
 django-allauth==0.60.1
-cryptography==41.0.8
+cryptography==45.0.6
+PyJWT==2.10.1
+pyOpenSSL==25.1.0
+service-identity==24.2.0
+
+# Realtime & ASGI
+channels==4.3.1
+channels-redis==4.3.0
+daphne==4.2.1
+autobahn==24.4.2
+Twisted==25.5.0
+attrs==25.3.0
+Automat==25.4.16
+constantly==23.10.4
+hyperlink==21.0.0
+incremental==24.7.2
+msgpack==1.1.1
+txaio==25.6.1
+zope.interface==7.2
+
+# Database & Caching
+psycopg2-binary==2.9.10
+redis==6.4.0
+django-redis==5.4.0
 
 # Payment Processing
 stripe==7.8.0
@@ -28,17 +55,16 @@ python-decouple==3.8
 django-environ==0.11.2
 
 # API Documentation
-drf-yasg==1.21.7
 django-rest-swagger==2.2.0
 
 # Caching & Performance
-django-cacheops==8.0.0
+django-cacheops==6.1
 django-debug-toolbar==4.2.0
 
 # Email & Notifications
 django-anymail==10.2
 celery==5.3.4
-django-celery-beat==2.5.0
+django-celery-beat==2.6.0
 
 # Monitoring & Logging
 sentry-sdk==1.40.4
@@ -65,8 +91,19 @@ django-storages==1.14.2
 openai==1.3.7
 anthropic==0.7.8
 
-# Utilities
-python-dateutil==2.8.2
-pytz==2023.3
+# HTTP & Serialization Utilities
 requests==2.31.0
-urllib3==2.1.0
+urllib3==2.5.0
+certifi==2025.10.5
+charset-normalizer==3.4.4
+idna==3.10
+packaging==25.0
+PyYAML==6.0.2
+python-dateutil==2.8.2
+pytz==2025.2
+
+# Low-level Dependencies
+cffi==1.17.1
+pycparser==2.22
+pyasn1==0.6.1
+pyasn1-modules==0.4.2

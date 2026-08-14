@@ -1,5 +1,28 @@
 import { authTokenStore } from './authToken';
-export const API_BASE_URL = 'http://127.0.0.1:8000/api';
+
+// Determine API base URL based on environment
+// In production (when served from Django), use relative path
+// In development (when using React dev server), use absolute path
+const getApiBaseUrl = (): string => {
+  // Check if REACT_APP_API_BASE_URL is set (for production/Liara or local override)
+  if (process.env.REACT_APP_API_BASE_URL) {
+    return process.env.REACT_APP_API_BASE_URL;
+  }
+
+  // CRA / Vite-style local frontend ports → Mignum backend on 8010
+  // (8000 is reserved for other local projects like Business-OS)
+  if (typeof window !== 'undefined') {
+    const port = window.location.port;
+    if (port === '3000' || port === '3001' || port === '5173') {
+      return 'http://127.0.0.1:8010/api';
+    }
+  }
+
+  // Same-origin (Django serving the React build)
+  return '/api';
+};
+
+export const API_BASE_URL = getApiBaseUrl();
 
 // Helper function for API calls
 async function apiCall<T>(

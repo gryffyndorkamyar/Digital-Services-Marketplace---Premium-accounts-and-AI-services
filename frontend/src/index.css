@@ -2,23 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-/* فونت‌های فارسی جدید و بروز - از CDN فارسی */
-@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
-@import url('https://cdn.jsdelivr.net/gh/rastikerdar/samim-font@v5.0.2/dist/font-face.css');
-@import url('https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v6.0.0/dist/font-face.css');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+/* Fonts loaded via index.html for faster parallel fetch */
 
-/* تم نارنجی-مشکی نئونی */
 :root {
-  --neon-orange: #ff6b35;
-  --neon-orange-light: #ff8c5a;
-  --neon-orange-dark: #ff4500;
-  --dark-bg: #000000;
-  --dark-surface: #0d0d0d;
-  --dark-card: #1a1a1a;
+  --ovyra-void: #050505;
+  --ovyra-ink: #0b0b0d;
+  --ovyra-mist: #d6d3d1;
+  --ovyra-gold: #c9a227;
+  --ovyra-violet: #9d4edd;
+  --ovyra-eye: #c026d3;
+  --ovyra-header-h: 4.75rem;
+  /* legacy hooks used across older pages */
+  --neon-orange: #c9a227;
+  --neon-orange-light: #e0c35a;
+  --neon-orange-dark: #a68516;
+  --dark-bg: #050505;
+  --dark-surface: #0b0b0d;
+  --dark-card: #121214;
 }
 
-/* استایل‌های پایه */
 * {
   margin: 0;
   padding: 0;
@@ -27,25 +29,35 @@
 
 body {
   margin: 0;
-  font-family: 'Vazirmatn', 'Samim', 'Shabnam', 'Inter', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Far Bamshad', Tahoma, system-ui, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--dark-bg);
-  color: #ffffff;
+  background-color: var(--ovyra-void);
+  color: #f5f5f4;
   direction: rtl;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+.font-display {
+  font-family: 'Orbitron', sans-serif;
 }
 
 .auth-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   background-color: var(--dark-surface);
-  border: 1px solid rgba(255, 107, 53, 0.3);
+  border: 1px solid rgba(201, 162, 39, 0.35);
   color: #ffffff;
-  caret-color: var(--neon-orange);
+  caret-color: var(--ovyra-gold);
   transition: all 0.3s ease;
 }
 
@@ -55,174 +67,1014 @@ body {
 
 .auth-input:focus {
   outline: none;
-  border-color: var(--neon-orange);
-  box-shadow: 0 0 12px rgba(255, 107, 53, 0.35);
+  border-color: var(--ovyra-gold);
+  box-shadow: 0 0 12px rgba(201, 162, 39, 0.28);
 }
 
-code {
-  font-family: 'JetBrains Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-/* افکت‌های نئونی */
-@layer utilities {
-  .neon-glow {
-    text-shadow: 
-      0 0 5px var(--neon-orange),
-      0 0 10px var(--neon-orange),
-      0 0 15px var(--neon-orange),
-      0 0 20px var(--neon-orange);
+@layer components {
+  .ovyra-btn-primary {
+    @apply inline-flex items-center gap-2 bg-ovyra-gold px-6 py-3 text-sm font-semibold text-black transition;
+  }
+  .ovyra-btn-primary:hover {
+    @apply bg-[#e0c35a];
+    box-shadow: 0 0 28px rgba(201, 162, 39, 0.35);
   }
 
-  .neon-glow-subtle {
-    text-shadow: 
-      0 0 5px var(--neon-orange),
-      0 0 10px var(--neon-orange);
+  .ovyra-btn-neon {
+    @apply relative inline-flex items-center gap-2 overflow-hidden border border-ovyra-violet/70 bg-gradient-to-l from-[#6b21a8] via-[#9d4edd] to-[#c9a227] px-7 py-3.5 text-sm font-semibold text-white;
+    box-shadow:
+      0 0 18px rgba(157, 78, 221, 0.45),
+      0 0 40px rgba(192, 38, 211, 0.2),
+      inset 0 0 18px rgba(255, 255, 255, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+  }
+  .ovyra-btn-neon:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow:
+      0 0 28px rgba(157, 78, 221, 0.65),
+      0 0 60px rgba(201, 162, 39, 0.28),
+      inset 0 0 22px rgba(255, 255, 255, 0.12);
   }
 
-  .neon-border {
-    border: 2px solid var(--neon-orange);
-    box-shadow: 
-      0 0 5px var(--neon-orange),
-      0 0 10px var(--neon-orange),
-      inset 0 0 5px var(--neon-orange);
+  .ovyra-btn-ghost {
+    @apply inline-flex items-center gap-2 border border-white/25 bg-black/45 px-6 py-3.5 text-sm text-white transition;
+  }
+  .ovyra-btn-ghost:hover {
+    @apply border-ovyra-violet/70 text-ovyra-violet;
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.25);
   }
 
-  .neon-border-subtle {
-    border: 1px solid var(--neon-orange);
-    box-shadow: 
-      0 0 3px var(--neon-orange),
-      inset 0 0 3px var(--neon-orange);
+  .ovyra-grain {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    pointer-events: none;
   }
 
-  .neon-button {
-    background: linear-gradient(135deg, var(--neon-orange-dark), var(--neon-orange));
-    border: 2px solid var(--neon-orange);
-    box-shadow: 
-      0 0 10px var(--neon-orange),
-      0 0 20px var(--neon-orange),
-      inset 0 0 10px rgba(255, 107, 53, 0.3);
+  .ovyra-scanlines {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.04) 0px,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 2px,
+      transparent 5px
+    );
+  }
+
+  .ovyra-section-glow {
+    @apply pointer-events-none absolute inset-x-0 top-0 h-48 bg-[radial-gradient(ellipse_at_top,rgba(157,78,221,0.16),transparent_70%)];
+  }
+
+  .ovyra-logo-breathe {
+    animation: ovyraBreathe 5.5s ease-in-out infinite;
+  }
+
+  .ovyra-fade-in {
+    animation: ovyraFadeIn 0.65s ease-out both;
+  }
+
+  .ovyra-fade-in-delay {
+    animation-delay: 0.12s;
+  }
+
+  .ovyra-section-defer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 520px;
+  }
+
+  .ovyra-neon-gold {
+    text-shadow:
+      0 0 10px rgba(201, 162, 39, 0.75),
+      0 0 28px rgba(201, 162, 39, 0.45),
+      0 0 48px rgba(201, 162, 39, 0.2);
+  }
+
+  .ovyra-neon-violet {
+    text-shadow:
+      0 0 12px rgba(157, 78, 221, 0.85),
+      0 0 32px rgba(192, 38, 211, 0.55),
+      0 0 56px rgba(157, 78, 221, 0.25);
+  }
+
+  .ovyra-neon-white {
+    text-shadow:
+      0 0 8px rgba(255, 255, 255, 0.5),
+      0 0 24px rgba(157, 78, 221, 0.25);
+  }
+
+  .ovyra-trust-neon {
+    border-top: 1px solid rgba(157, 78, 221, 0.35);
+    border-bottom: 1px solid rgba(201, 162, 39, 0.25);
+    background: linear-gradient(90deg, rgba(157, 78, 221, 0.08), rgba(0, 0, 0, 0.65), rgba(201, 162, 39, 0.08));
+    box-shadow:
+      0 0 40px rgba(157, 78, 221, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .ovyra-neon-orb {
+    @apply pointer-events-none absolute rounded-full;
+    filter: blur(72px);
+    animation: ovyraOrbFloat 9s ease-in-out infinite;
+  }
+
+  .ovyra-neon-orb-violet {
+    width: 22rem;
+    height: 22rem;
+    top: 8%;
+    left: 55%;
+    background: rgba(157, 78, 221, 0.28);
+  }
+
+  .ovyra-neon-orb-gold {
+    width: 18rem;
+    height: 18rem;
+    bottom: 12%;
+    left: 8%;
+    background: rgba(201, 162, 39, 0.18);
+    animation-delay: -3s;
+  }
+
+  .ovyra-neon-orb-eye {
+    width: 14rem;
+    height: 14rem;
+    top: 42%;
+    right: 12%;
+    background: rgba(192, 38, 211, 0.22);
+    animation-delay: -5s;
+  }
+
+  .ovyra-holo-frame {
+    border: 1px solid rgba(157, 78, 221, 0.35);
+    background: rgba(0, 0, 0, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 0.12) inset,
+      0 25px 80px rgba(0, 0, 0, 0.55),
+      0 0 40px rgba(157, 78, 221, 0.2);
+    transform-style: preserve-3d;
+  }
+
+  .ovyra-sheen {
+    background: linear-gradient(
+      115deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.08) 45%,
+      transparent 70%
+    );
+    background-size: 220% 220%;
+    animation: ovyraSheen 7s ease-in-out infinite;
+    mix-blend-mode: screen;
+  }
+
+  .ovyra-orbit {
+    border: 1px solid rgba(157, 78, 221, 0.35);
+    border-radius: 9999px;
+    box-shadow: 0 0 24px rgba(157, 78, 221, 0.25), inset 0 0 24px rgba(192, 38, 211, 0.12);
+    animation: ovyraSpin 18s linear infinite;
+  }
+
+  .ovyra-orbit-delayed {
+    border-color: rgba(201, 162, 39, 0.28);
+    animation-duration: 26s;
+    animation-direction: reverse;
+  }
+
+  .ovyra-eye-core {
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at 35% 30%, #fff 0 6%, transparent 7%),
+      radial-gradient(circle at center, #c026d3 0%, #6b21a8 42%, transparent 70%);
+    box-shadow:
+      0 0 30px rgba(192, 38, 211, 0.8),
+      0 0 70px rgba(157, 78, 221, 0.45);
+    animation: ovyraPulse 3.4s ease-in-out infinite;
+  }
+
+  .ovyra-neon-panel {
+    border: 1px solid rgba(157, 78, 221, 0.22);
+    background:
+      linear-gradient(160deg, rgba(157, 78, 221, 0.12), rgba(0, 0, 0, 0.42) 55%),
+      rgba(8, 8, 10, 0.82);
+    box-shadow:
+      inset 0 0 0 1px rgba(201, 162, 39, 0.08),
+      0 0 28px rgba(157, 78, 221, 0.1);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .ovyra-neon-panel:hover {
+    border-color: rgba(192, 38, 211, 0.45);
+    box-shadow:
+      0 0 36px rgba(157, 78, 221, 0.22),
+      0 0 64px rgba(201, 162, 39, 0.08);
+  }
+
+  .ovyra-step-ring {
+    @apply flex h-14 w-14 items-center justify-center font-display text-sm tracking-[0.2em] text-ovyra-gold;
+    border: 1px solid rgba(201, 162, 39, 0.65);
+    border-radius: 9999px;
+    box-shadow:
+      0 0 28px rgba(157, 78, 221, 0.45),
+      0 0 48px rgba(192, 38, 211, 0.15),
+      inset 0 0 16px rgba(201, 162, 39, 0.15);
+    animation: ovyraNeonBreathe 4s ease-in-out infinite;
+  }
+
+  .ovyra-figure-chip {
+    border: 1px solid rgba(157, 78, 221, 0.22);
+    background: linear-gradient(160deg, rgba(157, 78, 221, 0.06), rgba(0, 0, 0, 0.35));
+    padding: 1rem 0.85rem;
+    border-radius: 0.65rem;
     transition: all 0.3s ease;
   }
+  .ovyra-figure-chip:hover {
+    border-color: color-mix(in srgb, var(--chip-accent, #9d4edd) 55%, white);
+    box-shadow: 0 0 18px color-mix(in srgb, var(--chip-accent, #9d4edd) 28%, transparent);
+  }
+  .ovyra-figure-chip.is-active {
+    border-color: rgba(201, 162, 39, 0.85);
+    background: linear-gradient(160deg, rgba(201, 162, 39, 0.16), rgba(157, 78, 221, 0.12));
+    box-shadow:
+      0 0 32px rgba(157, 78, 221, 0.35),
+      0 0 56px rgba(192, 38, 211, 0.12);
+  }
 
+  .ovyra-section-border {
+    border-top: 1px solid rgba(157, 78, 221, 0.22);
+    box-shadow: inset 0 1px 0 rgba(201, 162, 39, 0.06);
+  }
+
+  .ovyra-product-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+      linear-gradient(165deg, rgba(157, 78, 221, 0.06), rgba(0, 0, 0, 0.5) 50%),
+      rgba(8, 8, 10, 0.85);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+  .ovyra-product-card:hover {
+    border-color: color-mix(in srgb, var(--card-accent, #9d4edd) 45%, rgba(201, 162, 39, 0.35));
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 28px color-mix(in srgb, var(--card-accent, #9d4edd) 18%, transparent);
+    transform: translateY(-3px);
+  }
+
+  .ovyra-input {
+    @apply w-full rounded-lg border border-white/15 bg-black/40 px-4 py-3 text-white placeholder-ovyra-mist/40 backdrop-blur-sm transition;
+  }
+  .ovyra-input:focus {
+    @apply border-ovyra-violet/60 outline-none;
+    box-shadow: 0 0 16px rgba(157, 78, 221, 0.25);
+  }
+
+  .ovyra-logo-nav img {
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 12px rgba(201, 162, 39, 0.35));
+  }
+
+  .ovyra-logo-hero img {
+    filter: drop-shadow(0 0 28px rgba(157, 78, 221, 0.22)) drop-shadow(0 0 48px rgba(201, 162, 39, 0.12));
+  }
+
+  /* ─── HERO PRO ─── */
+  .ovyra-hero-pro {
+    @apply relative overflow-hidden;
+  }
+
+  .ovyra-hero-pro-gridlines {
+    @apply pointer-events-none absolute inset-0 opacity-[0.035];
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse at 50% 38%, black 18%, transparent 68%);
+  }
+
+  .ovyra-hero-shell {
+    @apply relative z-10 mx-auto flex w-full max-w-7xl items-start px-5 sm:px-8;
+    padding-top: calc(var(--ovyra-header-h) + 1.15rem);
+    padding-bottom: 2.25rem;
+  }
+
+  .ovyra-hero-grid {
+    @apply grid w-full items-center;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    .ovyra-hero-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 2.25rem;
+      align-items: center;
+    }
+  }
+
+  .ovyra-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  .ovyra-hero-logo {
+    @apply mb-4 h-[3.25rem] w-auto sm:h-[4.25rem] lg:h-[4.75rem];
+  }
+
+  .ovyra-hero-meta-cluster {
+    @apply mb-4 inline-flex flex-wrap items-center gap-1 rounded-full px-2 py-1;
+    background: rgba(0, 0, 0, 0.62);
+    border: 1px solid rgba(157, 78, 221, 0.32);
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 0.12) inset,
+      0 0 32px rgba(157, 78, 221, 0.15),
+      0 12px 40px rgba(0, 0, 0, 0.42);
+  }
+
+  .ovyra-hero-meta-chip {
+    @apply inline-flex h-8 items-center px-3 font-display text-[10px] tracking-[0.38em] text-ovyra-gold/90 sm:text-[11px];
+  }
+
+  .ovyra-hero-headline {
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.25rem, 5.8vw, 4.1rem);
+    line-height: 1.04;
+    letter-spacing: 0.015em;
+  }
+
+  .ovyra-hero-lead {
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.05rem, 2.2vw, 1.28rem);
+    line-height: 1.5;
+    letter-spacing: 0.012em;
+    color: rgba(255, 255, 255, 0.94);
+  }
+
+  .ovyra-hero-sub {
+    font-family: 'Far Bamshad', Tahoma, system-ui, sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.92rem, 1.7vw, 1.02rem);
+    line-height: 1.65;
+    letter-spacing: 0.006em;
+    color: rgba(214, 211, 209, 0.62);
+  }
+
+  .ovyra-hero-lead-block {
+    @apply mt-4 w-full;
+    max-width: 32rem;
+  }
+
+  .ovyra-hero-lead-block .ovyra-hero-sub {
+    @apply mt-2.5;
+  }
+
+  .ovyra-hero-system-strip {
+    @apply mt-4 flex w-full max-w-lg flex-wrap gap-2;
+  }
+
+  .ovyra-hero-system-chip {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1.5;
+    border: 1px solid rgba(157, 78, 221, 0.28);
+    background: rgba(157, 78, 221, 0.08);
+    box-shadow: 0 0 18px rgba(157, 78, 221, 0.1);
+  }
+
+  .ovyra-hero-stats {
+    @apply mt-4 grid w-full max-w-lg grid-cols-3 gap-1.5;
+  }
+
+  .ovyra-hero-stat {
+    @apply ovyra-neon-panel flex flex-row items-center justify-center gap-2 px-2.5 py-2.5 text-center sm:flex-col sm:gap-0 sm:py-3;
+    border-color: rgba(157, 78, 221, 0.38);
+    box-shadow:
+      0 0 28px rgba(157, 78, 221, 0.18),
+      0 0 48px rgba(192, 38, 211, 0.08),
+      inset 0 0 0 1px rgba(201, 162, 39, 0.1);
+    animation: ovyraNeonBreathe 3.6s ease-in-out infinite;
+  }
+
+  .ovyra-hero-stat:nth-child(2) {
+    animation-delay: 0.45s;
+  }
+
+  .ovyra-hero-stat:nth-child(3) {
+    animation-delay: 0.9s;
+  }
+
+  .ovyra-hero-stat-value {
+    font-family: 'Orbitron', sans-serif;
+    @apply text-xl font-bold tracking-wide text-white sm:text-2xl;
+    text-shadow: 0 0 16px rgba(157, 78, 221, 0.5);
+  }
+
+  .ovyra-hero-stat-label {
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-weight: 500;
+    @apply text-[11px] tracking-wide text-ovyra-mist/70 sm:mt-1 sm:text-xs;
+  }
+
+  .ovyra-hero-actions {
+    @apply mt-4 flex w-full max-w-lg flex-wrap items-center gap-2;
+  }
+
+  .ovyra-hero-tagline {
+    @apply font-display text-[9px] tracking-[0.34em] sm:mr-auto sm:text-[10px];
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .ovyra-hero-media {
+    @apply relative mx-auto w-full;
+    max-width: min(100%, 28rem);
+  }
+
+  @media (min-width: 1024px) {
+    .ovyra-hero-media {
+      max-width: min(100%, 31rem);
+      justify-self: center;
+    }
+  }
+
+  .ovyra-hero-figure-stage {
+    @apply relative;
+    animation: ovyraVisualFloat 7s ease-in-out infinite;
+  }
+
+  .ovyra-hero-figure-glow {
+    @apply pointer-events-none absolute;
+    inset: 10% 6% 14%;
+    border-radius: 9999px;
+    background: radial-gradient(ellipse at center, rgba(157, 78, 221, 0.38), rgba(192, 38, 211, 0.12) 42%, transparent 72%);
+    filter: blur(36px);
+    animation: ovyraNeonBreathe 4.2s ease-in-out infinite;
+  }
+
+  .ovyra-hero-figure-img {
+    @apply relative z-[1] block w-full;
+    height: auto;
+    filter:
+      drop-shadow(0 36px 72px rgba(0, 0, 0, 0.72))
+      drop-shadow(0 0 40px rgba(157, 78, 221, 0.28))
+      drop-shadow(0 0 80px rgba(201, 162, 39, 0.1));
+  }
+
+  .ovyra-hero-badge {
+    @apply absolute -top-3 right-4 z-[3] rounded-full px-4 py-1.5 font-display text-[10px] tracking-[0.32em];
+    background: rgba(157, 78, 221, 0.32);
+    border: 1px solid rgba(192, 38, 211, 0.55);
+    color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 32px rgba(192, 38, 211, 0.45);
+    animation: ovyraNeonBreathe 2.8s ease-in-out infinite;
+  }
+
+  .ovyra-hero-caption {
+    @apply mt-3 text-center font-display text-[9px] leading-relaxed tracking-[0.3em] text-ovyra-mist/40 sm:text-[10px];
+  }
+
+  .ovyra-section-shell {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .ovyra-section-head {
+    @apply flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between;
+  }
+
+  .ovyra-section-eyebrow {
+    font-family: 'Orbitron', sans-serif;
+    @apply text-[11px] tracking-[0.4em] text-ovyra-gold;
+  }
+
+  .ovyra-section-title {
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-weight: 700;
+    @apply mt-3 text-3xl text-white sm:text-4xl lg:text-[3rem];
+    line-height: 1.1;
+  }
+
+  .ovyra-section-lead {
+    font-family: 'Far Bamshad', Tahoma, system-ui, sans-serif;
+    font-weight: 400;
+    font-size: clamp(1rem, 1.8vw, 1.12rem);
+    line-height: 1.75;
+    letter-spacing: 0.006em;
+    @apply mt-4 max-w-xl text-ovyra-mist/70;
+  }
+
+  .ovyra-section-cta-pill {
+    height: 2.85rem;
+    padding-inline: 1.2rem;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .ovyra-hero-beam {
+    @apply pointer-events-none absolute inset-x-0 top-0 z-[1];
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(201, 162, 39, 0.65) 24%,
+      rgba(157, 78, 221, 0.95) 50%,
+      rgba(192, 38, 211, 0.65) 76%,
+      transparent 100%
+    );
+    box-shadow:
+      0 0 24px rgba(157, 78, 221, 0.65),
+      0 0 48px rgba(201, 162, 39, 0.35);
+    animation: ovyraBeamPulse 4s ease-in-out infinite;
+  }
+
+  .ovyra-hero-glow {
+    @apply absolute inset-x-0 top-0 h-56;
+    background: radial-gradient(ellipse at 50% 0%, rgba(157, 78, 221, 0.12) 0%, transparent 72%);
+  }
+
+  .ovyra-hero-actions a.ovyra-nav-pill:hover,
+  .ovyra-hero-actions a.ovyra-nav-chip:hover {
+    transform: translateY(-1px);
+  }
+
+  .ovyra-hero-visual-ring {
+    @apply pointer-events-none absolute -inset-4 rounded-[1.45rem];
+    border: 1px solid rgba(157, 78, 221, 0.45);
+    box-shadow:
+      0 0 56px rgba(157, 78, 221, 0.28),
+      0 0 90px rgba(192, 38, 211, 0.12);
+    animation: ovyraRingPulse 3s ease-in-out infinite;
+  }
+
+  .ovyra-hero-visual {
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 0.18) inset,
+      0 32px 100px rgba(0, 0, 0, 0.62),
+      0 0 72px rgba(157, 78, 221, 0.32),
+      0 0 120px rgba(192, 38, 211, 0.12);
+    animation: ovyraVisualFloat 7s ease-in-out infinite;
+  }
+
+  .ovyra-archive-characters-stage {
+    @apply relative;
+  }
+
+  .ovyra-archive-characters-glow {
+    @apply pointer-events-none absolute;
+    inset: 8% 10% 12%;
+    border-radius: 9999px;
+    background: radial-gradient(ellipse at center, rgba(157, 78, 221, 0.28), rgba(192, 38, 211, 0.08) 45%, transparent 72%);
+    filter: blur(42px);
+  }
+
+  .ovyra-archive-characters-img {
+    @apply relative z-[1] block w-full;
+    height: auto;
+    object-fit: contain;
+    filter:
+      drop-shadow(0 28px 56px rgba(0, 0, 0, 0.65))
+      drop-shadow(0 0 36px rgba(157, 78, 221, 0.18));
+  }
+
+  .ovyra-hero-cta-pill {
+    height: 2.85rem;
+    padding-inline: 1.2rem;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .ovyra-hero-cta-chip {
+    height: 2.85rem;
+    padding-inline: 1.2rem;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .font-fa {
+    font-family: 'Far Bamshad', Tahoma, system-ui, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  .font-fa-display {
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.12;
+  }
+
+  .ovyra-copy {
+    font-family: 'Far Bamshad', Tahoma, system-ui, sans-serif;
+    @apply leading-[1.78] text-ovyra-mist/70;
+    font-weight: 400;
+    letter-spacing: 0.006em;
+  }
+
+  /* ─── HEADER ─── */
+  .ovyra-header {
+    height: var(--ovyra-header-h);
+    background: rgba(5, 5, 5, 0.94);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .ovyra-header {
+      background: rgba(5, 5, 5, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+  }
+
+  .ovyra-header-beam {
+    @apply pointer-events-none absolute inset-x-0 top-0 z-[1];
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(201, 162, 39, 0.65) 22%,
+      rgba(157, 78, 221, 0.95) 50%,
+      rgba(192, 38, 211, 0.65) 78%,
+      transparent 100%
+    );
+    box-shadow:
+      0 0 20px rgba(157, 78, 221, 0.55),
+      0 0 40px rgba(201, 162, 39, 0.25);
+    animation: ovyraBeamPulse 4.5s ease-in-out infinite;
+  }
+
+  .ovyra-header-glow {
+    @apply pointer-events-none absolute inset-x-0 top-0 h-24;
+    background: radial-gradient(ellipse at 50% 0%, rgba(157, 78, 221, 0.14) 0%, transparent 72%);
+  }
+
+  .ovyra-header-inner {
+    position: relative;
+    z-index: 2;
+    height: var(--ovyra-header-h);
+  }
+
+  .ovyra-header-brand {
+    @apply flex items-center gap-3;
+  }
+
+  .ovyra-header-brand-meta {
+    @apply border-r border-white/10 pr-3 leading-none;
+  }
+
+  .ovyra-header-cluster {
+    @apply items-center gap-1.5 rounded-full px-2.5 py-1.5;
+    background: rgba(0, 0, 0, 0.62);
+    border: 1px solid rgba(157, 78, 221, 0.28);
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 0.1) inset,
+      0 12px 40px rgba(0, 0, 0, 0.45),
+      0 0 40px rgba(157, 78, 221, 0.18);
+  }
+
+  .ovyra-header-divider {
+    @apply mx-0.5 h-5 w-px shrink-0 self-center;
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+  }
+
+  .ovyra-header-utils {
+    @apply flex items-center gap-0.5;
+  }
+
+  .ovyra-nav-chip {
+    @apply relative inline-flex h-10 shrink-0 items-center gap-1.5 overflow-hidden rounded-full px-4;
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.07) 0%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.75) 100%);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+      0 2px 12px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .ovyra-nav-chip-icon {
+    @apply opacity-55 transition-opacity;
+  }
+
+  .ovyra-nav-chip-label {
+    @apply relative z-[1] whitespace-nowrap;
+  }
+
+  .ovyra-nav-chip-sheen {
+    @apply pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300;
+    background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.1) 50%, transparent 65%);
+  }
+
+  a.ovyra-nav-chip:hover,
+  .ovyra-nav-chip.is-active {
+    transform: translateY(-1px);
+    color: #fff;
+    border-color: rgba(201, 162, 39, 0.35);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+      0 6px 20px rgba(0, 0, 0, 0.45),
+      0 0 20px rgba(201, 162, 39, 0.12);
+  }
+  a.ovyra-nav-chip:hover .ovyra-nav-chip-icon,
+  .ovyra-nav-chip.is-active .ovyra-nav-chip-icon {
+    opacity: 0.9;
+    color: #c9a227;
+  }
+  a.ovyra-nav-chip:hover .ovyra-nav-chip-sheen {
+    opacity: 1;
+  }
+
+  .ovyra-header-menu-btn {
+    @apply rounded-full p-2 text-white/90 transition;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(165deg, rgba(255, 255, 255, 0.06) 0%, rgba(0, 0, 0, 0.55) 100%);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  }
+  .ovyra-header-menu-btn:hover {
+    border-color: rgba(157, 78, 221, 0.45);
+    box-shadow: 0 0 20px rgba(157, 78, 221, 0.2);
+  }
+
+  .ovyra-header-mobile {
+    background: rgba(5, 5, 5, 0.98);
+  }
+
+  .ovyra-nav-pill {
+    @apply relative inline-flex h-10 shrink-0 items-center gap-1.5 overflow-visible rounded-full px-4;
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    color: rgba(255, 255, 255, 0.92);
+    border: 1px solid color-mix(in srgb, var(--pill-accent, #9d4edd) 38%, rgba(255, 255, 255, 0.1));
+    background:
+      linear-gradient(
+        165deg,
+        color-mix(in srgb, var(--pill-accent, #9d4edd) 26%, transparent) 0%,
+        rgba(8, 8, 10, 0.88) 48%,
+        rgba(0, 0, 0, 0.92) 100%
+      );
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 4px 20px rgba(0, 0, 0, 0.4),
+      0 0 24px var(--pill-glow, rgba(157, 78, 221, 0.22));
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  button.ovyra-nav-pill {
+    cursor: pointer;
+  }
+
+  .ovyra-nav-pill-dot {
+    @apply h-1.5 w-1.5 shrink-0 rounded-full;
+    background: var(--pill-accent, #9d4edd);
+    box-shadow: 0 0 10px var(--pill-glow, rgba(157, 78, 221, 0.6));
+  }
+
+  .ovyra-nav-pill-label,
+  .ovyra-nav-chip-label {
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+  }
+
+  .ovyra-nav-pill-label {
+    @apply relative z-[1] whitespace-nowrap;
+  }
+
+  .ovyra-nav-pill-icon {
+    @apply relative z-[1] shrink-0 opacity-90;
+  }
+
+  .ovyra-nav-pill-sheen {
+    @apply pointer-events-none absolute inset-0 rounded-full opacity-0 transition-opacity duration-300;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.12) 50%, transparent 70%);
+  }
+
+  a.ovyra-nav-pill:hover,
+  button.ovyra-nav-pill:hover {
+    transform: translateY(-1px);
+    color: #fff;
+    border-color: color-mix(in srgb, var(--pill-accent, #9d4edd) 65%, rgba(255, 255, 255, 0.25));
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 10px 28px rgba(0, 0, 0, 0.5),
+      0 0 36px var(--pill-glow, rgba(157, 78, 221, 0.45));
+  }
+  a.ovyra-nav-pill:hover .ovyra-nav-pill-sheen,
+  button.ovyra-nav-pill:hover .ovyra-nav-pill-sheen {
+    opacity: 1;
+  }
+
+  .ovyra-nav-pill.is-soon {
+    cursor: default;
+  }
+
+  .ovyra-soon-tag {
+    @apply absolute -top-3 left-1/2 z-[3] inline-flex -translate-x-1/2 items-center gap-1 text-[8px] font-bold uppercase text-white;
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    letter-spacing: 0.06em;
+    padding: 0.22rem 0.55rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    background: linear-gradient(135deg, #f0abfc, #c026d3 45%, #581c87);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+      0 0 20px rgba(192, 38, 211, 0.8),
+      0 4px 14px rgba(0, 0, 0, 0.5);
+    animation: ovyraSoonPulse 2.4s ease-in-out infinite;
+  }
+
+  .ovyra-btn-auth {
+    @apply relative inline-flex items-center gap-2 overflow-hidden rounded-full px-5 py-2.5 text-[13px] font-semibold text-white;
+    font-family: 'Far Bamshad', Tahoma, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background:
+      linear-gradient(135deg, rgba(76, 29, 149, 0.95) 0%, rgba(124, 58, 237, 0.92) 40%, rgba(157, 78, 221, 0.9) 65%, rgba(184, 134, 11, 0.85) 100%);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+      0 0 36px rgba(157, 78, 221, 0.45),
+      0 8px 24px rgba(0, 0, 0, 0.5);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+  }
+
+  .ovyra-btn-auth-shine {
+    @apply pointer-events-none absolute inset-0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, transparent 48%);
+  }
+
+  .ovyra-btn-auth::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: inherit;
+    background: conic-gradient(from 180deg, #c026d3, #9d4edd, #c9a227, #c026d3);
+    opacity: 0.65;
+    filter: blur(8px);
+    animation: ovyraAuthGlow 4s linear infinite;
+  }
+
+  .ovyra-btn-auth:hover {
+    transform: translateY(-1px) scale(1.02);
+    filter: brightness(1.08);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+      0 0 52px rgba(192, 38, 211, 0.55),
+      0 0 72px rgba(201, 162, 39, 0.28),
+      0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+
+  .ovyra-btn-auth.is-ghost {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 24px rgba(157, 78, 221, 0.15);
+  }
+  .ovyra-btn-auth.is-ghost::before {
+    opacity: 0.3;
+    animation: none;
+  }
+}
+
+@keyframes ovyraBeamPulse {
+  0%, 100% { opacity: 0.65; filter: brightness(0.9); }
+  50% { opacity: 1; filter: brightness(1.25); }
+}
+
+@keyframes ovyraNeonBreathe {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(157, 78, 221, 0.2),
+      inset 0 0 0 1px rgba(201, 162, 39, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(157, 78, 221, 0.38),
+      0 0 64px rgba(192, 38, 211, 0.15),
+      inset 0 0 0 1px rgba(201, 162, 39, 0.18);
+  }
+}
+
+@keyframes ovyraRingPulse {
+  0%, 100% {
+    opacity: 0.75;
+    transform: scale(1);
+    box-shadow:
+      0 0 40px rgba(157, 78, 221, 0.22),
+      0 0 72px rgba(192, 38, 211, 0.08);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+    box-shadow:
+      0 0 64px rgba(157, 78, 221, 0.42),
+      0 0 100px rgba(192, 38, 211, 0.18);
+  }
+}
+
+@keyframes ovyraVisualFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes ovyraOrbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.75; }
+  33% { transform: translate(12px, -18px) scale(1.06); opacity: 1; }
+  66% { transform: translate(-8px, 10px) scale(0.96); opacity: 0.85; }
+}
+
+@keyframes ovyraFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ovyraAuthGlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ovyraSoonPulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes ovyraBreathe {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(201, 162, 39, 0.18)); transform: translateY(0); }
+  50% { filter: drop-shadow(0 0 26px rgba(157, 78, 221, 0.4)); transform: translateY(-4px); }
+}
+
+@keyframes ovyraSheen {
+  0% { background-position: 0% 40%; }
+  50% { background-position: 100% 60%; }
+  100% { background-position: 0% 40%; }
+}
+
+@keyframes ovyraSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ovyraPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.85; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 1; }
+}
+
+@layer utilities {
+  .neon-glow {
+    text-shadow: 0 0 8px rgba(201, 162, 39, 0.55);
+  }
+  .neon-glow-subtle {
+    text-shadow: 0 0 6px rgba(201, 162, 39, 0.35);
+  }
+  .neon-border {
+    border: 1px solid rgba(201, 162, 39, 0.55);
+    box-shadow: 0 0 12px rgba(201, 162, 39, 0.2);
+  }
+  .neon-border-subtle {
+    border: 1px solid rgba(201, 162, 39, 0.35);
+  }
+  .neon-button {
+    background: linear-gradient(135deg, #a68516, #c9a227);
+    border: 1px solid #c9a227;
+    color: #000;
+    transition: all 0.3s ease;
+  }
   .neon-button:hover {
-    box-shadow: 
-      0 0 15px var(--neon-orange),
-      0 0 30px var(--neon-orange),
-      0 0 45px var(--neon-orange),
-      inset 0 0 15px rgba(255, 107, 53, 0.5);
-    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(201, 162, 39, 0.4);
+    transform: translateY(-1px);
   }
-
-  .neon-button:active {
-    transform: translateY(0);
-    box-shadow: 
-      0 0 5px var(--neon-orange),
-      inset 0 0 10px rgba(255, 107, 53, 0.5);
-  }
-
-  /* افکت پس‌زمینه نئونی */
   .neon-bg {
-    background: 
-      radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-      var(--dark-bg);
+    background:
+      radial-gradient(circle at 18% 30%, rgba(157, 78, 221, 0.14) 0%, transparent 45%),
+      radial-gradient(circle at 82% 70%, rgba(201, 162, 39, 0.1) 0%, transparent 40%),
+      var(--ovyra-void);
   }
 
-  /* انیمیشن‌های نئونی */
-  .neon-pulse {
-    animation: neonPulse 2s ease-in-out infinite;
-  }
-
-  @keyframes neonPulse {
-    0%, 100% {
-      opacity: 1;
-      filter: brightness(1);
-    }
-    50% {
-      opacity: 0.8;
-      filter: brightness(1.2);
-    }
-  }
-
-  .neon-flicker {
-    animation: neonFlicker 3s infinite;
-  }
-
-  @keyframes neonFlicker {
-    0%, 100% { opacity: 1; }
-    98% { opacity: 1; }
-    99% { opacity: 0.8; }
-  }
-
-  /* انیمیشن‌های شناور برای عکس‌ها */
-  .animate-float-slow {
-    animation: floatSlow 6s ease-in-out infinite;
-  }
-
-  .animate-float-reverse {
-    animation: floatReverse 6s ease-in-out infinite;
-  }
-
-  .animate-float-slow-delayed {
-    animation: floatSlow 6s ease-in-out infinite;
-    animation-delay: 1.5s;
-  }
-
-  .animate-float-reverse-delayed {
-    animation: floatReverse 6s ease-in-out infinite;
-    animation-delay: 2s;
-  }
-
-  @keyframes floatSlow {
-    0%, 100% {
-      transform: translateY(0) translateX(0) rotate(0deg);
-    }
-    25% {
-      transform: translateY(-20px) translateX(10px) rotate(5deg);
-    }
-    50% {
-      transform: translateY(-10px) translateX(-5px) rotate(-5deg);
-    }
-    75% {
-      transform: translateY(-25px) translateX(15px) rotate(3deg);
-    }
-  }
-
-  @keyframes floatReverse {
-    0%, 100% {
-      transform: translateY(0) translateX(0) rotate(0deg);
-    }
-    25% {
-      transform: translateY(20px) translateX(-10px) rotate(-5deg);
-    }
-    50% {
-      transform: translateY(10px) translateX(5px) rotate(5deg);
-    }
-    75% {
-      transform: translateY(25px) translateX(-15px) rotate(-3deg);
-    }
-  }
-
-  /* اسکرول بار با تم نئونی */
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
   }
-
   ::-webkit-scrollbar-track {
     background: var(--dark-surface);
   }
-
   ::-webkit-scrollbar-thumb {
-    background: var(--neon-orange);
-    border-radius: 5px;
-    box-shadow: 0 0 5px var(--neon-orange);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--neon-orange-light);
-    box-shadow: 0 0 10px var(--neon-orange);
+    background: linear-gradient(180deg, #c9a227, #9d4edd);
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ovyra-logo-breathe,
+  .ovyra-sheen,
+  .ovyra-orbit,
+  .ovyra-orbit-delayed,
+  .ovyra-eye-core {
+    animation: none !important;
+  }
+}

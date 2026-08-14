@@ -15,13 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from django.views.generic import TemplateView
+from django.views.decorators.cache import never_cache
+from django.http import HttpResponse
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from common.routers import urlpatterns as common_urls
 from authenticate.routers import urlpatterns as auth_urls
 from cart.routers import urlpatterns as cart_urls
+from main.views import serve_txt_file
 from django.conf import settings
 from django.conf.urls.static import static
+import os
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +40,51 @@ urlpatterns = [
     path('api/', include(common_urls)),
     path('api/', include(auth_urls)),
     path('api/', include(cart_urls)),
+    
+    # Serve .txt file for اینماد verification
+    # Both /txt and /47366271.txt will serve the same file
+    path('txt', serve_txt_file, name='txt_file'),
+    path('47366271.txt', serve_txt_file, name='enamad_txt_file'),
 ]
+
+# Serve React index.html for all non-API routes (both development and production)
+@never_cache
+def serve_react(request):
+    react_build_index = settings.REACT_BUILD_DIR / 'index.html'
+    if react_build_index.exists():
+        with open(react_build_index, 'r', encoding='utf-8') as f:
+            return HttpResponse(f.read(), content_type='text/html')
+    return HttpResponse('<html><body><h1>React build not found. Please run: cd frontend && npm run build</h1></body></html>', content_type='text/html')
+
+# Media must be served explicitly in production (WhiteNoise does not serve MEDIA)
+from django.views.static import serve as static_serve
+
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', static_serve, {'document_root': settings.MEDIA_ROOT}),
+]
+
+# In DEBUG, also expose django static helpers (WhiteNoise covers production static)
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# Serve files from React build root (for public assets like images)
+# This serves files like /31c57b54718309a92b5d2900a15ace5b.png from build/
+if settings.REACT_BUILD_DIR.exists():
+    def serve_build_files(request, path):
+        """Serve files from React build root, excluding index.html"""
+        if path == 'index.html':
+            return serve_react(request)
+        file_path = settings.REACT_BUILD_DIR / path
+        if file_path.exists() and file_path.is_file():
+            return static_serve(request, path, document_root=str(settings.REACT_BUILD_DIR))
+        return serve_react(request)
+
+    # Serve React app and build files for all non-API routes
+    urlpatterns += [
+        re_path(r'^(?!admin|api|media|static|txt|47366271\.txt)(?P<path>.*)$', serve_build_files),
+    ]
+else:
+    # Serve React app for all non-API routes
+    urlpatterns += [
+        re_path(r'^(?!admin|api|media|static|txt|47366271\.txt).*', serve_react),
+    ]

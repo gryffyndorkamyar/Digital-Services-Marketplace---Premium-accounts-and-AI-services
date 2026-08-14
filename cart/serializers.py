@@ -58,7 +58,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     """سریالایزر سبد خرید"""
-    items = CartItemSerializer(many=True, read_only=True)
+    items = serializers.SerializerMethodField()
     total_items = serializers.ReadOnlyField()
     subtotal = serializers.ReadOnlyField()
     discount_amount = serializers.ReadOnlyField()
@@ -76,6 +76,11 @@ class CartSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'id', 'user', 'session_key', 'status', 'created_at', 'updated_at', 'expires_at'
         ]
+    
+    def get_items(self, obj):
+        """فقط آیتم‌های active را برگردان"""
+        active_items = obj.items.filter(status='active')
+        return CartItemSerializer(active_items, many=True, context=self.context).data
 
 
 class CartCreateSerializer(serializers.ModelSerializer):
@@ -316,13 +321,29 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         if value.status == 'converted':
             errors.append('این سبد خرید قبلاً به سفارش تبدیل شده است. لطفاً یک سبد خرید جدید بسازید.')
         elif value.status != 'active':
-            errors.append(f'وضعیت سبد خرید باید active باشد (فعلاً: {value.get_status_display()})')
+            # اگر status != 'active' ولی آیتم فعال داره، status رو active کن
+            if value.get_total_items() > 0:
+                value.status = 'active'
+                value.save()
+            else:
+                errors.append(f'وضعیت سبد خرید باید active باشد (فعلاً: {value.get_status_display()})')
         
         if value.is_expired():
             errors.append('سبد خرید منقضی شده است.')
         
-        if value.get_total_items() == 0:
-            errors.append('سبد خرید باید حداقل یک آیتم داشته باشد.')
+        # بررسی دقیق‌تر: آیا واقعاً آیتم فعال وجود دارد؟
+        total_items = value.get_total_items()
+        if total_items == 0:
+            # یک بار دیگر بررسی کن - شاید مشکل در cache باشد
+            from django.db.models import Sum
+            from .models import CartItem
+            actual_count = CartItem.objects.filter(
+                cart=value,
+                status='active'
+            ).aggregate(total=Sum('quantity'))['total'] or 0
+            
+            if actual_count == 0:
+                errors.append('سبد خرید باید حداقل یک آیتم فعال داشته باشد. لطفاً ابتدا محصولی به سبد خرید اضافه کنید.')
         
         if errors:
             raise ValidationError('. '.join(errors))

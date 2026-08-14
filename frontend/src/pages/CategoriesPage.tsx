@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, List, Loader } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { categoriesAPI } from '../services/api';
 import { getCategoryImage } from '../utils/category';
 
@@ -33,6 +34,7 @@ const CategoriesPage: React.FC = () => {
         setFeaturedCategories(featured);
       } catch (error) {
         console.error('Error fetching categories:', error);
+        toast.error('خطا در بارگذاری دسته‌بندی‌ها');
       } finally {
         setLoading(false);
       }

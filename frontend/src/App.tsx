@@ -19,22 +19,22 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <div className="min-h-screen bg-dark-dark neon-bg">
+          <div className="min-h-screen bg-ovyra-void">
             <AppRoutes />
             <Toaster
               position="top-center"
               toastOptions={{
                 duration: 3000,
                 style: {
-                  background: '#1a1a1a',
-                  color: '#fff',
-                  border: '1px solid #ff6b35',
-                  boxShadow: '0 0 10px rgba(255, 107, 53, 0.3)',
+                  background: '#0b0b0d',
+                  color: '#f5f5f4',
+                  border: '1px solid rgba(201, 162, 39, 0.45)',
+                  boxShadow: '0 0 16px rgba(157, 78, 221, 0.2)',
                 },
                 success: {
                   iconTheme: {
-                    primary: '#ff6b35',
-                    secondary: '#fff',
+                    primary: '#c9a227',
+                    secondary: '#050505',
                   },
                 },
                 error: {

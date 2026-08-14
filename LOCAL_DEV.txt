@@ -1,0 +1,21 @@
+# Local dev — two commands only
+
+Terminal 1 (project root):
+  python manage.py runserver
+
+Terminal 2 (frontend folder):
+  cd frontend
+  npm start
+  # or: npm run dev
+
+URLs:
+  Backend + built UI : http://127.0.0.1:8010/
+  Frontend dev (CRA) : http://localhost:3000/
+  Admin              : http://127.0.0.1:8010/admin/  (admin / admin123)
+
+Automatic (no extra setup):
+  - .env.local → local Postgres (docker mignum-postgres :55434)
+  - .venv created on first run if missing
+  - migrate runs before runserver
+  - backend binds 127.0.0.1:8010 (port 8000 stays free for other projects)
+  - frontend API → http://127.0.0.1:8010/api

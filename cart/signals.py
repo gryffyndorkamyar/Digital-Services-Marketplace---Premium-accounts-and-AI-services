@@ -43,19 +43,23 @@ def send_order_notification(sender, instance, created, **kwargs):
         # در اینجا کد ارسال اعلان قرار می‌گیرد
 
 
+@receiver(pre_save, sender=Order)
+def track_previous_order_status(sender, instance, **kwargs):
+    """نگه داشتن وضعیت قبلی برای جلوگیری از کم‌کردن تکراری موجودی"""
+    if not instance.pk:
+        instance._previous_status = None
+        return
+    try:
+        instance._previous_status = Order.objects.only('status').get(pk=instance.pk).status
+    except Order.DoesNotExist:
+        instance._previous_status = None
+
+
 @receiver(post_save, sender=Order)
 def update_inventory(sender, instance, **kwargs):
-    """به‌روزرسانی موجودی محصولات"""
-    # فقط اگر status به 'paid' تغییر کرده باشه
-    if instance.status == 'paid':
-        # بررسی اینکه آیا قبلاً موجودی کم شده یا نه
-        # برای جلوگیری از اجرای تکراری
-        if hasattr(instance, '_inventory_updated') and instance._inventory_updated:
-            return
-        
-        # علامت بزن که موجودی به‌روزرسانی شده
-        instance._inventory_updated = True
-        
+    """به‌روزرسانی موجودی محصولات — فقط هنگام اولین انتقال به paid"""
+    previous_status = getattr(instance, '_previous_status', None)
+    if instance.status == 'paid' and previous_status != 'paid':
         for item in instance.items.all():
             if item.variant:
                 # بررسی اینکه موجودی نامحدود نباشه

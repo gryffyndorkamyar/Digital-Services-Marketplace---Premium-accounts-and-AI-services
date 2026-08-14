@@ -343,7 +343,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         if order.payment_method == 'online':
             # استفاده از درگاه زرین پال
             from .zarinpal import get_zarinpal_gateway
-            from django.urls import reverse
             
             gateway = get_zarinpal_gateway()
             
@@ -410,30 +409,36 @@ class OrderViewSet(viewsets.ModelViewSet):
                 'payment': PaymentSerializer(payment).data
             })
     
+    def _payment_return_redirect(self, payment_status, order=None, message=None):
+        """هدایت کاربر به فرانت بعد از بازگشت از زرین‌پال"""
+        from django.shortcuts import redirect
+        from django.conf import settings
+        from urllib.parse import urlencode
+
+        return_path = getattr(settings, 'FRONTEND_PAYMENT_RETURN_PATH', '/orders') or '/orders'
+        params = {'payment': payment_status}
+        if order is not None:
+            params['order'] = str(order.order_number)
+        if message:
+            params['message'] = message
+        separator = '&' if '?' in return_path else '?'
+        return redirect(f"{return_path}{separator}{urlencode(params)}")
+
     @action(detail=True, methods=['get', 'post'], url_path='zarinpal-callback', permission_classes=[AllowAny])
     def zarinpal_callback(self, request, pk=None):
-        """Callback از زرین پال"""
-        # به جای self.get_object() که نیاز به authentication داره
-        # مستقیم سفارش رو پیدا می‌کنیم چون زرین‌پال token نمی‌فرسته
+        """Callback از زرین پال — verify می‌کند و کاربر را به فرانت برمی‌گرداند"""
+        # زرین‌پال token نمی‌فرستد؛ سفارش را مستقیم پیدا می‌کنیم
         try:
             order = Order.objects.get(id=pk)
         except Order.DoesNotExist:
-            return Response(
-                {'error': 'سفارش یافت نشد.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        # دریافت authority و status از query parameters
+            return self._payment_return_redirect('failed', message='order_not_found')
+
         authority = request.query_params.get('Authority') or request.data.get('Authority')
         status_code = request.query_params.get('Status') or request.data.get('Status')
-        
+
         if not authority:
-            return Response(
-                {'error': 'Authority parameter is required.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # پیدا کردن payment با authority
+            return self._payment_return_redirect('failed', order=order, message='missing_authority')
+
         try:
             payment = Payment.objects.get(
                 order=order,
@@ -441,64 +446,54 @@ class OrderViewSet(viewsets.ModelViewSet):
                 status='pending'
             )
         except Payment.DoesNotExist:
-            return Response(
-                {'error': 'پرداخت یافت نشد.'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        # بررسی status از زرین پال
+            # اگر قبلاً تایید شده، کاربر را به صفحه موفق بفرست
+            existing = Payment.objects.filter(order=order, status='completed').first()
+            if existing and order.payment_status == 'completed':
+                return self._payment_return_redirect('success', order=order)
+            return self._payment_return_redirect('failed', order=order, message='payment_not_found')
+
         if status_code != 'OK':
             payment.status = 'failed'
             payment.gateway_response = {
                 'status': status_code,
                 'message': 'کاربر پرداخت را لغو کرد.'
             }
-            payment.save()
-            
-            return Response({
-                'message': 'پرداخت لغو شد.',
-                'status': 'cancelled'
-            })
-        
-        # تایید پرداخت با زرین پال
+            payment.save(update_fields=['status', 'gateway_response'])
+            return self._payment_return_redirect('cancelled', order=order)
+
         from .zarinpal import get_zarinpal_gateway
-        
+
         gateway = get_zarinpal_gateway()
         verify_result = gateway.verify_payment(
             authority=authority,
             amount=order.total_amount
         )
-        
+
         if verify_result['success']:
-            # پرداخت موفق
             payment.status = 'completed'
-            payment.payment_id = verify_result.get('ref_id', authority)
+            payment.payment_id = str(verify_result.get('ref_id') or authority)
             payment.gateway_response = verify_result.get('data', {})
             payment.completed_at = timezone.now()
             payment.save()
-            
+
             order.payment_status = 'completed'
             order.status = 'paid'
             order.paid_at = timezone.now()
-            order.save()
-            
+            order.save(update_fields=['payment_status', 'status', 'paid_at'])
+
             logger.info(f"Payment verified: {payment.payment_id} for order {order.order_number}")
-            return Response({
-                'message': 'پرداخت با موفقیت انجام شد.',
-                'status': 'success',
-                'payment': PaymentSerializer(payment).data
-            })
-        else:
-            # پرداخت ناموفق
-            payment.status = 'failed'
-            payment.gateway_response = verify_result.get('data', {})
-            payment.save()
-            
-            logger.error(f"Payment verification failed: {verify_result.get('message', 'Unknown')}")
-            return Response({
-                'message': verify_result.get('message', 'خطا در تایید پرداخت'),
-                'status': 'failed'
-            }, status=status.HTTP_400_BAD_REQUEST)
+            return self._payment_return_redirect('success', order=order)
+
+        payment.status = 'failed'
+        payment.gateway_response = verify_result.get('data', {})
+        payment.save(update_fields=['status', 'gateway_response'])
+
+        logger.error(f"Payment verification failed: {verify_result.get('message', 'Unknown')}")
+        return self._payment_return_redirect(
+            'failed',
+            order=order,
+            message=verify_result.get('message', 'verify_failed')
+        )
     
     @action(detail=True, methods=['get'], url_path='items/(?P<item_id>[^/.]+)/content')
     def item_content(self, request, pk=None, item_id=None):

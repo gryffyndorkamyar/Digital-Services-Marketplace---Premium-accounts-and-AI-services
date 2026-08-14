@@ -1,0 +1,39 @@
+# RunCloud — Nginx snippet (Custom Config in Web Application)
+# Replace YOUR_DOMAIN and upstream port (default Gunicorn 8000)
+
+upstream mignum_app {
+    server 127.0.0.1:8000;
+    keepalive 32;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ovyraworld.runflare.run ovyraword.runflare.run;
+
+    client_max_body_size 25M;
+
+    # RunCloud SSL — enable HTTPS in panel; proxy headers for Django
+    location / {
+        proxy_pass http://mignum_app;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+    }
+
+    # Optional: serve collected static directly (faster)
+    # location /static/ {
+    #     alias /home/runcloud/webapps/YOUR_APP/staticfiles/;
+    #     expires 30d;
+    #     access_log off;
+    # }
+
+    # Media uploads — persistent path outside deploy dir
+    # location /media/ {
+    #     alias /home/runcloud/webapps/YOUR_APP/media/;
+    #     expires 7d;
+    # }
+}

@@ -3,10 +3,26 @@
 import os
 import sys
 
+from local_bootstrap import (
+    default_runserver_addrport,
+    ensure_local_migrations,
+    ensure_local_postgres,
+    ensure_project_venv,
+    load_env_files,
+    print_dev_banner,
+)
+
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
+    load_env_files()
+    ensure_project_venv()
+    default_runserver_addrport()
+    ensure_local_postgres()
+    ensure_local_migrations()
+    print_dev_banner()
+
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "main.settings")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -18,5 +34,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

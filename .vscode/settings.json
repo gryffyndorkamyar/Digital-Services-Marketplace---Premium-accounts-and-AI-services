@@ -1,0 +1,8 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.terminal.activateEnvironment": true,
+  "terminal.integrated.env.windows": {
+    "USE_LOCAL_DB": "True",
+    "DJANGO_SETTINGS_MODULE": "main.settings"
+  }
+}

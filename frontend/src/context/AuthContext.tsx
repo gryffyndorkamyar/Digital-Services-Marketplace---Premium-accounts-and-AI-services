@@ -1,8 +1,9 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, lazy, Suspense, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { authAPI, usersAPI } from '../services/api';
-import AuthModal from '../components/AuthModal';
 import { toast } from 'react-hot-toast';
 import { authTokenStore } from '../services/authToken';
+
+const AuthModal = lazy(() => import('../components/AuthModal'));
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -146,12 +147,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider value={value}>
-      <AuthModal visible={authModalVisible} onClose={hideAuthModal} onSuccess={() => {
-        if (modalCallback) {
-          modalCallback();
-          setModalCallback(null);
-        }
-      }} />
+      {authModalVisible && (
+        <Suspense fallback={null}>
+          <AuthModal
+            visible={authModalVisible}
+            onClose={hideAuthModal}
+            onSuccess={() => {
+              if (modalCallback) {
+                modalCallback();
+                setModalCallback(null);
+              }
+            }}
+          />
+        </Suspense>
+      )}
       {children}
     </AuthContext.Provider>
   );

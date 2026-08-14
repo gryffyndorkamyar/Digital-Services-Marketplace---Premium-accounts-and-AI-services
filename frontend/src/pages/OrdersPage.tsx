@@ -1,9 +1,12 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { Package, Eye, X, CheckCircle, Clock, AlertCircle, LogIn } from 'lucide-react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { Package, Eye, X, CheckCircle, Clock, AlertCircle, LogIn, CreditCard, Loader2 } from 'lucide-react';
 import { ordersAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { formatPriceLabel, extractPriceValue, getProductPrimaryImage } from '../utils/product';
+import OvyraPageShell from '../components/ovyra/OvyraPageShell';
+import OvyraPageHeader from '../components/ovyra/OvyraPageHeader';
 
 interface OrderItem {
   id: string;
@@ -29,7 +32,10 @@ interface Order {
 const OrdersPage: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [processingOrderId, setProcessingOrderId] = useState<string | null>(null);
   const { isAuthenticated, loading: authLoading, showAuthModal } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paymentToastShown = useRef(false);
 
   const fetchOrders = useCallback(async () => {
     try {
@@ -43,6 +49,32 @@ const OrdersPage: React.FC = () => {
     }
   }, []);
 
+  const handleProcessPayment = useCallback(
+    async (orderId: string) => {
+      setProcessingOrderId(orderId);
+      try {
+        const response = await ordersAPI.processPayment(orderId, {});
+        if (response?.payment_url) {
+          window.location.href = response.payment_url;
+          return;
+        }
+        toast.success('پرداخت با موفقیت ثبت شد.');
+        fetchOrders();
+      } catch (error: any) {
+        console.error('Process payment error:', error);
+        const message =
+          error?.payload?.message ||
+          error?.payload?.error ||
+          error?.message?.replace(/^API Error:\s*/i, '') ||
+          'در ایجاد پرداخت خطایی رخ داد';
+        toast.error(message);
+      } finally {
+        setProcessingOrderId(null);
+      }
+    },
+    [fetchOrders]
+  );
+
   useEffect(() => {
     if (!isAuthenticated) {
       setLoading(false);
@@ -51,6 +83,28 @@ const OrdersPage: React.FC = () => {
     }
     fetchOrders();
   }, [isAuthenticated, fetchOrders]);
+
+  // بازگشت از درگاه زرین‌پال — فقط toast، بدون تغییر UI
+  useEffect(() => {
+    const paymentStatus = searchParams.get('payment');
+    if (!paymentStatus || paymentToastShown.current) return;
+    paymentToastShown.current = true;
+
+    if (paymentStatus === 'success') {
+      toast.success('پرداخت با موفقیت انجام شد.');
+      if (isAuthenticated) fetchOrders();
+    } else if (paymentStatus === 'cancelled') {
+      toast.error('پرداخت لغو شد.');
+    } else {
+      toast.error('تایید پرداخت ناموفق بود.');
+    }
+
+    const next = new URLSearchParams(searchParams);
+    next.delete('payment');
+    next.delete('order');
+    next.delete('message');
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams, isAuthenticated, fetchOrders]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -78,97 +132,53 @@ const OrdersPage: React.FC = () => {
     }
   };
 
-  if (authLoading) {
+  if (authLoading || loading) {
     return (
-      <div className="min-h-screen pt-16 pb-20 flex items-center justify-center">
-        <div className="text-center">
-          <Package className="w-16 h-16 text-neonOrange mx-auto mb-4 animate-spin" />
-          <p className="text-gray-300">در حال بررسی حساب کاربری...</p>
+      <OvyraPageShell glow={false}>
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <Loader2 className="h-12 w-12 animate-spin text-ovyra-gold" />
         </div>
-      </div>
+      </OvyraPageShell>
     );
   }
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen pt-16 pb-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 neon-bg">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
-        </div>
-        <div className="relative z-10 max-w-4xl mx-auto text-center pt-20">
-          <Package className="w-24 h-24 text-neonOrange mx-auto mb-6" />
-          <h2 className="text-3xl font-bold mb-4 text-neonOrange">ابتدا وارد حساب شوید</h2>
-          <p className="text-gray-300 mb-8">
-            برای مشاهده سفارشات، لطفاً وارد حساب کاربری خود شوید یا ثبت‌نام کنید.
-          </p>
-          <button
-            onClick={() => showAuthModal()}
-            className="inline-flex items-center gap-2 px-6 py-3 neon-button rounded-lg text-white font-bold"
-          >
-            <LogIn className="w-5 h-5" />
+      <OvyraPageShell>
+        <div className="mx-auto max-w-lg px-5 py-24 text-center">
+          <Package className="mx-auto mb-6 h-20 w-20 text-ovyra-gold/60" />
+          <h2 className="font-display text-3xl text-white">ورود لازم است</h2>
+          <p className="mt-4 text-ovyra-mist/70">برای مشاهده سفارش‌های آرشیو وارد شوید.</p>
+          <button type="button" onClick={() => showAuthModal()} className="ovyra-btn-neon mt-8 inline-flex items-center gap-2">
+            <LogIn className="h-5 w-5" />
             ورود / ثبت‌نام
           </button>
         </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen pt-16 pb-20 flex items-center justify-center">
-        <div className="text-center">
-          <Package className="w-16 h-16 text-neonOrange mx-auto mb-4 animate-spin" />
-          <p className="text-gray-300">در حال بارگذاری...</p>
-        </div>
-      </div>
+      </OvyraPageShell>
     );
   }
 
   if (orders.length === 0) {
     return (
-      <div className="min-h-screen pt-16 pb-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 neon-bg">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
-        </div>
-        <div className="relative z-10 max-w-4xl mx-auto text-center pt-20">
-          <Package className="w-24 h-24 text-neonOrange mx-auto mb-6" />
-          <h2 className="text-3xl font-bold mb-4 text-neonOrange">سفارشی ثبت نشده است</h2>
-          <p className="text-gray-300 mb-8">شما هنوز سفارشی ثبت نکرده‌اید</p>
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-2 px-6 py-3 neon-button rounded-lg text-white font-bold"
-          >
-            مشاهده محصولات
+      <OvyraPageShell>
+        <div className="mx-auto max-w-lg px-5 py-24 text-center">
+          <Package className="mx-auto mb-6 h-20 w-20 text-ovyra-gold/60" />
+          <h2 className="font-display text-3xl text-white">هنوز سفارشی ندارید</h2>
+          <Link to="/products" className="ovyra-btn-neon mt-8 inline-flex items-center gap-2">
+            ورود به فروشگاه
           </Link>
         </div>
-      </div>
+      </OvyraPageShell>
     );
   }
 
   return (
-    <div className="min-h-screen pt-16 pb-20 px-4 relative overflow-hidden">
-      {/* پس‌زمینه نئونی */}
-      <div className="absolute inset-0 neon-bg">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-neonOrange/10 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="relative z-10 max-w-6xl mx-auto">
-        {/* هدر */}
-        <div className="mb-8 mt-8">
-          <h1 className="text-4xl md:text-5xl font-bold neon-glow mb-2">سفارشات من</h1>
-          <p className="text-gray-300">تاریخچه سفارشات شما</p>
-        </div>
-
-        {/* لیست سفارشات */}
+    <OvyraPageShell>
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <OvyraPageHeader eyebrow="ORDERS" title="سفارش‌های من" description="تاریخچه خرید Archive 01" />
         <div className="space-y-6">
           {orders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-dark-card/90 backdrop-blur-md border border-neonOrange/30 rounded-xl p-6 hover:border-neonOrange/50 transition-all"
-            >
+            <div key={order.id} className="ovyra-neon-panel p-6">
               {/* هدر سفارش */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-neonOrange/20">
                 <div>
@@ -269,12 +279,31 @@ const OrdersPage: React.FC = () => {
                     لغو سفارش
                   </button>
                 )}
+                {order.payment_status !== 'completed' && (
+                  <button
+                    onClick={() => handleProcessPayment(order.id)}
+                    disabled={processingOrderId === order.id}
+                    className="flex items-center gap-2 px-4 py-2 bg-neonOrange text-white rounded-lg hover:bg-neonOrange-light transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {processingOrderId === order.id ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        در حال هدایت به درگاه...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="w-4 h-4" />
+                        پرداخت سفارش
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </OvyraPageShell>
   );
 };
 

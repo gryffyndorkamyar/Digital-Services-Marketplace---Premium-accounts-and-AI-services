@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-dark-dark">
+    <div className="min-h-screen bg-ovyra-void text-ovyra-mist">
       <Navbar />
       {children}
       <Footer />
@@ -17,4 +17,3 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 export default Layout;
-

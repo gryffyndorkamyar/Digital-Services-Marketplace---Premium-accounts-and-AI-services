@@ -11,10 +11,20 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load `.env` then `.env.local` (local overrides; Liara/production should not ship `.env.local`)
+try:
+    from local_bootstrap import load_env_files
+
+    load_env_files()
+except Exception:
+    pass
+
+from decouple import config
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +36,17 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [h.strip() for h in config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',') if h.strip()]
+
+# OVYRA production domains (RunFlare)
+OVYRA_PRODUCTION_HOSTS = (
+    'ovyraworld.runflare.run',
+    'ovyraword.runflare.run',
+)
+OVYRA_PRODUCTION_ORIGINS = (
+    'https://ovyraworld.runflare.run',
+    'https://ovyraword.runflare.run',
+)
 
 
 # Application definition
@@ -41,6 +61,7 @@ INSTALLED_APPS = [
     
     # Third party apps
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
     'django_filters',
     'drf_yasg',
@@ -54,8 +75,11 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'main.middleware.DisableCSRFForAPI',  # غیرفعال کردن CSRF برای API
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -66,7 +90,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,16 +108,41 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': config('DB_ENGINE'),
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
+# Local-first DB options (keep remote Liara .env untouched for deploy):
+#   USE_LOCAL_DB=True  → dedicated local Postgres (default port 55434)
+#   USE_SQLITE=True    → only if models are SQLite-compatible (not recommended here)
+USE_LOCAL_DB = config('USE_LOCAL_DB', default=False, cast=bool)
+USE_SQLITE = config('USE_SQLITE', default=False, cast=bool)
+
+if USE_SQLITE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+elif USE_LOCAL_DB:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('LOCAL_DB_NAME', default='mignum'),
+            'USER': config('LOCAL_DB_USER', default='mignum'),
+            'PASSWORD': config('LOCAL_DB_PASSWORD', default='mignum_local'),
+            'HOST': config('LOCAL_DB_HOST', default='127.0.0.1'),
+            'PORT': config('LOCAL_DB_PORT', default='55434'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': config('DB_ENGINE'),
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT'),
+        }
+    }
 
 
 # Password validation
@@ -130,7 +179,32 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# React Build Directory
+REACT_BUILD_DIR = BASE_DIR / 'frontend' / 'build'
+
+# Static files directories
+STATICFILES_DIRS = []
+if (REACT_BUILD_DIR / 'static').exists():
+    STATICFILES_DIRS.append(REACT_BUILD_DIR / 'static')
+# Also serve files from build root (for public assets like images)
+if REACT_BUILD_DIR.exists():
+    STATICFILES_DIRS.append(REACT_BUILD_DIR)
+
+# WhiteNoise: serve collected static files in production (gunicorn)
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+    },
+}
+WHITENOISE_USE_FINDERS = DEBUG
+WHITENOISE_AUTOREFRESH = DEBUG
+
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -147,7 +221,8 @@ AUTH_USER_MODEL = 'authenticate.User'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # SessionAuthentication را حذف کردیم تا CSRF لازم نباشد
+        # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -192,7 +267,18 @@ SIMPLE_JWT = {
 }
 
 # CORS Settings
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000').split(',')
+_cors_origins = [
+    o.strip()
+    for o in config(
+        'CORS_ALLOWED_ORIGINS',
+        default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000',
+    ).split(',')
+    if o.strip()
+]
+CORS_ALLOWED_ORIGINS = _cors_origins
+if not DEBUG:
+    CORS_ALLOWED_ORIGINS = list(dict.fromkeys([*CORS_ALLOWED_ORIGINS, *OVYRA_PRODUCTION_ORIGINS]))
+    ALLOWED_HOSTS = list(dict.fromkeys([*ALLOWED_HOSTS, *OVYRA_PRODUCTION_HOSTS]))
 CORS_ALLOW_CREDENTIALS = True
 
 # Channels Configuration
@@ -202,29 +288,56 @@ INSTALLED_APPS += [
 
 ASGI_APPLICATION = 'main.asgi.application'
 
-# Channel Layers (Redis)
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
+# Channel Layers (Redis with in-memory fallback for deploys without Redis)
+redis_host = config('REDIS_HOST', default='')
+redis_port = config('REDIS_PORT', default='6379')
+USE_REDIS = config('USE_REDIS', default=bool(redis_host), cast=bool)
 
-# CSRF settings for API - امن و بدون مقدار None
-CSRF_COOKIE_SECURE = False
+if USE_REDIS and redis_host:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [(redis_host, int(redis_port))],
+            },
+        },
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        },
+    }
+
+# CSRF settings for API
 CSRF_COOKIE_HTTPONLY = False
-CSRF_TRUSTED_ORIGINS = []
+_csrf_env = config('CSRF_TRUSTED_ORIGINS', default='')
+if _csrf_env.strip():
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_env.split(',') if o.strip()]
+else:
+    CSRF_TRUSTED_ORIGINS = list(_cors_origins)
 CSRF_USE_SESSIONS = False
-# از مقادیر پیش‌فرض Django برای هدر استفاده می‌شود (CSRF_HEADER_NAME را ست نکن)
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_COOKIE_SAMESITE = 'Lax'
-# مقادیر زیر را تنظیم نمی‌کنیم تا پیش‌فرض‌های Django اعمال شود:
-# CSRF_COOKIE_DOMAIN
-# CSRF_COOKIE_PATH
-# CSRF_COOKIE_AGE
+
+# Production security (RunFlare / Liara / reverse proxy)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if not DEBUG:
+    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int)
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+else:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
 
 # زرین پال Settings
 ZARINPAL_MERCHANT_ID = config('ZARINPAL_MERCHANT_ID', default='')
 ZARINPAL_SANDBOX = config('ZARINPAL_SANDBOX', default=True, cast=bool)
+# قیمت‌ها در UI به تومان هستند؛ زرین‌پال مبلغ را به ریال می‌گیرد
+ZARINPAL_CURRENCY_UNIT = config('ZARINPAL_CURRENCY_UNIT', default='IRT')  # IRT=toman, IRR=rial
+FRONTEND_PAYMENT_RETURN_PATH = config('FRONTEND_PAYMENT_RETURN_PATH', default='/orders')
