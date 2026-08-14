@@ -39,6 +39,7 @@ python manage.py createsuperuser
 ## عیب‌یابی
 | خطا | کار |
 |-----|-----|
+| **502 Bad Gateway** | لاگ **Runtime** را ببین. `args` باید آرایه باشد: `["gunicorn","main.wsgi:application","-c","gunicorn.conf.py"]`. envها (SECRET_KEY, DB_*) را چک کن. |
 | DisallowedHost | ALLOWED_HOSTS را چک کن |
 | DB connection | DB_HOST/PORT از Liara در RunFlare باز باشد |
 | صفحه سفید | لاگ deploy — frontend/build باید در repo باشد |

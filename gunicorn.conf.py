@@ -1,7 +1,10 @@
 """Gunicorn config — RunFlare / production."""
 import multiprocessing
+import os
 
-bind = "0.0.0.0:8000"
+# RunFlare/Liara nginx proxies to the platform-assigned PORT (see runflare.json "port").
+_port = os.environ.get("PORT", "8000")
+bind = f"0.0.0.0:{_port}"
 workers = min(multiprocessing.cpu_count() * 2 + 1, 4)
 worker_class = "sync"
 timeout = 120
