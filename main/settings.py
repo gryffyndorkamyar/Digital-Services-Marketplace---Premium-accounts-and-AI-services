@@ -16,7 +16,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load `.env` then `.env.local` (local overrides; Liara/production should not ship `.env.local`)
+# Load `.env` then `.env.local` (local only — RunFlare uses panel env vars, not `.env`)
 try:
     from local_bootstrap import load_env_files
 
@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Local-first DB options (keep remote Liara .env untouched for deploy):
+# Local-first DB options (production RunFlare uses remote Postgres via DB_* env):
 #   USE_LOCAL_DB=True  → dedicated local Postgres (default port 55434)
 #   USE_SQLITE=True    → only if models are SQLite-compatible (not recommended here)
 USE_LOCAL_DB = config('USE_LOCAL_DB', default=False, cast=bool)
@@ -322,7 +322,7 @@ CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_COOKIE_SAMESITE = 'Lax'
 
-# Production security (RunFlare / Liara / reverse proxy)
+# Production security (RunFlare reverse proxy)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 if not DEBUG:
     SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)

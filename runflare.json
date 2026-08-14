@@ -2,15 +2,17 @@
   "app": "ovyraword",
   "port": 8000,
   "platform": "django",
+  "django": {
+    "collectStatic": true,
+    "modifySettings": false,
+    "timezone": "Asia/Tehran"
+  },
   "build": {
+    "location": "iran",
     "command": "pip install -r requirements.txt && python manage.py migrate --noinput && python manage.py collectstatic --noinput"
   },
-  "args": ["gunicorn", "main.wsgi:application", "-c", "gunicorn.conf.py"],
+  "args": ["sh", "start.sh"],
   "disks": [
-    {
-      "name": "data",
-      "mountTo": "data"
-    },
     {
       "name": "media",
       "mountTo": "media"

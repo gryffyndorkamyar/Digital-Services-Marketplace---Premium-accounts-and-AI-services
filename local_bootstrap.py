@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parent
 
 
 def load_env_files() -> None:
-    """Load `.env` then override with `.env.local` (local-only; not used on Liara)."""
+    """Load `.env` then override with `.env.local` (local-only; not used on RunFlare)."""
 
     def _load(path: Path, override: bool) -> None:
         if not path.is_file():

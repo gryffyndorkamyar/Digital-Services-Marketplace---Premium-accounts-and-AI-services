@@ -3,6 +3,12 @@ from django.http import HttpResponse, Http404
 from django.conf import settings
 from pathlib import Path
 
+
+def health_check(_request):
+    """Lightweight probe for RunFlare / nginx upstream checks."""
+    return HttpResponse("ok", content_type="text/plain")
+
+
 def serve_txt_file(request):
     """نمایش فایل 47366271.txt از root پروژه برای اینماد"""
     # مسیر فایل 47366271.txt در root پروژه

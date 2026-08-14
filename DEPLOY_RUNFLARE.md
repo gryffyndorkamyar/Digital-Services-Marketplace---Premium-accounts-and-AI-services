@@ -56,18 +56,17 @@ runflare deploy
 
 ## ۶. Build روی سرور (خودکار)
 
-`runflare.json`:
-```json
-pip install -r requirements.txt && migrate && collectstatic
-gunicorn main.wsgi:application --bind 0.0.0.0:8000
-```
+`runflare.json` → build: pip + migrate + collectstatic  
+Runtime → `start.sh` → gunicorn روی `$PORT` (8000)
+
+فقط دیسک **`media`** لازم است. `liara.json` حذف شده — فقط `runflare.json`.
 
 ## ۷. تست
 
 - https://ovyraworld.runflare.run/
 - https://ovyraword.runflare.run/
 - https://ovyraworld-nd7-ovyraworld.runflare.cloud/
-- /api/ و /admin/
+- https://ovyraworld.runflare.run/health/
 
 ## نکات
 

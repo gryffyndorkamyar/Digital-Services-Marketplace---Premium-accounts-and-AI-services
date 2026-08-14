@@ -23,12 +23,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from common.routers import urlpatterns as common_urls
 from authenticate.routers import urlpatterns as auth_urls
 from cart.routers import urlpatterns as cart_urls
-from main.views import serve_txt_file
+from main.views import health_check, serve_txt_file
 from django.conf import settings
 from django.conf.urls.static import static
 import os
 
 urlpatterns = [
+    path('health/', health_check, name='health_check'),
     path('admin/', admin.site.urls),
     
     # JWT Token URLs
@@ -81,10 +82,10 @@ if settings.REACT_BUILD_DIR.exists():
 
     # Serve React app and build files for all non-API routes
     urlpatterns += [
-        re_path(r'^(?!admin|api|media|static|txt|47366271\.txt)(?P<path>.*)$', serve_build_files),
+        re_path(r'^(?!admin|api|media|static|health|txt|47366271\.txt)(?P<path>.*)$', serve_build_files),
     ]
 else:
     # Serve React app for all non-API routes
     urlpatterns += [
-        re_path(r'^(?!admin|api|media|static|txt|47366271\.txt).*', serve_react),
+        re_path(r'^(?!admin|api|media|static|health|txt|47366271\.txt).*', serve_react),
     ]
