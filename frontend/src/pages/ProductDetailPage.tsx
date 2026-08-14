@@ -162,7 +162,7 @@ const ProductDetailPage: React.FC = () => {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               {BOX_CONTENTS.map((item) => (
                 <div key={item.title} className="border border-white/8 bg-black/30 px-3 py-3 text-sm">
                   <span className="font-display text-[10px] tracking-[0.2em] text-ovyra-gold">{item.title}</span>

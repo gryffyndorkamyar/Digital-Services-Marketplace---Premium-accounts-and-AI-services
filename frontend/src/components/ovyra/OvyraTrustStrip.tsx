@@ -3,7 +3,7 @@ import { TRUST_SIGNALS } from '../../brand/ovyra';
 
 const OvyraTrustStrip: React.FC = () => (
   <div className="ovyra-trust-neon">
-    <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-8 gap-y-3 px-5 py-5 sm:gap-x-12 sm:px-8">
+    <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-6 gap-y-2.5 px-4 py-4 sm:gap-x-12 sm:px-8 sm:py-5">
       {TRUST_SIGNALS.map((signal) => (
         <span
           key={signal}

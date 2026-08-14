@@ -256,21 +256,27 @@ const CheckoutPage: React.FC = () => {
                 {normalizedCart.items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center gap-4 bg-dark-surface/50 rounded-lg p-4 border border-transparent hover:border-neonOrange/40 transition-colors"
+                    className="flex flex-col gap-3 rounded-lg border border-transparent bg-dark-surface/50 p-4 transition-colors hover:border-neonOrange/40 sm:flex-row sm:items-center"
                   >
-                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-dark-surface border border-neonOrange/20 flex-shrink-0">
-                      {item.productImage ? (
-                        <img src={item.productImage} alt={item.productName} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">
-                          بدون تصویر
-                        </div>
-                      )}
+                    <div className="flex items-center gap-4">
+                      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-neonOrange/20 bg-dark-surface">
+                        {item.productImage ? (
+                          <img src={item.productImage} alt={item.productName} className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-xs text-gray-500">
+                            بدون تصویر
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1 sm:hidden">
+                        <h3 className="truncate text-base font-semibold text-white">{item.productName}</h3>
+                        <span className="font-display text-sm text-neonOrange">{item.totalPriceLabel}</span>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-lg font-semibold text-white">{item.productName}</h3>
-                        <span className="text-neonOrange font-bold">{item.totalPriceLabel}</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-2 hidden items-center justify-between sm:flex">
+                        <h3 className="truncate text-lg font-semibold text-white">{item.productName}</h3>
+                        <span className="shrink-0 font-display text-neonOrange">{item.totalPriceLabel}</span>
                       </div>
                       <div className="text-sm text-gray-400 flex flex-wrap gap-3">
                         <span>تعداد: {item.quantity}</span>

@@ -1060,6 +1060,228 @@ textarea {
   }
 }
 
+/* ─── MOBILE & SMALL VIEWPORTS ─── */
+html {
+  overflow-x: clip;
+}
+
+.ovyra-page {
+  overflow-x: clip;
+}
+
+@media (max-width: 639px) {
+  :root {
+    --ovyra-header-h: 4.15rem;
+  }
+
+  .ovyra-hero-shell {
+    padding-top: calc(var(--ovyra-header-h) + 0.75rem);
+    padding-bottom: 1.5rem;
+    padding-inline: 1rem;
+  }
+
+  .ovyra-section-shell {
+    padding-inline: 1rem;
+  }
+
+  .ovyra-hero-logo {
+    height: 2.75rem;
+  }
+
+  .ovyra-hero-headline {
+    font-size: clamp(1.65rem, 8.2vw, 2.35rem);
+    line-height: 1.08;
+  }
+
+  .ovyra-hero-meta-chip {
+    height: 1.65rem;
+    padding-inline: 0.45rem;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+  }
+
+  .ovyra-hero-meta-cluster {
+    gap: 0.2rem;
+    padding-inline: 0.35rem;
+    max-width: 100%;
+  }
+
+  .ovyra-hero-lead {
+    font-size: 0.98rem;
+  }
+
+  .ovyra-hero-sub {
+    font-size: 0.875rem;
+  }
+
+  .ovyra-hero-system-strip {
+    gap: 0.35rem;
+  }
+
+  .ovyra-hero-system-chip {
+    flex: 1 1 calc(50% - 0.35rem);
+    min-width: 0;
+    justify-content: center;
+    padding-inline: 0.5rem;
+  }
+
+  .ovyra-hero-system-chip .font-fa {
+    font-size: 11px;
+  }
+
+  .ovyra-hero-stats {
+    gap: 0.35rem;
+  }
+
+  .ovyra-hero-stat {
+    flex-direction: column;
+    gap: 0;
+    padding: 0.45rem 0.25rem;
+  }
+
+  .ovyra-hero-stat-value {
+    font-size: 1.05rem;
+  }
+
+  .ovyra-hero-stat-label {
+    margin-top: 0.1rem;
+    font-size: 9px;
+    line-height: 1.25;
+  }
+
+  .ovyra-hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 100%;
+    gap: 0.45rem;
+  }
+
+  .ovyra-hero-actions .ovyra-nav-pill,
+  .ovyra-hero-actions .ovyra-nav-chip {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ovyra-hero-tagline {
+    width: 100%;
+    margin-top: 0.15rem;
+    text-align: center;
+    letter-spacing: 0.2em;
+    font-size: 8px;
+  }
+
+  .ovyra-hero-badge {
+    right: 0.35rem;
+    top: -0.35rem;
+    padding-inline: 0.55rem;
+    font-size: 7px;
+    letter-spacing: 0.18em;
+  }
+
+  .ovyra-hero-caption {
+    letter-spacing: 0.18em;
+    font-size: 8px;
+  }
+
+  .ovyra-neon-orb-violet {
+    width: 13rem;
+    height: 13rem;
+  }
+
+  .ovyra-neon-orb-gold {
+    width: 10rem;
+    height: 10rem;
+  }
+
+  .ovyra-neon-orb-eye {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .ovyra-section-eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.26em;
+  }
+
+  .ovyra-section-title {
+    font-size: 1.55rem;
+  }
+
+  .ovyra-section-lead {
+    font-size: 0.92rem;
+  }
+
+  .ovyra-section-head {
+    gap: 1rem;
+  }
+
+  .ovyra-section-head .ovyra-section-cta-pill {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ovyra-figure-chip {
+    padding: 0.55rem 0.45rem;
+  }
+
+  .ovyra-trust-neon > div {
+    gap: 0.55rem 1rem;
+    padding-inline: 1rem;
+    padding-block: 1rem;
+  }
+
+  .ovyra-trust-neon span.font-fa {
+    font-size: 11px;
+  }
+
+  .ovyra-header-inner {
+    padding-inline: 0.75rem;
+  }
+
+  .ovyra-nav-pill,
+  .ovyra-nav-chip {
+    font-size: 13px;
+  }
+
+  .ovyra-hero-cta-pill,
+  .ovyra-hero-cta-chip,
+  .ovyra-section-cta-pill {
+    height: 2.65rem;
+    font-size: 13px;
+  }
+
+  .ovyra-neon-panel .font-display.text-xl {
+    font-size: 1.05rem;
+  }
+
+  .ovyra-step-ring {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 374px) {
+  .ovyra-hero-meta-cluster .ovyra-header-divider {
+    display: none;
+  }
+
+  .ovyra-hero-meta-cluster {
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 0.65rem;
+    padding: 0.45rem 0.55rem;
+  }
+
+  .ovyra-hero-system-chip {
+    flex: 1 1 100%;
+  }
+
+  .ovyra-figure-chip .font-display {
+    letter-spacing: 0.18em;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -38,9 +38,9 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      <div className="mx-auto mt-10 flex max-w-7xl flex-col gap-2 border-t border-white/10 px-5 pt-6 text-xs text-ovyra-mist/45 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+      <div className="mx-auto mt-10 flex max-w-7xl flex-col gap-2 border-t border-white/10 px-5 pt-6 text-center text-xs text-ovyra-mist/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:text-right">
         <span>© {new Date().getFullYear()} OVYRA — The Lost Archive</span>
-        <span className="font-display tracking-[0.3em]">{BRAND.closing}</span>
+        <span className="font-display text-[10px] tracking-[0.22em] sm:text-xs sm:tracking-[0.3em]">{BRAND.closing}</span>
       </div>
     </footer>
   );

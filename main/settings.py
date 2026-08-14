@@ -42,10 +42,12 @@ ALLOWED_HOSTS = [h.strip() for h in config('ALLOWED_HOSTS', default='localhost,1
 OVYRA_PRODUCTION_HOSTS = (
     'ovyraworld.runflare.run',
     'ovyraword.runflare.run',
+    'ovyraworld-nd7-ovyraworld.runflare.cloud',
 )
 OVYRA_PRODUCTION_ORIGINS = (
     'https://ovyraworld.runflare.run',
     'https://ovyraword.runflare.run',
+    'https://ovyraworld-nd7-ovyraworld.runflare.cloud',
 )
 
 

@@ -9,7 +9,7 @@ upstream mignum_app {
 server {
     listen 80;
     listen [::]:80;
-    server_name ovyraworld.runflare.run ovyraword.runflare.run;
+    server_name ovyraworld.runflare.run ovyraword.runflare.run ovyraworld-nd7-ovyraworld.runflare.cloud;
 
     client_max_body_size 25M;
 
