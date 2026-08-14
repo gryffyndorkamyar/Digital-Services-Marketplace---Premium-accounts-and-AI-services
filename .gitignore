@@ -26,6 +26,7 @@ media/
 mignum-deploy.zip
 mignum-runcloud.zip
 ovyra-runflare.zip
+deploy/runflare-panel.env
 
 # IDE / editor
 .idea/

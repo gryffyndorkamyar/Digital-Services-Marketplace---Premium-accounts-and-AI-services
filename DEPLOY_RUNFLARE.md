@@ -3,6 +3,8 @@
 دامنه‌ها:
 - **https://ovyraworld.runflare.run**
 - **https://ovyraword.runflare.run**
+- **https://ovyraworld-nd7-ovyraworld.runflare.cloud**
+- **https://ovyraword.runflare.run**
 
 ---
 
@@ -35,9 +37,9 @@ cd ..
 از `deploy/runflare.env.example` کپی کن در پنل RunFlare:
 
 ```
-ALLOWED_HOSTS=ovyraworld.runflare.run,ovyraword.runflare.run
-CORS_ALLOWED_ORIGINS=https://ovyraworld.runflare.run,https://ovyraword.runflare.run
-CSRF_TRUSTED_ORIGINS=https://ovyraworld.runflare.run,https://ovyraword.runflare.run
+ALLOWED_HOSTS=ovyraworld.runflare.run,ovyraword.runflare.run,ovyraworld-nd7-ovyraworld.runflare.cloud
+CORS_ALLOWED_ORIGINS=https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
+CSRF_TRUSTED_ORIGINS=https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
 DEBUG=False
 SECRET_KEY=...
 DB_*=...
@@ -64,6 +66,7 @@ gunicorn main.wsgi:application --bind 0.0.0.0:8000
 
 - https://ovyraworld.runflare.run/
 - https://ovyraword.runflare.run/
+- https://ovyraworld-nd7-ovyraworld.runflare.cloud/
 - /api/ و /admin/
 
 ## نکات
