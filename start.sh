@@ -2,11 +2,12 @@
 # RunFlare / Liara-compatible production entrypoint
 set -eu
 
-if [ -d /usr/src/app ]; then
-  cd /usr/src/app
-else
-  cd "$(dirname "$0")"
-fi
+for appdir in /usr/src/app /app "$(dirname "$0")"; do
+  if [ -f "$appdir/manage.py" ]; then
+    cd "$appdir"
+    break
+  fi
+done
 
 PORT="${PORT:-8000}"
 
@@ -33,9 +34,11 @@ if [ -n "$missing" ]; then
   exit 1
 fi
 
-if [ "${USE_SQLITE:-False}" = "True" ] || [ "${USE_SQLITE:-false}" = "true" ] || [ "${USE_SQLITE:-0}" = "1" ]; then
-  mkdir -p media
-fi
+mkdir -p media staticfiles
+
+echo "==> OVYRA — migrate + collectstatic"
+python manage.py migrate --noinput
+python manage.py collectstatic --noinput
 
 echo "==> OVYRA — starting gunicorn (WSGI/sync) on 0.0.0.0:${PORT}"
 
