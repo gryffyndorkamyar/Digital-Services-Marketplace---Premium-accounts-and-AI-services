@@ -14,7 +14,7 @@ const OvyraBrandSystemSection: React.FC = () => {
         <div className="ovyra-brand-system-glow-center" />
       </div>
 
-      <div className="ovyra-brand-system-inner ovyra-section-shell">
+      <div className="ovyra-brand-system-inner">
         <div className="ovyra-brand-system-stage">
           <header className="ovyra-brand-system-copy ovyra-fade-in">
             <p className="ovyra-hero-realm-eyebrow">{system.eyebrow}</p>
@@ -42,51 +42,55 @@ const OvyraBrandSystemSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="ovyra-brand-system-chain-row">
-            {system.steps.map((item, index) => (
-              <React.Fragment key={item.step}>
-                <article className="ovyra-brand-system-card">
-                  <span className="ovyra-brand-system-card-hook ovyra-brand-system-card-hook-left" aria-hidden />
-                  <span className="ovyra-brand-system-card-hook ovyra-brand-system-card-hook-right" aria-hidden />
-                  <div className="ovyra-brand-system-card-inner">
-                    <div className="ovyra-brand-system-card-slot" aria-hidden />
-                    <div className="ovyra-brand-system-card-copy">
-                      <div className="ovyra-brand-system-card-head">
-                        <span className="ovyra-brand-system-card-step">{item.step}</span>
-                        <div>
-                          <h3 className="ovyra-brand-system-card-title">{item.title}</h3>
-                          <p className="ovyra-brand-system-card-fa font-fa" dir="rtl" lang="fa">
-                            {item.fa}
-                          </p>
+          <div className="ovyra-brand-system-bottom">
+            <div className="ovyra-brand-system-chain-row">
+              {system.steps.map((item, index) => (
+                <React.Fragment key={item.step}>
+                  <article className="ovyra-brand-system-card">
+                    <span className="ovyra-brand-system-card-hook ovyra-brand-system-card-hook-left" aria-hidden />
+                    <span className="ovyra-brand-system-card-hook ovyra-brand-system-card-hook-right" aria-hidden />
+                    <div className="ovyra-brand-system-card-inner">
+                      <div className="ovyra-brand-system-card-slot" aria-hidden />
+                      <div className="ovyra-brand-system-card-copy">
+                        <div className="ovyra-brand-system-card-head">
+                          <span className="ovyra-brand-system-card-step">{item.step}</span>
+                          <div>
+                            <h3 className="ovyra-brand-system-card-title">{item.title}</h3>
+                            <p className="ovyra-brand-system-card-fa font-fa" dir="rtl" lang="fa">
+                              {item.fa}
+                            </p>
+                          </div>
                         </div>
+                        <p className="ovyra-brand-system-card-body font-fa" dir="rtl" lang="fa">
+                          {item.body}
+                        </p>
+                        <p className="ovyra-brand-system-card-hint">{item.hint}</p>
                       </div>
-                      <p className="ovyra-brand-system-card-body font-fa" dir="rtl" lang="fa">
-                        {item.body}
-                      </p>
-                      <p className="ovyra-brand-system-card-hint">{item.hint}</p>
                     </div>
-                  </div>
-                </article>
+                  </article>
 
-                {index < system.steps.length - 1 && (
-                  <div className="ovyra-brand-system-chain-connector" aria-hidden>
-                    <img src={CHAIN_LINK} alt="" className="ovyra-brand-system-chain-img" decoding="async" />
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
+                  {index < system.steps.length - 1 && (
+                    <div className="ovyra-brand-system-chain-connector" aria-hidden>
+                      <img src={CHAIN_LINK} alt="" className="ovyra-brand-system-chain-img" decoding="async" />
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+
+            <div className="ovyra-brand-system-closing">
+              <div className="ovyra-brand-system-closing-copy">
+                <p className="ovyra-hero-realm-stats-en">{system.closing}</p>
+                <p className="ovyra-hero-realm-stats-fa font-fa" dir="rtl" lang="fa">
+                  {system.closingFa}
+                </p>
+              </div>
+              <Link to="/products" className="ovyra-hero-realm-cta ovyra-brand-system-cta">
+                <span>ورود به آرشیو ۰۱</span>
+              </Link>
+            </div>
           </div>
         </div>
-
-        <footer className="ovyra-brand-system-footer">
-          <p className="ovyra-hero-realm-stats-en">{system.closing}</p>
-          <p className="ovyra-hero-realm-stats-fa font-fa" dir="rtl" lang="fa">
-            {system.closingFa}
-          </p>
-          <Link to="/products" className="ovyra-hero-realm-cta">
-            <span>ورود به آرشیو ۰۱</span>
-          </Link>
-        </footer>
       </div>
     </section>
   );
