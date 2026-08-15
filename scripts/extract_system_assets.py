@@ -93,9 +93,32 @@ def cleanup_alpha(img: Image.Image) -> Image.Image:
     arr = np.array(img.convert("RGBA"), dtype=np.uint8)
     alpha = arr[:, :, 3]
     lum = (arr[:, :, 0].astype(np.int16) + arr[:, :, 1].astype(np.int16) + arr[:, :, 2].astype(np.int16)) / 3
+    spread = np.maximum.reduce(
+        [
+            np.abs(arr[:, :, 0].astype(np.int16) - arr[:, :, 1].astype(np.int16)),
+            np.abs(arr[:, :, 1].astype(np.int16) - arr[:, :, 2].astype(np.int16)),
+            np.abs(arr[:, :, 0].astype(np.int16) - arr[:, :, 2].astype(np.int16)),
+        ]
+    )
 
     arr[alpha < 28, 3] = 0
     arr[(alpha > 0) & (alpha < 48) & (lum >= 175), 3] = 0
+
+    # aggressive top-left fringe removal (visible white spot on box spine)
+    h, w = arr.shape[:2]
+    fringe_h, fringe_w = min(140, h), min(160, w)
+    region = arr[:fringe_h, :fringe_w]
+    r_lum = (region[:, :, 0].astype(np.int16) + region[:, :, 1].astype(np.int16) + region[:, :, 2].astype(np.int16)) / 3
+    r_spread = np.maximum.reduce(
+        [
+            np.abs(region[:, :, 0].astype(np.int16) - region[:, :, 1].astype(np.int16)),
+            np.abs(region[:, :, 1].astype(np.int16) - region[:, :, 2].astype(np.int16)),
+            np.abs(region[:, :, 0].astype(np.int16) - region[:, :, 2].astype(np.int16)),
+        ]
+    )
+    kill = (region[:, :, 3] > 0) & (r_lum >= 130) & (r_spread <= 40)
+    region[kill, 3] = 0
+    arr[:fringe_h, :fringe_w] = region
 
     return Image.fromarray(arr, "RGBA")
 
