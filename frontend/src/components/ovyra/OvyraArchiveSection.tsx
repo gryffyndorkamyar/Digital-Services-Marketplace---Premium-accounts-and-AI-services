@@ -39,9 +39,6 @@ const OvyraArchiveSection: React.FC = () => {
             aria-live="polite"
           >
             <div className="ovyra-archive-showcase-figure">
-              <div className="ovyra-archive-showcase-ring" aria-hidden />
-              <div className="ovyra-archive-showcase-glow" aria-hidden />
-              <div className="ovyra-archive-showcase-pedestal" aria-hidden />
               <span className="ovyra-archive-showcase-code">{focused.code}</span>
               <img
                 key={focused.code}
