@@ -564,6 +564,218 @@ textarea {
     font-weight: 700;
   }
 
+  /* ─── BRAND SYSTEM (Collect · Connect · Complete) ─── */
+  .ovyra-brand-system {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(157, 78, 221, 0.08) 0%, transparent 52%),
+      #050505;
+  }
+
+  .ovyra-brand-system-ambient {
+    @apply pointer-events-none absolute inset-0;
+  }
+
+  .ovyra-brand-system-glow-center {
+    @apply absolute;
+    top: 28%;
+    left: 50%;
+    width: min(44vw, 440px);
+    height: min(24vw, 240px);
+    transform: translateX(-50%);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(157, 78, 221, 0.08) 0%, transparent 72%);
+    filter: blur(14px);
+  }
+
+  .ovyra-brand-system-header {
+    @apply mx-auto max-w-2xl text-center;
+  }
+
+  .ovyra-brand-system-title {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    margin-top: 0.65rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(1.55rem, 3.8vw, 2.35rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: 0.08em;
+    text-shadow:
+      0 2px 0 rgba(255, 255, 255, 0.06),
+      0 8px 24px rgba(0, 0, 0, 0.65),
+      0 0 32px rgba(157, 78, 221, 0.12);
+    background: linear-gradient(180deg, #ffffff 0%, #c4c4c4 38%, #8a8a8a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+  }
+
+  .ovyra-brand-system-lead {
+    margin-top: 1rem;
+    max-width: 24rem;
+    font-size: clamp(0.88rem, 1.5vw, 0.98rem);
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .ovyra-brand-system-showcase {
+    @apply relative mx-auto mt-10 w-full max-w-3xl lg:mt-12;
+  }
+
+  .ovyra-brand-system-pedestal {
+    @apply pointer-events-none absolute inset-x-[10%] bottom-[4%] z-0;
+    height: 32%;
+  }
+
+  .ovyra-brand-system-pedestal-glow {
+    @apply absolute inset-0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(157, 78, 221, 0.2) 0%, transparent 68%);
+    filter: blur(16px);
+  }
+
+  .ovyra-brand-system-hero-image {
+    @apply relative z-[1] mx-auto block w-full select-none;
+    filter: drop-shadow(0 20px 44px rgba(0, 0, 0, 0.78));
+  }
+
+  .ovyra-brand-system-cards {
+    @apply mt-10 grid gap-4 sm:mt-12 lg:grid-cols-3 lg:gap-5;
+  }
+
+  .ovyra-brand-system-card {
+    @apply relative;
+  }
+
+  .ovyra-brand-system-card-inner {
+    @apply relative flex h-full flex-col overflow-hidden;
+    border: 1px solid rgba(157, 78, 221, 0.22);
+    background: rgba(8, 8, 8, 0.92);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+    transition:
+      transform 0.35s ease,
+      border-color 0.3s ease,
+      box-shadow 0.35s ease;
+  }
+
+  .ovyra-brand-system-card:hover .ovyra-brand-system-card-inner,
+  .ovyra-brand-system-card:focus-within .ovyra-brand-system-card-inner {
+    transform: translateY(-3px);
+    border-color: rgba(157, 78, 221, 0.42);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55), 0 0 24px rgba(157, 78, 221, 0.12);
+  }
+
+  .ovyra-brand-system-card-asset {
+    @apply relative flex items-center justify-center;
+    min-height: 9.5rem;
+    padding: 1.25rem 1rem 1rem;
+    background: radial-gradient(ellipse at 50% 100%, rgba(157, 78, 221, 0.08) 0%, transparent 65%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .ovyra-brand-system-card-image {
+    @apply relative z-[1] w-auto select-none object-contain;
+    filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.7));
+    transition: transform 0.35s ease;
+  }
+
+  .ovyra-brand-system-card-image--0 {
+    max-height: 8.5rem;
+    max-width: 88%;
+  }
+
+  .ovyra-brand-system-card-image--1 {
+    max-height: 9.25rem;
+    max-width: 72%;
+  }
+
+  .ovyra-brand-system-card-image--2 {
+    max-height: 8.75rem;
+    max-width: 70%;
+  }
+
+  .ovyra-brand-system-card:hover .ovyra-brand-system-card-image,
+  .ovyra-brand-system-card:focus-within .ovyra-brand-system-card-image {
+    transform: translateY(-2px) scale(1.03);
+  }
+
+  .ovyra-brand-system-card-eye {
+    @apply pointer-events-none absolute z-[2] select-none;
+    width: 38%;
+    max-width: 5.5rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.48;
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 18px rgba(157, 78, 221, 0.55));
+  }
+
+  .ovyra-brand-system-card-copy {
+    @apply flex flex-1 flex-col px-4 py-4 sm:px-5 sm:py-5;
+  }
+
+  .ovyra-brand-system-card-head {
+    @apply flex items-start gap-3;
+  }
+
+  .ovyra-brand-system-card-step {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center text-[9px] tracking-[0.14em];
+    font-family: 'Orbitron', sans-serif;
+    color: rgba(157, 78, 221, 0.95);
+    border: 1px solid rgba(157, 78, 221, 0.35);
+    background: rgba(157, 78, 221, 0.06);
+  }
+
+  .ovyra-brand-system-card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ovyra-brand-system-card-fa {
+    margin-top: 0.2rem;
+    font-size: 0.82rem;
+    color: rgba(157, 78, 221, 0.88);
+  }
+
+  .ovyra-brand-system-card-body {
+    margin-top: 0.85rem;
+    flex: 1;
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .ovyra-brand-system-card-hint {
+    margin-top: 0.85rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    color: rgba(157, 78, 221, 0.75);
+  }
+
+  .ovyra-brand-system-footer {
+    @apply mt-12 flex flex-col border-t border-white/[0.06] pt-8 text-center lg:items-end lg:text-right;
+  }
+
+  @media (max-width: 767px) {
+    .ovyra-brand-system-showcase {
+      max-width: 20rem;
+    }
+
+    .ovyra-brand-system-title {
+      font-size: 1.35rem;
+      letter-spacing: 0.06em;
+    }
+
+    .ovyra-brand-system-card-asset {
+      min-height: 8.5rem;
+    }
+  }
+
   .ovyra-hero-beam {
     @apply pointer-events-none absolute inset-x-0 top-0 z-[1];
     height: 2px;

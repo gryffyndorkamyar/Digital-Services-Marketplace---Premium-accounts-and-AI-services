@@ -11,6 +11,7 @@ import {
 import OvyraTrustStrip from '../components/ovyra/OvyraTrustStrip';
 import OvyraStickyCta from '../components/ovyra/OvyraStickyCta';
 import OvyraHeroRealm from '../components/ovyra/OvyraHeroRealm';
+import OvyraBrandSystemSection from '../components/ovyra/OvyraBrandSystemSection';
 
 const LandingPage: React.FC = () => {
   const [active, setActive] = useState(1);
@@ -31,7 +32,10 @@ const LandingPage: React.FC = () => {
 
       <OvyraTrustStrip />
 
-      {/* ── 2. ARCHIVE — product first for collectible brands ── */}
+      {/* ── 2. SYSTEM — brand ritual (Collect · Connect · Complete) ── */}
+      <OvyraBrandSystemSection />
+
+      {/* ── 3. ARCHIVE — ten beings ── */}
       <section id="archive" className="ovyra-section-defer ovyra-section-border relative overflow-hidden py-14 sm:py-20 md:py-28">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(157,78,221,0.18),transparent_62%)]" />
 
@@ -98,30 +102,6 @@ const LandingPage: React.FC = () => {
             <Link to="/products" className="ovyra-nav-chip ovyra-hero-cta-chip mt-5 inline-flex !h-9 !px-4 !text-xs font-fa">
               <span className="ovyra-nav-chip-label">{COPY.archive.featuredCta}</span>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 3. SYSTEM ── */}
-      <section id="how" className="ovyra-section-defer ovyra-section-border relative py-14 sm:py-20 md:py-28">
-        <div className="ovyra-section-glow" />
-        <div className="ovyra-section-shell relative">
-          <div className="max-w-2xl">
-            <p className="ovyra-section-eyebrow font-display">{COPY.system.eyebrow}</p>
-            <h2 className="ovyra-section-title font-display !tracking-[0.1em]">{BRAND.tagline}</h2>
-            <p className="ovyra-section-lead">{COPY.system.lead}</p>
-          </div>
-
-          <div className="relative mt-14 grid gap-4 md:grid-cols-3 md:gap-5">
-            <div className="pointer-events-none absolute left-[8%] right-[8%] top-10 hidden h-px bg-gradient-to-l from-transparent via-ovyra-violet/50 to-transparent md:block" />
-            {COPY.system.steps.map((item) => (
-              <div key={item.step} className="ovyra-neon-panel relative px-5 py-6 sm:px-6">
-                <div className="ovyra-step-ring mb-5">{item.step}</div>
-                <h3 className="font-display text-xl tracking-[0.14em] text-white sm:text-2xl">{item.title}</h3>
-                <p className="font-fa mt-1 text-sm font-medium text-ovyra-gold">{item.fa}</p>
-                <p className="ovyra-hero-sub mt-4 !text-sm">{item.body}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
