@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ARCHIVE_01, COPY, type ArchiveFigure } from '../../brand/ovyra';
+import { ARCHIVE_01, ARCHIVE_FIGURE_LARGE, COPY, type ArchiveFigure } from '../../brand/ovyra';
 
 const OvyraArchiveSection: React.FC = () => {
   const { archive } = COPY;
@@ -44,7 +44,9 @@ const OvyraArchiveSection: React.FC = () => {
                 key={focused.code}
                 src={focused.image}
                 alt={`${focused.name} — OVYRA Archive 01`}
-                className="ovyra-archive-showcase-image"
+                className={`ovyra-archive-showcase-image${
+                  ARCHIVE_FIGURE_LARGE.has(focused.code) ? ' is-figure-large' : ''
+                }`}
                 loading="lazy"
                 decoding="async"
               />
@@ -118,7 +120,9 @@ const OvyraArchiveSection: React.FC = () => {
                         <img
                           src={figure.image}
                           alt=""
-                          className="ovyra-archive-cell-figure"
+                          className={`ovyra-archive-cell-figure${
+                            ARCHIVE_FIGURE_LARGE.has(figure.code) ? ' is-figure-large' : ''
+                          }`}
                           loading="lazy"
                           decoding="async"
                         />

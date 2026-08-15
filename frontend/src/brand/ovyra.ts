@@ -11,6 +11,9 @@ export type ArchiveFigure = {
   image: string;
 };
 
+/** Figures that need a slightly larger render in grid + spotlight. */
+export const ARCHIVE_FIGURE_LARGE = new Set(['01', '02', '04', '06', '09']);
+
 export const BRAND = {
   name: 'OVYRA',
   series: 'THE LOST ARCHIVE',
@@ -138,7 +141,12 @@ export const COPY = {
     body: 'Archive 01 ده شخصیت دارد. وقتی هر ده جعبه کنار هم باشند، چشم کامل می‌شود.',
   },
   footer: {
+    eyebrow: 'THE LOST ARCHIVE',
     tagline: 'فیگور lore محور با پرینت سه‌بعدی. جمع کن، وصل کن، کامل کن.',
+    taglineEn: 'Lore-driven figures. Collect. Connect. Complete.',
+    archiveHeading: 'ARCHIVE',
+    legalHeading: 'LEGAL',
+    socialHeading: 'CONNECT',
   },
 } as const;
 
@@ -239,7 +247,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Many heads, one body. Each mask keeps a different sound. Some collectors say if you listen long enough, you hear your own unfinished sentence. Its Lore Card is short: silence is an echo too.',
     accent: '#38bdf8',
-    image: '/brand/archive/figure-07.png',
+    image: '/brand/Copilot_20260815_163130.png',
   },
   {
     id: 8,
@@ -267,7 +275,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Half its body is black, the other half purple crystal. It came from a place where the line between things disappeared. Every shard that falls fills a little more of the eye puzzle\'s empty space.',
     accent: '#c026d3',
-    image: '/brand/archive/figure-09.png',
+    image: '/brand/Copilot_20260815_164503.png',
   },
   {
     id: 10,
@@ -281,7 +289,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'No face. Only light. The Shadow Companion is the last being in Archive 01, but its file was opened first. The Lore Card says: you are the tenth. When the other nine stand together, this one shows the way.',
     accent: '#f59e0b',
-    image: '/brand/archive/figure-10.png',
+    image: '/brand/Copilot_20260815_164149.png',
   },
 ];
 

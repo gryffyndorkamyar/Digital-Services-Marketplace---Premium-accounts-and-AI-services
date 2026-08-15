@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   BOX_CONTENTS,
-  BRAND,
   COMPETITOR_EDGE,
   COPY,
   SEASON_02,
@@ -78,35 +77,6 @@ const LandingPage: React.FC = () => {
             </div>
             <Link to="/contact" className="ovyra-nav-chip ovyra-hero-cta-chip shrink-0 font-fa">
               <span className="ovyra-nav-chip-label">{SEASON_02.cta}</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 7. FINAL CTA ── */}
-      <section className="ovyra-section-defer ovyra-section-border relative overflow-hidden py-16 sm:py-24 md:py-28">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(192,38,211,0.28),transparent_55%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(201,162,39,0.14),transparent_45%)]" />
-
-        <div className="ovyra-section-shell relative max-w-3xl text-center">
-          <p className="ovyra-section-eyebrow font-display !tracking-[0.28em] text-ovyra-gold sm:!tracking-[0.48em]">{BRAND.closing}</p>
-          <h2 className="ovyra-section-title font-fa-display mx-auto mt-4">
-            {COPY.cta.title1}
-            <span className="ovyra-neon-violet mt-2 block text-ovyra-violet">{COPY.cta.title2}</span>
-          </h2>
-          <p className="ovyra-section-lead mx-auto mt-5 max-w-lg">{COPY.cta.sub}</p>
-          <div className="mt-10 flex flex-col items-stretch justify-center gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
-            <Link
-              to="/products"
-              className="ovyra-nav-pill ovyra-hero-cta-pill w-full sm:w-auto"
-              style={{ '--pill-accent': '#c9a227', '--pill-glow': 'rgba(201,162,39,0.42)' } as React.CSSProperties}
-            >
-              <span className="ovyra-nav-pill-dot" aria-hidden />
-              <span className="ovyra-nav-pill-label font-fa">{COPY.cta.primary}</span>
-              <span className="ovyra-nav-pill-sheen" aria-hidden />
-            </Link>
-            <Link to="/about" className="ovyra-nav-chip ovyra-hero-cta-chip w-full font-fa sm:w-auto">
-              <span className="ovyra-nav-chip-label">{COPY.cta.secondary}</span>
             </Link>
           </div>
         </div>
