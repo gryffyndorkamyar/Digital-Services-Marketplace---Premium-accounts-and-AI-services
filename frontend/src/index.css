@@ -766,12 +766,107 @@ textarea {
     cursor: pointer;
   }
 
+  .ovyra-hero-realm-scene.has-active-card .ovyra-hero-realm-monument {
+    filter:
+      drop-shadow(0 32px 64px rgba(0, 0, 0, 0.85))
+      drop-shadow(0 0 64px rgba(157, 78, 221, 0.24))
+      brightness(0.68)
+      saturate(0.88);
+    transition: filter 0.4s ease;
+  }
+
+  .ovyra-hero-realm-scene.has-active-card .ovyra-hero-realm-monument-glow {
+    opacity: 0.45;
+    transition: opacity 0.4s ease;
+  }
+
   .ovyra-hero-realm-cards-deck.has-active-card .ovyra-hero-realm-cards-strip {
     filter:
       drop-shadow(0 10px 24px rgba(0, 0, 0, 0.82))
-      brightness(0.72)
-      saturate(0.88);
+      brightness(0.48)
+      saturate(0.72);
     transition: filter 0.35s ease;
+  }
+
+  .ovyra-hero-realm-card-lift {
+    @apply pointer-events-none absolute block;
+    left: 50%;
+    top: 47%;
+    width: 36%;
+    max-width: 13.5rem;
+    aspect-ratio: 0.68;
+    height: auto;
+    transform-origin: center center;
+    z-index: 60;
+    will-change: transform, opacity, filter;
+    animation: ovyraCardLiftCenter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+    filter:
+      drop-shadow(0 20px 40px rgba(0, 0, 0, 0.82))
+      drop-shadow(0 0 32px color-mix(in srgb, var(--card-accent) 42%, transparent));
+  }
+
+  .ovyra-hero-realm-card-lift-img {
+    @apply block h-full w-full select-none;
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .ovyra-hero-realm-card-lift-shine {
+    @apply pointer-events-none absolute inset-[1.5%];
+    border-radius: 3px;
+    border: 1px solid color-mix(in srgb, var(--card-accent) 48%, rgba(255, 255, 255, 0.2));
+    box-shadow:
+      inset 0 0 22px color-mix(in srgb, var(--card-accent) 26%, transparent),
+      0 0 20px color-mix(in srgb, var(--card-accent) 32%, transparent);
+    animation: ovyraCardLiftPulse 2.4s ease-in-out infinite;
+  }
+
+  .ovyra-hero-realm-card-lift-meta {
+    @apply pointer-events-none absolute left-1/2 z-[2] w-max max-w-[11rem] -translate-x-1/2 text-center;
+    top: calc(100% + 0.5rem);
+    padding: 0.45rem 0.7rem;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.92);
+    border: 1px solid color-mix(in srgb, var(--card-accent) 62%, transparent);
+    box-shadow:
+      0 0 32px color-mix(in srgb, var(--card-accent) 45%, transparent),
+      0 10px 28px rgba(0, 0, 0, 0.7);
+    animation: ovyraCardLiftMetaIn 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+  }
+
+  @keyframes ovyraCardLiftCenter {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 22%) scale(0.62) rotate(var(--card-lift-from, 0deg));
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+  }
+
+  @keyframes ovyraCardLiftMetaIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 10px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  @keyframes ovyraCardLiftPulse {
+    0%, 100% {
+      box-shadow:
+        inset 0 0 28px color-mix(in srgb, var(--card-accent) 32%, transparent),
+        0 0 24px color-mix(in srgb, var(--card-accent) 42%, transparent);
+    }
+    50% {
+      box-shadow:
+        inset 0 0 36px color-mix(in srgb, var(--card-accent) 44%, transparent),
+        0 0 36px color-mix(in srgb, var(--card-accent) 58%, transparent);
+    }
   }
 
   .ovyra-hero-realm-cards-strip {
@@ -839,16 +934,16 @@ textarea {
   }
 
   .ovyra-hero-realm-card-glow.is-active {
-    opacity: 1;
+    opacity: 0.35;
     z-index: 40 !important;
     transform:
       rotate(var(--card-rotate, 0deg))
       translateY(-2.5%)
-      scale(1.045);
-    border-color: color-mix(in srgb, var(--card-accent) 65%, rgba(255, 255, 255, 0.35));
+      scale(1.02);
+    border-color: color-mix(in srgb, var(--card-accent) 45%, rgba(255, 255, 255, 0.2));
     box-shadow:
-      0 0 36px color-mix(in srgb, var(--card-accent) 52%, transparent),
-      0 18px 40px rgba(0, 0, 0, 0.55);
+      0 0 24px color-mix(in srgb, var(--card-accent) 38%, transparent),
+      0 12px 28px rgba(0, 0, 0, 0.45);
   }
 
   .ovyra-hero-realm-card-glow.is-active::before,
@@ -858,7 +953,6 @@ textarea {
 
   .ovyra-hero-realm-card.is-active {
     z-index: 41 !important;
-    pointer-events: auto;
   }
 
   .ovyra-hero-realm-card-meta {
@@ -884,23 +978,11 @@ textarea {
     @apply mt-0.5 block font-fa text-[11px] text-white/70;
   }
 
-  .ovyra-hero-realm-card:hover,
-  .ovyra-hero-realm-card:focus-visible,
-  .ovyra-hero-realm-card.is-active {
-    z-index: 6;
-  }
-
-  .ovyra-hero-realm-card:hover::after,
-  .ovyra-hero-realm-card:focus-visible::after,
-  .ovyra-hero-realm-card.is-active::after {
-    opacity: 1;
-  }
-
   .ovyra-hero-realm-card:hover .ovyra-hero-realm-card-meta,
   .ovyra-hero-realm-card:focus-visible .ovyra-hero-realm-card-meta,
   .ovyra-hero-realm-card.is-active .ovyra-hero-realm-card-meta {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, 0) rotate(calc(var(--card-rotate, 0deg) * -1));
   }
 
   .ovyra-hero-realm-eyebrow {
@@ -1124,6 +1206,23 @@ textarea {
     50% { transform: scale(1.35); opacity: 0.85; }
   }
 
+  .ovyra-hero-realm-scene.has-active-card .ovyra-hero-realm-card-meta {
+    opacity: 0 !important;
+    visibility: hidden;
+  }
+
+  .ovyra-hero-realm-scene.has-active-card::after {
+    content: '';
+    @apply pointer-events-none absolute inset-0 z-[55];
+    background: radial-gradient(circle at 50% 44%, rgba(0, 0, 0, 0.22) 0%, transparent 68%);
+    animation: ovyraCardLiftBackdrop 0.4s ease both;
+  }
+
+  @keyframes ovyraCardLiftBackdrop {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
   @keyframes ovyraKidsShine {
     0% { background-position: 0% center; }
     100% { background-position: 180% center; }
@@ -1151,6 +1250,12 @@ textarea {
       width: 73%;
       transform: translateX(-50%) translateY(1cm) scale(0.71);
     }
+
+    .ovyra-hero-realm-card-lift {
+      width: 40%;
+      max-width: 15rem;
+      top: 45%;
+    }
   }
 
   @media (min-width: 640px) {
@@ -1167,6 +1272,12 @@ textarea {
 
     .ovyra-hero-realm-cards-deck {
       transform: translateX(-50%) translateY(1cm) scale(0.73);
+    }
+
+    .ovyra-hero-realm-card-lift {
+      width: 42%;
+      max-width: 16.5rem;
+      top: 44%;
     }
   }
 
@@ -1198,18 +1309,20 @@ textarea {
       transform: translateX(-50%) translateY(1cm) scale(0.61);
     }
 
-    .ovyra-hero-realm-cards-hotspots {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+    .ovyra-hero-realm-card-lift {
+      width: 42%;
+      max-width: 11.5rem;
+      top: 46%;
     }
 
-    .ovyra-hero-realm-cards-hotspots::-webkit-scrollbar {
-      display: none;
+    .ovyra-hero-realm-card-lift-meta {
+      max-width: 10rem;
+      font-size: 0.92em;
     }
 
-    .ovyra-hero-realm-card {
-      flex: 0 0 2.5rem;
+    .ovyra-hero-realm-card-meta {
+      max-width: 8.5rem;
+      font-size: 0.92em;
     }
 
     .ovyra-hero-realm-foot {
