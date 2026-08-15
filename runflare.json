@@ -11,7 +11,7 @@
     "location": "iran",
     "command": "pip install -r requirements.txt && mkdir -p media && python manage.py migrate --noinput && python manage.py collectstatic --noinput"
   },
-  "args": "sh start.sh",
+  "args": "gunicorn main.wsgi:application -c gunicorn.conf.py --bind 0.0.0.0:8000 --workers 2 --worker-class sync --timeout 120 --access-logfile - --error-logfile -",
   "disks": [
     {
       "name": "media",

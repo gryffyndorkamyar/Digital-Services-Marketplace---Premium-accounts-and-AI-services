@@ -298,35 +298,32 @@ CORS_ALLOWED_ORIGINS = list(dict.fromkeys([*_cors_origins, *OVYRA_PRODUCTION_ORI
 ALLOWED_HOSTS = list(dict.fromkeys([*ALLOWED_HOSTS, *OVYRA_PRODUCTION_HOSTS]))
 CORS_ALLOW_CREDENTIALS = True
 
-# Channels (WebSocket) — disabled on RunFlare landing deploy unless USE_ASGI=True
+# Channels (WebSocket) — off on RunFlare landing unless USE_ASGI=True
 USE_ASGI = config('USE_ASGI', default=False, cast=bool)
-INSTALLED_APPS += [
-    'channels',
-]
 
 if USE_ASGI:
+    INSTALLED_APPS += ['channels']
     ASGI_APPLICATION = 'main.asgi.application'
 
-# Channel Layers (Redis with in-memory fallback for deploys without Redis)
-redis_host = config('REDIS_HOST', default='')
-redis_port = config('REDIS_PORT', default='6379')
-USE_REDIS = config('USE_REDIS', default=bool(redis_host), cast=bool)
+    redis_host = config('REDIS_HOST', default='')
+    redis_port = config('REDIS_PORT', default='6379')
+    USE_REDIS = config('USE_REDIS', default=bool(redis_host), cast=bool)
 
-if USE_REDIS and redis_host:
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            'CONFIG': {
-                "hosts": [(redis_host, int(redis_port))],
+    if USE_REDIS and redis_host:
+        CHANNEL_LAYERS = {
+            'default': {
+                'BACKEND': 'channels_redis.core.RedisChannelLayer',
+                'CONFIG': {
+                    "hosts": [(redis_host, int(redis_port))],
+                },
             },
-        },
-    }
-else:
-    CHANNEL_LAYERS = {
-        'default': {
-            'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        },
-    }
+        }
+    else:
+        CHANNEL_LAYERS = {
+            'default': {
+                'BACKEND': 'channels.layers.InMemoryChannelLayer',
+            },
+        }
 
 # CSRF settings for API
 CSRF_COOKIE_HTTPONLY = False
