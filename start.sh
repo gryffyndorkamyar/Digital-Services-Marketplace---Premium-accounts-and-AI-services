@@ -18,6 +18,9 @@ fi
 
 mkdir -p media staticfiles
 
+echo "==> OVYRA — collectstatic"
+python manage.py collectstatic --noinput
+
 echo "==> OVYRA — starting gunicorn (WSGI/sync) on 0.0.0.0:${PORT}"
 
 exec gunicorn main.wsgi:application \
