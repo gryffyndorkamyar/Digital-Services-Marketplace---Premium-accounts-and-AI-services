@@ -773,8 +773,10 @@ textarea {
 
   .ovyra-brand-system-chain-img {
     @apply block w-full select-none;
+    max-height: 1.65rem;
+    object-fit: contain;
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
-    opacity: 0.92;
+    opacity: 0.94;
   }
 
   .ovyra-brand-system-footer {

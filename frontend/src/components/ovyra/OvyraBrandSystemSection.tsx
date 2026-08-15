@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { COPY } from '../../brand/ovyra';
 
 const BOX_IMAGE = '/brand/system/box-open.png';
-const CHAIN_LINK = '/brand/system/chain-link.png';
+const CHAIN_LINK = '/brand/system/chain-segment.png';
 
 const OvyraBrandSystemSection: React.FC = () => {
   const { system } = COPY;

@@ -120,6 +120,19 @@ def cleanup_alpha(img: Image.Image) -> Image.Image:
     region[kill, 3] = 0
     arr[:fringe_h, :fringe_w] = region
 
+    # diagonal wedge near top-left corner
+    for y in range(min(180, h)):
+        for x in range(min(200, w)):
+            if x + y > 210:
+                continue
+            r, g, b, a = arr[y, x]
+            if a == 0:
+                continue
+            lum = (int(r) + int(g) + int(b)) / 3
+            spread = max(abs(int(r) - int(g)), abs(int(g) - int(b)), abs(int(r) - int(b)))
+            if lum >= 120 and spread <= 45:
+                arr[y, x, 3] = 0
+
     return Image.fromarray(arr, "RGBA")
 
 
