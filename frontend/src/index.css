@@ -1504,6 +1504,10 @@ textarea {
     .ovyra-archive-cell-figure {
       max-height: 8.8rem;
     }
+
+    .ovyra-archive-cell-figure.is-figure-large {
+      max-height: 9.75rem;
+    }
   }
 
   @media (min-width: 900px) {
@@ -3053,6 +3057,227 @@ html {
     letter-spacing: 0.18em;
   }
 }
+
+  /* ─── FOOTER ─── */
+  .ovyra-footer {
+    @apply relative bg-ovyra-void;
+    padding-top: 3.5rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .ovyra-footer-ambient {
+    @apply pointer-events-none absolute inset-0;
+  }
+
+  .ovyra-footer-glow-left {
+    @apply absolute;
+    top: -12%;
+    left: -8%;
+    width: min(42vw, 22rem);
+    height: min(42vw, 22rem);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(157, 78, 221, 0.22), transparent 68%);
+    filter: blur(8px);
+  }
+
+  .ovyra-footer-glow-right {
+    @apply absolute;
+    right: -6%;
+    bottom: -18%;
+    width: min(38vw, 18rem);
+    height: min(38vw, 18rem);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(201, 162, 39, 0.16), transparent 70%);
+    filter: blur(10px);
+  }
+
+  .ovyra-footer-gridlines {
+    @apply absolute inset-0 opacity-[0.025];
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.85) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.85) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at 50% 0%, black 12%, transparent 72%);
+  }
+
+  .ovyra-footer-inner {
+    @apply relative z-[1] mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .ovyra-footer-top {
+    @apply grid gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-start lg:gap-12;
+  }
+
+  .ovyra-footer-brand {
+    @apply flex max-w-xl flex-col;
+  }
+
+  .ovyra-footer-eyebrow {
+    margin-top: 1.35rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.38em;
+    color: rgba(157, 78, 221, 0.88);
+  }
+
+  .ovyra-footer-tagline {
+    margin-top: 0.85rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ovyra-footer-tagline-en {
+    margin-top: 0.45rem;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.52);
+  }
+
+  .ovyra-footer-closing {
+    margin-top: 1.15rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.34em;
+    color: rgba(201, 162, 39, 0.92);
+    text-shadow: 0 0 18px rgba(201, 162, 39, 0.22);
+  }
+
+  .ovyra-footer-eye-line {
+    margin-top: 0.55rem;
+    max-width: 22rem;
+    font-size: 0.52rem;
+    line-height: 1.7;
+    letter-spacing: 0.22em;
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .ovyra-footer-columns {
+    @apply grid gap-3 sm:grid-cols-2 lg:grid-cols-3;
+  }
+
+  .ovyra-footer-panel {
+    @apply relative overflow-hidden;
+    border: 1px solid rgba(157, 78, 221, 0.22);
+    background:
+      linear-gradient(165deg, rgba(157, 78, 221, 0.07), rgba(0, 0, 0, 0.72) 48%),
+      rgba(6, 6, 8, 0.92);
+    box-shadow:
+      inset 0 0 0 1px rgba(201, 162, 39, 0.06),
+      0 10px 28px rgba(0, 0, 0, 0.42);
+    padding: 1rem 1.05rem 1.1rem;
+  }
+
+  .ovyra-footer-panel::before {
+    content: '';
+    @apply pointer-events-none absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(157, 78, 221, 0.55), transparent);
+    opacity: 0.7;
+  }
+
+  .ovyra-footer-panel-title {
+    font-size: 0.58rem;
+    letter-spacing: 0.34em;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .ovyra-footer-links {
+    @apply mt-4 space-y-2.5;
+  }
+
+  .ovyra-footer-link {
+    @apply inline-flex text-sm transition-colors;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .ovyra-footer-link:hover {
+    color: rgba(201, 162, 39, 0.95);
+  }
+
+  .ovyra-footer-panel-social {
+    @apply sm:col-span-2 lg:col-span-1;
+  }
+
+  .ovyra-footer-social {
+    @apply mt-4 flex flex-wrap gap-2;
+  }
+
+  .ovyra-footer-social-link {
+    @apply inline-flex items-center transition;
+    border: 1px solid rgba(157, 78, 221, 0.28);
+    background: rgba(0, 0, 0, 0.42);
+    padding: 0.38rem 0.62rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.24em;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .ovyra-footer-social-link:hover {
+    border-color: rgba(201, 162, 39, 0.55);
+    color: rgba(201, 162, 39, 0.95);
+    box-shadow: 0 0 18px rgba(157, 78, 221, 0.18);
+  }
+
+  .ovyra-footer-series {
+    margin-top: 1rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.28em;
+    color: rgba(157, 78, 221, 0.82);
+  }
+
+  .ovyra-footer-archive {
+    margin-top: 0.35rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.28em;
+    color: rgba(201, 162, 39, 0.78);
+  }
+
+  .ovyra-footer-bar {
+    @apply mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .ovyra-footer-copy {
+    @apply text-xs;
+    color: rgba(255, 255, 255, 0.38);
+  }
+
+  .ovyra-footer-manifesto {
+    font-size: 0.52rem;
+    letter-spacing: 0.28em;
+    color: rgba(255, 255, 255, 0.42);
+  }
+
+  @media (max-width: 639px) {
+    .ovyra-footer {
+      padding-top: 2.75rem;
+    }
+
+    .ovyra-footer-top {
+      gap: 2rem;
+    }
+
+    .ovyra-footer-eye-line {
+      letter-spacing: 0.16em;
+      font-size: 0.48rem;
+    }
+
+    .ovyra-footer-manifesto {
+      letter-spacing: 0.18em;
+      text-align: center;
+    }
+
+    .ovyra-footer-bar {
+      text-align: center;
+    }
+
+    .ovyra-archive-showcase-image.is-figure-large {
+      max-height: min(72vw, 18.5rem);
+      transform: scale(1.06);
+    }
+  }
 
 @media (prefers-reduced-motion: reduce) {
   *,

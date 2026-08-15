@@ -3,44 +3,100 @@ import { Link } from 'react-router-dom';
 import OvyraLogo from './OvyraLogo';
 import { BRAND, COPY } from '../brand/ovyra';
 
+const archiveLinks = [
+  { label: 'شخصیت‌ها', to: '/products' },
+  { label: 'سبد خرید', to: '/cart' },
+  { label: 'داستان برند', to: '/about' },
+  { label: 'تماس', to: '/contact' },
+] as const;
+
+const legalLinks = [
+  { label: 'قوانین', to: '/terms' },
+  { label: 'حریم خصوصی', to: '/privacy' },
+  { label: 'بازگشت وجه', to: '/refund-policy' },
+  { label: 'پشتیبانی', to: '/support' },
+] as const;
+
 const Footer: React.FC = () => {
+  const { footer, heroRealm } = COPY;
+
   return (
-    <footer className="border-t border-white/10 bg-black py-12">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:grid-cols-2 sm:px-8 lg:grid-cols-4">
-        <div className="lg:col-span-2">
-          <OvyraLogo className="h-12 w-auto" />
-          <p className="font-fa mt-4 max-w-md text-sm leading-7 text-ovyra-mist/65">
-            {COPY.footer.tagline}
-          </p>
-          <p className="mt-3 font-display text-[11px] tracking-[0.35em] text-ovyra-gold">
-            {BRAND.tagline}
-          </p>
-        </div>
-
-        <div>
-          <h3 className="font-display text-xs tracking-[0.3em] text-white">ARCHIVE</h3>
-          <ul className="mt-4 space-y-2 text-sm text-ovyra-mist/70">
-            <li><Link className="hover:text-ovyra-gold" to="/products">شخصیت‌ها</Link></li>
-            <li><Link className="hover:text-ovyra-gold" to="/cart">سبد خرید</Link></li>
-            <li><Link className="hover:text-ovyra-gold" to="/about">داستان برند</Link></li>
-            <li><Link className="hover:text-ovyra-gold" to="/contact">تماس</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="font-display text-xs tracking-[0.3em] text-white">POLICY</h3>
-          <ul className="mt-4 space-y-2 text-sm text-ovyra-mist/70">
-            <li><Link className="hover:text-ovyra-gold" to="/terms">قوانین</Link></li>
-            <li><Link className="hover:text-ovyra-gold" to="/privacy">حریم خصوصی</Link></li>
-            <li><Link className="hover:text-ovyra-gold" to="/refund-policy">بازگشت وجه</Link></li>
-            <li><Link className="hover:text-ovyra-gold" to="/support">پشتیبانی</Link></li>
-          </ul>
-        </div>
+    <footer className="ovyra-footer ovyra-section-border relative overflow-hidden">
+      <div className="ovyra-footer-ambient" aria-hidden>
+        <div className="ovyra-footer-glow-left" />
+        <div className="ovyra-footer-glow-right" />
+        <div className="ovyra-footer-gridlines" />
       </div>
 
-      <div className="mx-auto mt-10 flex max-w-7xl flex-col gap-2 border-t border-white/10 px-5 pt-6 text-center text-xs text-ovyra-mist/45 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:text-right">
-        <span>© {new Date().getFullYear()} OVYRA — The Lost Archive</span>
-        <span className="font-display text-[10px] tracking-[0.22em] sm:text-xs sm:tracking-[0.3em]">{BRAND.closing}</span>
+      <div className="ovyra-footer-inner">
+        <div className="ovyra-footer-top">
+          <div className="ovyra-footer-brand">
+            <Link to="/" className="inline-block" aria-label="OVYRA home">
+              <OvyraLogo className="h-11 w-auto sm:h-12" />
+            </Link>
+            <p className="ovyra-footer-eyebrow font-display">{footer.eyebrow}</p>
+            <p className="ovyra-footer-tagline font-fa" dir="rtl" lang="fa">
+              {footer.tagline}
+            </p>
+            <p className="ovyra-footer-tagline-en">{footer.taglineEn}</p>
+            <p className="ovyra-footer-closing font-display">{BRAND.closing}</p>
+            <p className="ovyra-footer-eye-line font-display">{BRAND.eyeLine}</p>
+          </div>
+
+          <div className="ovyra-footer-columns">
+            <div className="ovyra-footer-panel">
+              <h3 className="ovyra-footer-panel-title font-display">{footer.archiveHeading}</h3>
+              <ul className="ovyra-footer-links">
+                {archiveLinks.map((item) => (
+                  <li key={item.to}>
+                    <Link to={item.to} className="ovyra-footer-link font-fa">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="ovyra-footer-panel">
+              <h3 className="ovyra-footer-panel-title font-display">{footer.legalHeading}</h3>
+              <ul className="ovyra-footer-links">
+                {legalLinks.map((item) => (
+                  <li key={item.to}>
+                    <Link to={item.to} className="ovyra-footer-link font-fa">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="ovyra-footer-panel ovyra-footer-panel-social">
+              <h3 className="ovyra-footer-panel-title font-display">{footer.socialHeading}</h3>
+              <div className="ovyra-footer-social">
+                {heroRealm.social.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="ovyra-footer-social-link font-display"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+              <p className="ovyra-footer-series font-display">{BRAND.series}</p>
+              <p className="ovyra-footer-archive font-display">{BRAND.archive}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="ovyra-footer-bar">
+          <span className="ovyra-footer-copy">
+            © {new Date().getFullYear()} OVYRA — The Lost Archive
+          </span>
+          <span className="ovyra-footer-manifesto font-display">{BRAND.tagline}</span>
+        </div>
       </div>
     </footer>
   );
