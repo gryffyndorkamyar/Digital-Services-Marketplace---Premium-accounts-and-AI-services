@@ -155,7 +155,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'First found in a box with no label. It has several eyes, and each one remembers something different. Not its own memory. Someone else\'s. The Lore Card reads: some memories are like fog. Hold them long enough, and they become yours.',
     accent: '#9b5de5',
-    image: '/brand/archive/figure-01.png',
+    image: '/brand/Copilot_20260815_161213.png',
   },
   {
     id: 2,
@@ -169,7 +169,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Its body is full of scratches, as if it has been dropped and picked up many times. The Mood Totem holds the feeling, not the reason. Stand close and your mood shifts. Not happy, not bad. Just familiar.',
     accent: '#c9a227',
-    image: '/brand/archive/figure-02.png',
+    image: '/brand/Copilot_20260815_160150.png',
   },
   {
     id: 3,
@@ -183,7 +183,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Its chest is dark, but small points of light shine like stars. No one knows what is on the other side. We only know its puzzle piece fits the Archive\'s purple sky.',
     accent: '#3b82f6',
-    image: '/brand/archive/figure-03.png',
+    image: '/brand/Copilot_20260815_160924.png',
   },
   {
     id: 4,
@@ -197,7 +197,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Made of concrete, bolts, and gears. It has one eye, and that is enough. Archive records say it was first found near an abandoned factory. It still sometimes holds the sound of footsteps on pavement.',
     accent: '#94a3b8',
-    image: '/brand/archive/figure-04.png',
+    image: '/brand/Copilot_20260815_162459.png',
   },
   {
     id: 5,
@@ -211,7 +211,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Leaves grow from its head, roots from its mechanical feet. The Living Planter was the first being that grew inside the Archive instead of being brought in. Its Lore Card has one line: life does not wait for permission.',
     accent: '#84cc16',
-    image: '/brand/archive/figure-05.png',
+    image: '/brand/Copilot_20260815_161511.png',
   },
   {
     id: 6,
@@ -225,7 +225,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Its beanie is puffy and its feet never quite touch the ground. The Gravity Breaker moves like someone who has not learned to fall yet. Every jump adds a new line to its file.',
     accent: '#e2e8f0',
-    image: '/brand/archive/figure-06.png',
+    image: '/brand/Copilot_20260815_161735.png',
   },
   {
     id: 7,
@@ -253,7 +253,7 @@ export const ARCHIVE_01: ArchiveFigure[] = [
     loreEn:
       'Golden wings, a body of stone. The Persian Neo Myth comes from old stories, rebuilt for an Archive that is not complete yet. Its plate reads: collect the past. connect the future.',
     accent: '#d4af37',
-    image: '/brand/archive/figure-08.png',
+    image: '/brand/Copilot_20260815_162850.png',
   },
   {
     id: 9,

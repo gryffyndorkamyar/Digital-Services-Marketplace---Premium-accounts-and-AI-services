@@ -1042,8 +1042,8 @@ textarea {
 
   .ovyra-archive-showcase-image {
     @apply relative z-[1] block w-auto select-none;
-    max-height: min(52vw, 13.5rem);
-    max-width: min(88%, 16rem);
+    max-height: min(56vw, 15rem);
+    max-width: min(90%, 18rem);
     margin-inline: auto;
     filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.72));
     animation: ovyraArchiveSpotlightIn 0.45s ease-out;
@@ -1515,8 +1515,8 @@ textarea {
     }
 
     .ovyra-archive-showcase-image {
-      max-height: 15.5rem;
-      max-width: min(92%, 18rem);
+      max-height: 17rem;
+      max-width: min(94%, 20rem);
     }
 
     .ovyra-archive-dossier {
@@ -1555,8 +1555,8 @@ textarea {
 
   @media (min-width: 1280px) {
     .ovyra-archive-showcase-image {
-      max-height: 17rem;
-      max-width: min(94%, 20rem);
+      max-height: 19rem;
+      max-width: min(96%, 22rem);
     }
 
     .ovyra-archive-showcase-figure,
