@@ -1,6 +1,14 @@
 # Start Mignum LOCAL backend on port 8010
 # Does NOT touch :8000 (Business-OS) or :8001 (MardeKuhestan)
 # Uses dedicated Docker Postgres on :55434
+#
+# Usage:
+#   .\start-backend-local.ps1         full setup (docker, migrate, seed)
+#   .\start-backend-local.ps1 -Quick  only runserver (after first setup)
+
+param(
+  [switch]$Quick
+)
 
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
@@ -17,6 +25,7 @@ if (Test-Path ".\.venv\Scripts\python.exe") {
 }
 Write-Host "Using Python: $Python"
 
+if (-not $Quick) {
 $container = "mignum-postgres"
 $port = "55434"
 
@@ -110,6 +119,22 @@ if not Product.objects.exists():
 else:
     print('products already exist:', Product.objects.count())
 "@
+
+} else {
+  Write-Host "Quick mode — skipping Docker/migrate/seed (runserver only)."
+  $env:USE_LOCAL_DB = "True"
+  $env:USE_SQLITE = "False"
+  $env:DEBUG = "True"
+  $env:ZARINPAL_SANDBOX = "True"
+  $env:SECURE_SSL_REDIRECT = "False"
+  $env:LOCAL_DB_NAME = "mignum"
+  $env:LOCAL_DB_USER = "mignum"
+  $env:LOCAL_DB_PASSWORD = "mignum_local"
+  $env:LOCAL_DB_HOST = "127.0.0.1"
+  $env:LOCAL_DB_PORT = "55434"
+  $env:ALLOWED_HOSTS = "localhost,127.0.0.1"
+  $env:CORS_ALLOWED_ORIGINS = "http://localhost:3000,http://127.0.0.1:3000,http://127.0.0.1:8010,http://localhost:8010"
+}
 
 Write-Host ""
 Write-Host "============================================"

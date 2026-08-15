@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ShoppingCart, Package, User, LogOut, LogIn } from 'lucide-react';
+import { Menu, X, User, LogOut, LogIn } from 'lucide-react';
 import OvyraLogo from './OvyraLogo';
 import OvyraNavPill from './ovyra/OvyraNavPill';
 import OvyraNavChip from './ovyra/OvyraNavChip';
-import { BRAND, NAV_AUTH, NAV_HOME, NAV_PILLS, NAV_UTIL } from '../brand/ovyra';
+import { BRAND, NAV_AUTH, NAV_HOME, NAV_PILLS } from '../brand/ovyra';
 import { useAuth } from '../context/AuthContext';
 
 const iconProps = { className: 'h-[14px] w-[14px]', strokeWidth: 1.75 };
@@ -27,18 +27,12 @@ const Navbar: React.FC = () => {
     closeMenu();
   };
 
-  const utilIcons: Record<string, React.ReactNode> = {
-    cart: <ShoppingCart {...iconProps} />,
-    orders: <Package {...iconProps} />,
-  };
-
   return (
     <header className="ovyra-header fixed top-0 left-0 right-0 z-50">
       <div className="ovyra-header-beam" aria-hidden />
       <div className="ovyra-header-glow" aria-hidden />
 
       <div className="ovyra-header-inner relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-        {/* Brand */}
         <Link to="/" className="ovyra-header-brand relative z-[3] shrink-0" onClick={closeMenu}>
           <OvyraLogo className="h-9 w-auto sm:h-10" priority />
           <span className="ovyra-header-brand-meta hidden lg:flex lg:flex-col">
@@ -47,30 +41,16 @@ const Navbar: React.FC = () => {
           </span>
         </Link>
 
-        {/* Desktop: centered rail — absolute so viewport center stays exact */}
         <nav
           className="ovyra-header-cluster absolute left-1/2 top-1/2 z-[2] hidden -translate-x-1/2 -translate-y-1/2 md:flex"
           aria-label="ناوبری"
         >
-          <OvyraNavChip
-            item={{ ...NAV_HOME, id: NAV_HOME.id }}
-            active={pathname === '/'}
-          />
+          <OvyraNavChip item={{ ...NAV_HOME, id: NAV_HOME.id }} active={pathname === '/'} />
 
           <span className="ovyra-header-divider" aria-hidden />
 
           {NAV_PILLS.map((item) => (
             <OvyraNavPill key={item.id} item={item} />
-          ))}
-
-          <span className="ovyra-header-divider" aria-hidden />
-
-          {NAV_UTIL.map((link) => (
-            <OvyraNavChip
-              key={link.id}
-              item={{ ...link, icon: utilIcons[link.id] }}
-              active={pathname === link.to}
-            />
           ))}
 
           <span className="ovyra-header-divider" aria-hidden />
@@ -113,7 +93,6 @@ const Navbar: React.FC = () => {
           )}
         </nav>
 
-        {/* Mobile menu toggle */}
         <button
           type="button"
           className="ovyra-header-menu-btn relative z-[3] shrink-0 md:hidden"
@@ -125,7 +104,6 @@ const Navbar: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile drawer */}
       {isMenuOpen && (
         <div className="ovyra-header-mobile border-t border-white/[0.06] md:hidden">
           <nav className="flex flex-col gap-2 px-4 py-4">
@@ -140,19 +118,7 @@ const Navbar: React.FC = () => {
             ))}
           </nav>
 
-          <div className="flex flex-col gap-2 border-t border-white/[0.06] px-4 py-4">
-            {NAV_UTIL.map((link) => (
-              <OvyraNavChip
-                key={link.id}
-                item={{ ...link, icon: utilIcons[link.id] }}
-                fullWidth
-                active={pathname === link.to}
-                onClick={closeMenu}
-              />
-            ))}
-          </div>
-
-          <div className="px-4 pb-5">
+          <div className="border-t border-white/[0.06] px-4 pb-5 pt-4">
             {isAuthenticated ? (
               <div className="flex flex-col gap-2">
                 <OvyraNavChip

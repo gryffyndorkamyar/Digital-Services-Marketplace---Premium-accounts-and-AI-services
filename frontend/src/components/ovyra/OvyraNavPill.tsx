@@ -15,6 +15,7 @@ const OvyraNavPill: React.FC<OvyraNavPillProps> = ({ item, onClick, fullWidth, i
   const className = [
     'ovyra-nav-pill',
     item.comingSoon ? 'is-soon' : '',
+    item.variant === 'kids' ? 'is-kids' : '',
     fullWidth ? 'w-full justify-center' : '',
   ]
     .filter(Boolean)
@@ -27,10 +28,16 @@ const OvyraNavPill: React.FC<OvyraNavPillProps> = ({ item, onClick, fullWidth, i
 
   const inner = (
     <>
-      {item.comingSoon && (
+      {item.comingSoon && item.variant !== 'kids' && (
         <span className="ovyra-soon-tag">
           <Sparkles className="h-2.5 w-2.5" strokeWidth={2} aria-hidden />
           به‌زودی
+        </span>
+      )}
+      {item.variant === 'kids' && (
+        <span className="ovyra-kids-tag" aria-hidden>
+          <Sparkles className="h-2.5 w-2.5" strokeWidth={2} />
+          SOON
         </span>
       )}
       <span className="ovyra-nav-pill-dot" aria-hidden />

@@ -18,6 +18,23 @@ export const BRAND = {
 } as const;
 
 export const COPY = {
+  heroRealm: {
+    welcome: 'WELCOME TO',
+    title: 'OVYRA',
+    subtitle: 'OVYRA — WHERE IMAGINATION TAKES FORM.',
+    bodyFa: 'اویرا؛ جایی که تخیل شکل می‌گیرد',
+    statsEn: '10 BEINGS. 10 STORIES. 1 SECRET.',
+    statsFa: '۱۰ موجود. ۱۰ داستان. ۱ راز',
+    cta: 'EXPLORE THE WORLD',
+    scroll: 'SCROLL TO DISCOVER',
+    closingLine1: 'ARE YOU READY',
+    closingLine2: 'TO UNCOVER THE TRUTH?',
+    social: [
+      { label: 'INSTAGRAM', href: 'https://instagram.com' },
+      { label: 'YOUTUBE', href: 'https://youtube.com' },
+      { label: 'DISCORD', href: 'https://discord.com' },
+    ],
+  },
   hero: {
     line1: 'ده موجود.',
     line2: 'یک چشم.',
@@ -141,12 +158,13 @@ export type NavPillItem = {
   comingSoon?: boolean;
   accent: string;
   glow: string;
+  variant?: 'kids';
 };
 
 export const NAV_PILLS: NavPillItem[] = [
   {
     id: 'characters',
-    label: 'شخصیت‌ها',
+    label: 'خزانه OVYRA',
     to: '/products',
     accent: '#9d4edd',
     glow: 'rgba(157,78,221,0.45)',
@@ -159,17 +177,18 @@ export const NAV_PILLS: NavPillItem[] = [
     glow: 'rgba(201,162,39,0.4)',
   },
   {
-    id: 'ai',
-    label: 'هوش مصنوعی',
+    id: 'kids',
+    label: 'KIDS',
     comingSoon: true,
-    accent: '#c026d3',
-    glow: 'rgba(192,38,211,0.5)',
+    accent: '#ff2fd6',
+    glow: 'rgba(255,47,214,0.7)',
+    variant: 'kids',
   },
 ];
 
 export const NAV_HOME = {
   id: 'home',
-  label: 'آرشیو',
+  label: 'آرشیو شخصیت‌ها',
   to: '/',
 } as const;
 
@@ -188,10 +207,6 @@ export const NAV_AUTH = {
   },
 } as const;
 
-export const NAV_UTIL = [
-  { id: 'cart', to: '/cart', label: 'سبد' },
-  { id: 'orders', to: '/orders', label: 'سفارش‌ها' },
-] as const;
 
 export function matchArchiveFigure(productName?: string): ArchiveFigure | undefined {
   if (!productName) return undefined;

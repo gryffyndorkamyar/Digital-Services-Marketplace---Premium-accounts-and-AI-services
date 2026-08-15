@@ -114,11 +114,11 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Far Bamshad', 'Tahoma', 'system-ui', 'sans-serif'],
-        fa: ['Far Bamshad', 'Tahoma', 'system-ui', 'sans-serif'],
-        'fa-display': ['Far Bamshad', 'Tahoma', 'sans-serif'],
-        display: ['Orbitron', 'Far Bamshad', 'system-ui', 'sans-serif'],
-        vazir: ['Far Bamshad', 'Tahoma', 'sans-serif'],
+        sans: ['Vazirmatn', 'Tahoma', 'system-ui', 'sans-serif'],
+        fa: ['Vazirmatn', 'Tahoma', 'system-ui', 'sans-serif'],
+        'fa-display': ['Vazirmatn', 'Tahoma', 'sans-serif'],
+        display: ['Orbitron', 'Vazirmatn', 'system-ui', 'sans-serif'],
+        vazir: ['Vazirmatn', 'Tahoma', 'sans-serif'],
         mono: ['IBM Plex Mono', 'monospace'],
       },
       animation: {

@@ -8,9 +8,9 @@ import {
   COPY,
   SEASON_02,
 } from '../brand/ovyra';
-import OvyraLogo from '../components/OvyraLogo';
 import OvyraTrustStrip from '../components/ovyra/OvyraTrustStrip';
 import OvyraStickyCta from '../components/ovyra/OvyraStickyCta';
+import OvyraHeroRealm from '../components/ovyra/OvyraHeroRealm';
 
 const LandingPage: React.FC = () => {
   const [active, setActive] = useState(1);
@@ -26,107 +26,8 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="ovyra-page relative overflow-x-hidden bg-ovyra-void pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] text-ovyra-mist md:pb-0">
-      {/* ── 1. HERO ── */}
-      <section className="ovyra-hero-pro">
-        <div className="ovyra-hero-beam" aria-hidden />
-        <div className="ovyra-hero-pro-gridlines" aria-hidden />
-        <div className="pointer-events-none absolute inset-0">
-          <div className="ovyra-neon-orb ovyra-neon-orb-violet" aria-hidden />
-          <div className="ovyra-neon-orb ovyra-neon-orb-gold" aria-hidden />
-          <div className="ovyra-neon-orb ovyra-neon-orb-eye" aria-hidden />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_24%,rgba(157,78,221,0.28),transparent_58%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_14%_90%,rgba(201,162,39,0.16),transparent_48%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(192,38,211,0.08),transparent_65%)]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-ovyra-void via-ovyra-void/97 to-ovyra-void" />
-          <div className="ovyra-hero-glow" aria-hidden />
-        </div>
-
-        <div className="ovyra-hero-shell">
-          <div className="ovyra-hero-grid ovyra-fade-in">
-            <div className="ovyra-hero-copy">
-              <OvyraLogo variant="hero" className="ovyra-hero-logo" priority />
-
-              <div className="ovyra-hero-meta-cluster">
-                <span className="ovyra-hero-meta-chip">{BRAND.series}</span>
-                <span className="ovyra-header-divider" aria-hidden />
-                <span className="ovyra-hero-meta-chip text-white/60">{BRAND.archive}</span>
-                <span className="ovyra-header-divider" aria-hidden />
-                <span className="ovyra-hero-meta-chip text-ovyra-violet/90">{BRAND.age}</span>
-              </div>
-
-              <h1 className="ovyra-hero-headline">
-                <span className="ovyra-neon-white block text-white">{COPY.hero.line1}</span>
-                <span className="ovyra-neon-gold mt-1 block text-ovyra-gold">{COPY.hero.line2}</span>
-                <span className="ovyra-neon-violet mt-1 block text-ovyra-violet">{COPY.hero.line3}</span>
-              </h1>
-
-              <div className="ovyra-hero-lead-block">
-                <p className="ovyra-hero-lead">{COPY.hero.lead}</p>
-                <p className="ovyra-hero-sub">{COPY.hero.sub}</p>
-              </div>
-
-              <div className="ovyra-hero-system-strip" aria-label="سیستم OVYRA">
-                {COPY.system.steps.map((step) => (
-                  <span key={step.step} className="ovyra-hero-system-chip">
-                    <span className="font-display text-[10px] tracking-[0.28em] text-ovyra-gold">{step.step}</span>
-                    <span className="font-fa text-xs font-medium text-white/85">{step.fa}</span>
-                  </span>
-                ))}
-              </div>
-
-              <div className="ovyra-hero-stats">
-                <div className="ovyra-hero-stat">
-                  <span className="ovyra-hero-stat-value">10</span>
-                  <span className="ovyra-hero-stat-label">{COPY.hero.statFigures}</span>
-                </div>
-                <div className="ovyra-hero-stat">
-                  <span className="ovyra-hero-stat-value">1</span>
-                  <span className="ovyra-hero-stat-label">{COPY.hero.statEye}</span>
-                </div>
-                <div className="ovyra-hero-stat">
-                  <span className="ovyra-hero-stat-value">{BRAND.age}</span>
-                  <span className="ovyra-hero-stat-label">{COPY.hero.statAge}</span>
-                </div>
-              </div>
-
-              <div className="ovyra-hero-actions">
-                <Link
-                  to="/products"
-                  className="ovyra-nav-pill ovyra-hero-cta-pill"
-                  style={{ '--pill-accent': '#c9a227', '--pill-glow': 'rgba(201,162,39,0.42)' } as React.CSSProperties}
-                >
-                  <span className="ovyra-nav-pill-dot" aria-hidden />
-                  <span className="ovyra-nav-pill-label font-fa">{COPY.hero.ctaPrimary}</span>
-                  <span className="ovyra-nav-pill-sheen" aria-hidden />
-                </Link>
-                <a href="#how" className="ovyra-nav-chip ovyra-hero-cta-chip font-fa">
-                  <span className="ovyra-nav-chip-label">{COPY.hero.ctaSecondary}</span>
-                  <span className="ovyra-nav-chip-sheen" aria-hidden />
-                </a>
-                <span className="ovyra-hero-tagline">{BRAND.tagline}</span>
-              </div>
-            </div>
-
-            <div className="ovyra-hero-media ovyra-fade-in ovyra-fade-in-delay">
-              <span className="ovyra-hero-badge">LIMITED ARCHIVE</span>
-              <div className="ovyra-hero-figure-stage">
-                <div className="ovyra-hero-figure-glow" aria-hidden />
-                <img
-                  src="/brand/firstfigure.png?v=4"
-                  alt="OVYRA Archive 01 — Mood Totem box and figure"
-                  className="ovyra-hero-figure-img"
-                  fetchPriority="high"
-                  decoding="async"
-                  loading="eager"
-                  width={960}
-                  height={720}
-                />
-              </div>
-              <p className="ovyra-hero-caption">{BRAND.eyeLine}</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── 1. HERO (realm mockup) ── */}
+      <OvyraHeroRealm />
 
       <OvyraTrustStrip />
 
