@@ -38,16 +38,22 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = [h.strip() for h in config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',') if h.strip()]
 
-# OVYRA production domains (RunFlare)
+# OVYRA production domains (RunFlare + custom domain)
 OVYRA_PRODUCTION_HOSTS = (
     'ovyraworld.runflare.run',
     'ovyraword.runflare.run',
     'ovyraworld-nd7-ovyraworld.runflare.cloud',
+    'ovyraworld.com',
+    'www.ovyraworld.com',
 )
 OVYRA_PRODUCTION_ORIGINS = (
     'https://ovyraworld.runflare.run',
     'https://ovyraword.runflare.run',
     'https://ovyraworld-nd7-ovyraworld.runflare.cloud',
+    'https://ovyraworld.com',
+    'http://ovyraworld.com',
+    'https://www.ovyraworld.com',
+    'http://www.ovyraworld.com',
 )
 
 
@@ -277,10 +283,8 @@ _cors_origins = [
     ).split(',')
     if o.strip()
 ]
-CORS_ALLOWED_ORIGINS = _cors_origins
-if not DEBUG:
-    CORS_ALLOWED_ORIGINS = list(dict.fromkeys([*CORS_ALLOWED_ORIGINS, *OVYRA_PRODUCTION_ORIGINS]))
-    ALLOWED_HOSTS = list(dict.fromkeys([*ALLOWED_HOSTS, *OVYRA_PRODUCTION_HOSTS]))
+CORS_ALLOWED_ORIGINS = list(dict.fromkeys([*_cors_origins, *OVYRA_PRODUCTION_ORIGINS]))
+ALLOWED_HOSTS = list(dict.fromkeys([*ALLOWED_HOSTS, *OVYRA_PRODUCTION_HOSTS]))
 CORS_ALLOW_CREDENTIALS = True
 
 # Channels Configuration
@@ -318,6 +322,7 @@ if _csrf_env.strip():
     CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_env.split(',') if o.strip()]
 else:
     CSRF_TRUSTED_ORIGINS = list(_cors_origins)
+CSRF_TRUSTED_ORIGINS = list(dict.fromkeys([*CSRF_TRUSTED_ORIGINS, *OVYRA_PRODUCTION_ORIGINS]))
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_COOKIE_SAMESITE = 'Lax'
@@ -325,12 +330,13 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 # Production security (RunFlare reverse proxy)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 if not DEBUG:
-    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int)
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    # False = both http and https work (RunFlare/nginx terminates TLS at the edge).
+    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+    SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=SECURE_SSL_REDIRECT, cast=bool)
+    CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=SECURE_SSL_REDIRECT, cast=bool)
+    SECURE_HSTS_SECONDS = config('SECURE_HSTS_SECONDS', default=31536000, cast=int) if SECURE_SSL_REDIRECT else 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = SECURE_SSL_REDIRECT
+    SECURE_HSTS_PRELOAD = SECURE_SSL_REDIRECT
     SECURE_CONTENT_TYPE_NOSNIFF = True
 else:
     SECURE_SSL_REDIRECT = False

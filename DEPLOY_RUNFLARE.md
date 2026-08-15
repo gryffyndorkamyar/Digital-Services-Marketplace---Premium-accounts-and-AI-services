@@ -1,6 +1,8 @@
 # دیپلوی OVYRA روی RunFlare
 
 دامنه‌ها:
+- **https://ovyraworld.com** / **http://ovyraworld.com**
+- **https://www.ovyraworld.com** / **http://www.ovyraworld.com**
 - **https://ovyraworld.runflare.run**
 - **https://ovyraword.runflare.run**
 - **https://ovyraworld-nd7-ovyraworld.runflare.cloud**
@@ -37,9 +39,9 @@ cd ..
 از `deploy/runflare.env.example` کپی کن در پنل RunFlare:
 
 ```
-ALLOWED_HOSTS=ovyraworld.runflare.run,ovyraword.runflare.run,ovyraworld-nd7-ovyraworld.runflare.cloud
-CORS_ALLOWED_ORIGINS=https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
-CSRF_TRUSTED_ORIGINS=https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
+ALLOWED_HOSTS=ovyraworld.com,www.ovyraworld.com,ovyraworld.runflare.run,ovyraword.runflare.run,ovyraworld-nd7-ovyraworld.runflare.cloud
+CORS_ALLOWED_ORIGINS=https://ovyraworld.com,http://ovyraworld.com,https://www.ovyraworld.com,http://www.ovyraworld.com,https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
+CSRF_TRUSTED_ORIGINS=https://ovyraworld.com,http://ovyraworld.com,https://www.ovyraworld.com,http://www.ovyraworld.com,https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
 DEBUG=False
 SECRET_KEY=...
 DB_*=...
@@ -57,15 +59,16 @@ runflare deploy
 ## ۶. Build روی سرور (خودکار)
 
 `runflare.json` → build: pip + migrate + collectstatic  
-Runtime → `start.sh` → gunicorn روی `$PORT` (8000)
+Runtime → `start.sh` → gunicorn **sync/WSGI** روی `$PORT` (8000)
+
+**مهم:** در `runflare.json` فیلد `args` باید **رشته** باشد: `"args": "sh start.sh"` — اگر آرایه باشد RunFlare نادیده می‌گیرد و UvicornWorker پیش‌فرض بالا می‌آید.
 
 فقط دیسک **`media`** لازم است. `liara.json` حذف شده — فقط `runflare.json`.
 
 ## ۷. تست
 
-- https://ovyraworld.runflare.run/
-- https://ovyraword.runflare.run/
-- https://ovyraworld-nd7-ovyraworld.runflare.cloud/
+- https://ovyraworld.com/health/
+- https://ovyraworld.com/
 - https://ovyraworld.runflare.run/health/
 
 ## نکات

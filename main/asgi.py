@@ -10,15 +10,19 @@ https://docs.djangoproject.com/en/5.2/howto/deployment/asgi/
 import os
 
 from django.core.asgi import get_asgi_application
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
+
+# Django must be initialized before Channels imports (see channels deploy docs).
+django_asgi_app = get_asgi_application()
+
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from django.urls import path
 from common.consumers import ProductConsumer, ReviewConsumer
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'main.settings')
-
 application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
+    "http": django_asgi_app,
     "websocket": AuthMiddlewareStack(
         URLRouter([
             path("ws/products/", ProductConsumer.as_asgi()),

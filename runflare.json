@@ -11,7 +11,7 @@
     "location": "iran",
     "command": "pip install -r requirements.txt && python manage.py migrate --noinput && python manage.py collectstatic --noinput"
   },
-  "args": ["sh", "start.sh"],
+  "args": "sh start.sh",
   "disks": [
     {
       "name": "media",

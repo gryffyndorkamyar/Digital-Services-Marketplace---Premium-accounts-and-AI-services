@@ -10,12 +10,13 @@ fi
 
 PORT="${PORT:-8000}"
 
-echo "==> OVYRA — starting gunicorn on 0.0.0.0:${PORT}"
+echo "==> OVYRA — starting gunicorn (WSGI/sync) on 0.0.0.0:${PORT}"
 
 exec gunicorn main.wsgi:application \
+  -c gunicorn.conf.py \
   --bind "0.0.0.0:${PORT}" \
   --workers 2 \
-  --threads 2 \
+  --worker-class sync \
   --timeout 120 \
   --access-logfile - \
   --error-logfile - \
