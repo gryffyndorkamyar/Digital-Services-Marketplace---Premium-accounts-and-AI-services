@@ -10,6 +10,20 @@ fi
 
 PORT="${PORT:-8000}"
 
+missing=""
+for var in SECRET_KEY DB_ENGINE DB_NAME DB_USER DB_PASSWORD DB_HOST DB_PORT; do
+  eval "val=\${$var:-}"
+  if [ -z "$val" ]; then
+    missing="${missing} ${var}"
+  fi
+done
+
+if [ -n "$missing" ]; then
+  echo "ERROR: Missing required environment variables:${missing}" >&2
+  echo "Set them in RunFlare → Environment Variables (see deploy/runflare.env.example)." >&2
+  exit 1
+fi
+
 echo "==> OVYRA — starting gunicorn (WSGI/sync) on 0.0.0.0:${PORT}"
 
 exec gunicorn main.wsgi:application \

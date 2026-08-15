@@ -5,19 +5,21 @@
 - شاخه: **`stage`**
 - فایل کانفیگ: **`runflare.json`** (نه `liara.json` — حذف شده)
 
-## ۲. Environment Variables
-فایل **`deploy/runflare-panel.env`** را باز کن — هر خط را در پنل RunFlare اضافه کن.
+## ۲. Environment Variables (الزامی — بدون این‌ها worker کرش می‌کند)
 
-| Key | Value |
-|-----|-------|
-| DEBUG | False |
-| SECRET_KEY | (از runflare-panel.env) |
-| ALLOWED_HOSTS | ovyraworld.com,www.ovyraworld.com,ovyraworld.runflare.run,ovyraword.runflare.run,ovyraworld-nd7-ovyraworld.runflare.cloud |
-| CORS_ALLOWED_ORIGINS | https://ovyraworld.com,http://ovyraworld.com,https://www.ovyraworld.com,... |
-| CSRF_TRUSTED_ORIGINS | همان CORS |
-| USE_LOCAL_DB | False |
-| DB_* | Postgres (ممکن است host لیارا باشد — مشکلی نیست) |
-| ZARINPAL_* | از runflare-panel.env |
+در RunFlare → **تنظیم متغیر محیطی** → همه خطوط `deploy/runflare.env.example` را اضافه کن.
+
+**حداقل اجباری:**
+
+| Key | توضیح |
+|-----|--------|
+| `SECRET_KEY` | **بدون این gunicorn worker بالا نمی‌آید** |
+| `DEBUG` | `False` |
+| `DB_ENGINE` | `django.db.backends.postgresql` |
+| `DB_NAME` / `DB_USER` / `DB_PASSWORD` / `DB_HOST` / `DB_PORT` | از دیتابیس RunFlare |
+| `ALLOWED_HOSTS` | شامل `ovyraworld.com` و دامنه RunFlare |
+
+بعد از ذخیره env → **Redeploy** بزن.
 
 ## ۳. دیسک media
 فقط یک دیسک **`media`** بساز و mount کن روی `media` (دیسک `data` لازم نیست).
@@ -41,7 +43,7 @@ python manage.py createsuperuser
 |-----|--------|
 | gunicorn start نشده | Runtime log — باید `==> OVYRA — starting gunicorn (WSGI/sync)` ببینی (نه UvicornWorker) |
 | لاگ `UvicornWorker` | `runflare.json` → `"args": "sh start.sh"` (رشته، نه آرایه) |
-| env ناقص | SECRET_KEY و DB_* در پنل |
+| Worker failed to boot | **SECRET_KEY** یا **DB_*** در پنل ست نشده — env را کامل کن و Redeploy |
 | دیسک `data` تعریف شده ولی ساخته نشده | فقط `media` در runflare.json |
 | پورت | سرویس Django = **8000** |
 | `liara.json` قدیمی | حذف شد — فقط `runflare.json` |
