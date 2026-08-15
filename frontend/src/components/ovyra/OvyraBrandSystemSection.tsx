@@ -12,6 +12,7 @@ const OvyraBrandSystemSection: React.FC = () => {
     <section id="how" className="ovyra-brand-system ovyra-section-defer ovyra-section-border relative overflow-hidden" dir="ltr">
       <div className="ovyra-brand-system-ambient" aria-hidden>
         <div className="ovyra-brand-system-glow-center" />
+        <div className="ovyra-brand-system-glow-right" />
       </div>
 
       <div className="ovyra-brand-system-inner">
@@ -27,10 +28,15 @@ const OvyraBrandSystemSection: React.FC = () => {
             <p className="ovyra-hero-realm-stats-fa font-fa" dir="rtl" lang="fa">
               {system.statsFa}
             </p>
+            <Link to="/products" className="ovyra-hero-realm-cta ovyra-brand-system-copy-cta">
+              <span>ورود به آرشیو ۰۱</span>
+            </Link>
           </header>
 
           <div className="ovyra-brand-system-visual ovyra-fade-in ovyra-fade-in-delay">
             <div className="ovyra-brand-system-showcase">
+              <div className="ovyra-brand-system-showcase-bloom" aria-hidden />
+              <div className="ovyra-brand-system-showcase-ring" aria-hidden />
               <div className="ovyra-brand-system-pedestal-glow" aria-hidden />
               <img
                 src={BOX_IMAGE}
@@ -79,15 +85,10 @@ const OvyraBrandSystemSection: React.FC = () => {
             </div>
 
             <div className="ovyra-brand-system-closing">
-              <div className="ovyra-brand-system-closing-copy">
-                <p className="ovyra-hero-realm-stats-en">{system.closing}</p>
-                <p className="ovyra-hero-realm-stats-fa font-fa" dir="rtl" lang="fa">
-                  {system.closingFa}
-                </p>
-              </div>
-              <Link to="/products" className="ovyra-hero-realm-cta ovyra-brand-system-cta">
-                <span>ورود به آرشیو ۰۱</span>
-              </Link>
+              <p className="ovyra-hero-realm-stats-en">{system.closing}</p>
+              <p className="ovyra-hero-realm-stats-fa font-fa" dir="rtl" lang="fa">
+                {system.closingFa}
+              </p>
             </div>
           </div>
         </div>
