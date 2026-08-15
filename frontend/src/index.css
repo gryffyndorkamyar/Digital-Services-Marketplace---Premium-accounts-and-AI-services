@@ -577,7 +577,7 @@ textarea {
 
   .ovyra-brand-system-glow-center {
     @apply absolute;
-    top: 22%;
+    top: 18%;
     left: 58%;
     width: min(36vw, 360px);
     height: min(20vw, 200px);
@@ -587,9 +587,15 @@ textarea {
     filter: blur(12px);
   }
 
+  .ovyra-brand-system-inner {
+    @apply relative z-[1];
+    padding-top: calc(var(--ovyra-header-h) + 1.25rem);
+    padding-bottom: 2rem;
+  }
+
   .ovyra-brand-system-stage {
-    @apply relative z-[1] mx-auto grid w-full max-w-[96rem] items-center gap-6 px-5 pb-6 pt-[calc(var(--ovyra-header-h)+0.75rem)] sm:px-8 lg:grid-cols-[minmax(0,0.52fr)_minmax(0,1fr)] lg:gap-8 lg:px-10 lg:pb-8;
-    min-height: min(calc(100vh - var(--ovyra-header-h) - 11rem), 42rem);
+    @apply grid w-full items-center gap-x-8 gap-y-5;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .ovyra-brand-system-copy {
@@ -600,9 +606,9 @@ textarea {
     position: relative;
     z-index: 1;
     display: inline-block;
-    margin-top: 0.5rem;
+    margin-top: 0.55rem;
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.15rem, 2.4vw, 1.65rem);
+    font-size: clamp(1.35rem, 2.8vw, 1.95rem);
     font-weight: 800;
     line-height: 1.06;
     letter-spacing: 0.07em;
@@ -618,27 +624,20 @@ textarea {
   }
 
   .ovyra-brand-system-copy .ovyra-hero-realm-subtitle {
-    margin-top: 0.55rem;
-    font-size: clamp(0.52rem, 1vw, 0.62rem);
-    letter-spacing: 0.18em;
+    margin-top: 0.65rem;
   }
 
   .ovyra-brand-system-copy .ovyra-hero-realm-body-fa {
-    margin-top: 0.65rem;
-    max-width: 18rem;
-    font-size: clamp(0.82rem, 1.4vw, 0.92rem);
-    line-height: 1.65;
+    margin-top: 0.75rem;
+    max-width: 20rem;
   }
 
   .ovyra-brand-system-copy .ovyra-hero-realm-stats-en {
-    margin-top: 0.75rem;
-    font-size: clamp(0.52rem, 1vw, 0.6rem);
-    letter-spacing: 0.24em;
+    margin-top: 0.85rem;
   }
 
   .ovyra-brand-system-copy .ovyra-hero-realm-stats-fa {
-    margin-top: 0.3rem;
-    font-size: clamp(0.72rem, 1.2vw, 0.82rem);
+    margin-top: 0.35rem;
   }
 
   .ovyra-brand-system-visual {
@@ -647,7 +646,7 @@ textarea {
 
   .ovyra-brand-system-showcase {
     @apply relative;
-    width: min(100%, 20rem);
+    width: min(100%, 22rem);
   }
 
   .ovyra-brand-system-pedestal-glow {
@@ -664,20 +663,20 @@ textarea {
   }
 
   .ovyra-brand-system-chain-row {
-    @apply relative z-[2] flex flex-wrap items-stretch justify-center gap-y-4 pb-6 pt-2;
+    @apply flex flex-wrap items-stretch justify-center gap-y-3;
   }
 
   .ovyra-brand-system-card {
     @apply relative;
-    width: min(100%, 11.25rem);
+    width: min(100%, 15.5rem);
     flex-shrink: 0;
   }
 
   .ovyra-brand-system-card-hook {
     @apply pointer-events-none absolute z-[3] block rounded-full;
-    top: 0.55rem;
-    width: 0.45rem;
-    height: 0.45rem;
+    top: 0.65rem;
+    width: 0.5rem;
+    height: 0.5rem;
     border: 1px solid rgba(201, 162, 39, 0.55);
     background: radial-gradient(circle, rgba(201, 162, 39, 0.35) 0%, rgba(201, 162, 39, 0.08) 100%);
     box-shadow: 0 0 8px rgba(201, 162, 39, 0.25);
@@ -693,7 +692,7 @@ textarea {
 
   .ovyra-brand-system-card-inner {
     @apply relative flex h-full flex-col overflow-hidden;
-    border: 1px solid rgba(157, 78, 221, 0.2);
+    border: 1px solid rgba(157, 78, 221, 0.22);
     background: rgba(6, 6, 6, 0.94);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -701,34 +700,35 @@ textarea {
 
   .ovyra-brand-system-card:hover .ovyra-brand-system-card-inner,
   .ovyra-brand-system-card:focus-within .ovyra-brand-system-card-inner {
-    border-color: rgba(157, 78, 221, 0.38);
+    border-color: rgba(157, 78, 221, 0.4);
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 16px rgba(157, 78, 221, 0.1);
   }
 
   .ovyra-brand-system-card-slot {
-    min-height: 4.25rem;
+    aspect-ratio: 4 / 3;
+    min-height: 7.25rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     background:
-      linear-gradient(180deg, rgba(157, 78, 221, 0.04) 0%, transparent 100%),
+      linear-gradient(180deg, rgba(157, 78, 221, 0.05) 0%, transparent 100%),
       repeating-linear-gradient(
         -45deg,
-        rgba(255, 255, 255, 0.015) 0,
-        rgba(255, 255, 255, 0.015) 1px,
+        rgba(255, 255, 255, 0.018) 0,
+        rgba(255, 255, 255, 0.018) 1px,
         transparent 1px,
-        transparent 7px
+        transparent 8px
       );
   }
 
   .ovyra-brand-system-card-copy {
-    @apply flex flex-1 flex-col px-3 py-3;
+    @apply flex flex-1 flex-col px-3.5 py-3.5;
   }
 
   .ovyra-brand-system-card-head {
-    @apply flex items-start gap-2;
+    @apply flex items-start gap-2.5;
   }
 
   .ovyra-brand-system-card-step {
-    @apply flex h-7 w-7 shrink-0 items-center justify-center text-[8px] tracking-[0.12em];
+    @apply flex h-8 w-8 shrink-0 items-center justify-center text-[9px] tracking-[0.12em];
     font-family: 'Orbitron', sans-serif;
     color: rgba(157, 78, 221, 0.95);
     border: 1px solid rgba(157, 78, 221, 0.32);
@@ -737,50 +737,50 @@ textarea {
 
   .ovyra-brand-system-card-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.68rem;
+    font-size: 0.76rem;
     letter-spacing: 0.16em;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.92);
   }
 
   .ovyra-brand-system-card-fa {
-    margin-top: 0.1rem;
-    font-size: 0.68rem;
-    color: rgba(157, 78, 221, 0.85);
+    margin-top: 0.15rem;
+    font-size: 0.76rem;
+    color: rgba(157, 78, 221, 0.88);
   }
 
   .ovyra-brand-system-card-body {
-    margin-top: 0.55rem;
+    margin-top: 0.65rem;
     flex: 1;
-    font-size: 0.68rem;
-    line-height: 1.55;
-    color: rgba(255, 255, 255, 0.58);
+    font-size: 0.76rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.65);
   }
 
   .ovyra-brand-system-card-hint {
-    margin-top: 0.55rem;
+    margin-top: 0.65rem;
     font-family: 'Orbitron', sans-serif;
-    font-size: 7px;
-    letter-spacing: 0.18em;
-    color: rgba(157, 78, 221, 0.65);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: rgba(157, 78, 221, 0.72);
   }
 
   .ovyra-brand-system-chain-connector {
     @apply relative flex shrink-0 items-center justify-center self-center;
-    width: min(4.5rem, 14vw);
-    margin-top: 0.35rem;
-    padding-inline: 0.15rem;
+    width: min(5rem, 16vw);
+    margin-top: 0.5rem;
+    padding-inline: 0.2rem;
   }
 
   .ovyra-brand-system-chain-img {
     @apply block w-full select-none;
-    max-height: 1.65rem;
+    max-height: 2.15rem;
     object-fit: contain;
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
     opacity: 0.94;
   }
 
   .ovyra-brand-system-footer {
-    @apply relative z-[2] flex flex-col items-center gap-1 border-t border-white/[0.05] pb-8 pt-5 text-center lg:flex-row lg:flex-wrap lg:items-center lg:justify-end lg:gap-x-5 lg:gap-y-2 lg:pb-10 lg:text-right;
+    @apply mt-5 flex flex-col items-center gap-1 border-t border-white/[0.05] pt-4 text-center lg:mt-6 lg:flex-row lg:flex-wrap lg:items-center lg:justify-end lg:gap-x-5 lg:gap-y-2 lg:text-right;
   }
 
   .ovyra-brand-system-footer .ovyra-hero-realm-stats-en,
@@ -790,14 +790,60 @@ textarea {
 
   .ovyra-brand-system-footer .ovyra-hero-realm-cta {
     margin-top: 0.35rem;
-    padding: 0.55rem 0.85rem 0.55rem 0.95rem;
-    font-size: 9px;
+  }
+
+  @media (min-width: 768px) {
+    .ovyra-brand-system-stage {
+      grid-template-columns: minmax(0, 0.46fr) minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: 2.5rem;
+      row-gap: 1.25rem;
+    }
+
+    .ovyra-brand-system-copy {
+      grid-column: 1;
+      grid-row: 1;
+      align-self: center;
+    }
+
+    .ovyra-brand-system-visual {
+      grid-column: 2;
+      grid-row: 1;
+      justify-content: flex-start;
+    }
+
+    .ovyra-brand-system-showcase {
+      width: min(100%, 24rem);
+    }
+
+    .ovyra-brand-system-chain-row {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      flex-wrap: nowrap;
+      gap: 0;
+      margin-top: 0.15rem;
+    }
+
+    .ovyra-brand-system-card {
+      width: min(100%, 16.5rem);
+      flex: 1 1 0;
+      max-width: 16.5rem;
+    }
+
+    .ovyra-brand-system-card-slot {
+      min-height: 8rem;
+    }
+
+    .ovyra-brand-system-chain-connector {
+      width: clamp(3rem, 5.5vw, 4.75rem);
+      margin-inline: -0.25rem;
+    }
   }
 
   @media (max-width: 767px) {
-    .ovyra-brand-system-stage {
-      min-height: auto;
-      padding-bottom: 1rem;
+    .ovyra-brand-system-inner {
+      padding-top: calc(var(--ovyra-header-h) + 0.85rem);
+      padding-bottom: 1.5rem;
     }
 
     .ovyra-brand-system-copy {
@@ -810,18 +856,18 @@ textarea {
     }
 
     .ovyra-brand-system-showcase {
-      width: min(100%, 16rem);
+      width: min(100%, 18rem);
       margin-inline: auto;
     }
 
     .ovyra-brand-system-chain-row {
       flex-direction: column;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.65rem;
     }
 
     .ovyra-brand-system-card {
-      width: min(100%, 15rem);
+      width: min(100%, 17rem);
     }
 
     .ovyra-brand-system-card-hook-left,
@@ -830,21 +876,13 @@ textarea {
     }
 
     .ovyra-brand-system-chain-connector {
-      width: 3rem;
+      width: 3.25rem;
       transform: rotate(90deg);
-      margin-block: 0.15rem;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .ovyra-brand-system-chain-row {
-      flex-wrap: nowrap;
-      gap: 0;
+      margin-block: 0.1rem;
     }
 
-    .ovyra-brand-system-chain-connector {
-      width: clamp(2.75rem, 5vw, 4.25rem);
-      margin-inline: -0.35rem;
+    .ovyra-brand-system-title {
+      font-size: 1.25rem;
     }
   }
 
