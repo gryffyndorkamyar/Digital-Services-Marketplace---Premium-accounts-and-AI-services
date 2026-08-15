@@ -650,7 +650,7 @@ textarea {
 
   .ovyra-brand-system-showcase {
     @apply relative;
-    width: min(100%, 26rem);
+    width: min(100%, 32rem);
   }
 
   .ovyra-brand-system-showcase-bloom {
@@ -701,7 +701,7 @@ textarea {
 
   .ovyra-brand-system-card {
     @apply relative shrink-0;
-    width: min(100%, 17.75rem);
+    width: min(100%, 21rem);
   }
 
   .ovyra-brand-system-card-hook {
@@ -745,7 +745,7 @@ textarea {
   }
 
   .ovyra-brand-system-card-slot {
-    height: 8.25rem;
+    height: 9.75rem;
     flex-shrink: 0;
     border-bottom: 1px solid rgba(157, 78, 221, 0.14);
     background:
@@ -806,14 +806,14 @@ textarea {
 
   .ovyra-brand-system-chain-connector {
     @apply relative flex shrink-0 items-center justify-center;
-    width: clamp(3rem, 4.5vw, 4.5rem);
-    margin-top: 3.65rem;
-    padding-inline: 0.2rem;
+    width: clamp(3.5rem, 5.3vw, 5.3rem);
+    margin-top: 4.3rem;
+    padding-inline: 0.25rem;
   }
 
   .ovyra-brand-system-chain-img {
     @apply block w-full select-none;
-    max-height: 2.15rem;
+    max-height: 2.5rem;
     object-fit: contain;
     opacity: 0.96;
     filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
@@ -854,7 +854,7 @@ textarea {
     }
 
     .ovyra-brand-system-showcase {
-      width: min(100%, 34rem);
+      width: min(100%, 41rem);
     }
 
     .ovyra-brand-system-bottom {
@@ -864,11 +864,11 @@ textarea {
     }
 
     .ovyra-brand-system-card {
-      width: min(100%, 18.5rem);
+      width: min(100%, 21.85rem);
     }
 
     .ovyra-brand-system-card-slot {
-      height: 8.75rem;
+      height: 10.35rem;
     }
   }
 
@@ -898,7 +898,7 @@ textarea {
     }
 
     .ovyra-brand-system-showcase {
-      width: min(100%, 21rem);
+      width: min(100%, 25.5rem);
     }
 
     .ovyra-brand-system-chain-row {
@@ -908,7 +908,7 @@ textarea {
     }
 
     .ovyra-brand-system-card {
-      width: min(100%, 18rem);
+      width: min(100%, 21.25rem);
     }
 
     .ovyra-brand-system-card-hook-left,
@@ -917,7 +917,7 @@ textarea {
     }
 
     .ovyra-brand-system-chain-connector {
-      width: 3rem;
+      width: 3.5rem;
       margin-top: 0;
       transform: rotate(90deg);
     }

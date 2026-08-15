@@ -54,7 +54,7 @@ export const COPY = {
     manifestoFa: 'هر جعبه، یک موجود. هر موجود، یک راز. هر راز، یک تکه از چشم.',
     statsEn: 'FIGURE. LORE. PUZZLE. ONE TRUTH.',
     statsFa: 'فیگور. کارت. پازل. یک حقیقت.',
-    lead: 'با هر خرید، شخصیت، کارت lore و قطعه پازل را دریافت می‌کنی — هر کدام تو را به حقیقت پنهان نزدیک‌تر می‌کند.',
+    lead: 'با هر خرید، شخصیت، کارت lore و قطعه پازل را دریافت می‌کنی و هر کدام تو را به حقیقت پنهان نزدیک‌تر می‌کند.',
     imageAlt: 'Inside the OVYRA Archive 01 box — figure, lore card, and puzzle piece',
     callouts: {
       lore: {
