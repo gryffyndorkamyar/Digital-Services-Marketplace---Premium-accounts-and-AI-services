@@ -4,6 +4,8 @@ export type ArchiveFigure = {
   name: string;
   nameFa: string;
   tagline: string;
+  loreFa: string;
+  loreEn: string;
   accent: string;
   image: string;
 };
@@ -106,6 +108,8 @@ export const COPY = {
     featuredCta: 'مشاهده در فروشگاه',
     hoverHint: 'HOVER TO INSPECT',
     viewLabel: 'VIEW IN SHOP',
+    dossierLabel: 'ARCHIVE DOSSIER',
+    dossierChip: 'LORE · PUZZLE · PLATE',
   },
   why: {
     eyebrow: 'WHY OVYRA',
@@ -139,16 +143,126 @@ export const COPY = {
 } as const;
 
 export const ARCHIVE_01: ArchiveFigure[] = [
-  { id: 1, code: '01', name: 'Memory Parasite', nameFa: 'انگل حافظه', tagline: 'خاطراتی که مال تو نبودند.', accent: '#9b5de5', image: '/brand/archive/figure-01.png' },
-  { id: 2, code: '02', name: 'Mood Totem', nameFa: 'توتم حال', tagline: 'حس بدون حافظه، هرج‌ومرج می‌آورد.', accent: '#c9a227', image: '/brand/archive/figure-02.png' },
-  { id: 3, code: '03', name: 'Void Creature', nameFa: 'موجود خلأ', tagline: 'آسمان داخل قفسه سینه.', accent: '#3b82f6', image: '/brand/archive/figure-03.png' },
-  { id: 4, code: '04', name: 'Urban Fossil', nameFa: 'فسیل شهری', tagline: 'بتن و چرخ‌دنده با یک چشم.', accent: '#94a3b8', image: '/brand/archive/figure-04.png' },
-  { id: 5, code: '05', name: 'Living Planter', nameFa: 'گلدان زنده', tagline: 'زندگی از ترک‌ها بیرون می‌زند.', accent: '#84cc16', image: '/brand/archive/figure-05.png' },
-  { id: 6, code: '06', name: 'Gravity Breaker', nameFa: 'شکننده گرانش', tagline: 'وقتی زمین دیگر قانون نیست.', accent: '#e2e8f0', image: '/brand/archive/figure-06.png' },
-  { id: 7, code: '07', name: 'Echo Heads', nameFa: 'سرهای پژواک', tagline: 'ماسک‌هایی که صدا را نگه می‌دارند.', accent: '#38bdf8', image: '/brand/archive/figure-07.png' },
-  { id: 8, code: '08', name: 'Persian Neo Myth', nameFa: 'نئواسطوره پارسی', tagline: 'طلا روی بال اسطوره.', accent: '#d4af37', image: '/brand/archive/figure-08.png' },
-  { id: 9, code: '09', name: 'Broken Dimension', nameFa: 'بعد شکسته', tagline: 'نیمه تن، نیمه بلور.', accent: '#c026d3', image: '/brand/archive/figure-09.png' },
-  { id: 10, code: '10', name: 'Shadow Companion', nameFa: 'همراه سایه', tagline: 'چهره‌ای از نور در تاریکی.', accent: '#f59e0b', image: '/brand/archive/figure-10.png' },
+  {
+    id: 1,
+    code: '01',
+    name: 'Memory Parasite',
+    nameFa: 'انگل حافظه',
+    tagline: 'خاطراتی که مال تو نبودند.',
+    loreFa:
+      'در اعماق آرشیو گم‌شده، موجوداتی زندگی می‌کنند که خاطره نمی‌سازند — قرض می‌گیرند. انگل حافظه از لایه‌های فراموش‌شده ذهن تغذیه می‌کند و هر بار که نگاهش می‌افتد، تصویری را برمی‌گرداند که شاید هرگز مال تو نبوده.',
+    loreEn: 'It feeds on forgotten layers of the mind — returning memories that were never yours to begin with.',
+    accent: '#9b5de5',
+    image: '/brand/archive/figure-01.png',
+  },
+  {
+    id: 2,
+    code: '02',
+    name: 'Mood Totem',
+    nameFa: 'توتم حال',
+    tagline: 'حس بدون حافظه، هرج‌ومرج می‌آورد.',
+    loreFa:
+      'توتم حال بدون نام است. احساسی که نمی‌دانی از کجا آمده، اما تمام بدنت را می‌لرزاند. مهندسان آرشیو می‌گویند این موجود حامل «حالت‌های گم‌شده» است — پیش از آنکه تبدیل به خاطره شوند.',
+    loreEn: 'A vessel for nameless feelings — moods that arrive before memory can name them.',
+    accent: '#c9a227',
+    image: '/brand/archive/figure-02.png',
+  },
+  {
+    id: 3,
+    code: '03',
+    name: 'Void Creature',
+    nameFa: 'موجود خلأ',
+    tagline: 'آسمان داخل قفسه سینه.',
+    loreFa:
+      'سینه‌اش پنجره‌ای به جایی دیگر است. ستاره‌ها درونش می‌چرخند، اما هیچ‌کس نمی‌داند آن سمت چه چیزی نگاه می‌کند. هر قطعه پازل این موجود، بخشی از آسمان بنفش آرشیو را روشن می‌کند.',
+    loreEn: 'Its chest is a window — stars spin inside, and no one knows what stares back.',
+    accent: '#3b82f6',
+    image: '/brand/archive/figure-03.png',
+  },
+  {
+    id: 4,
+    code: '04',
+    name: 'Urban Fossil',
+    nameFa: 'فسیل شهری',
+    tagline: 'بتن و چرخ‌دنده با یک چشم.',
+    loreFa:
+      'وقتی شهرها پیر می‌شوند، چیزی زیر بتن زنده می‌ماند. فسیل شهری از لایه‌های ساختمان، خیابان و ماشین ساخته شده — با یک چشم مکانیکی که هنوز می‌بیند و هنوز چیزی را به یاد می‌آورد.',
+    loreEn: 'Built from concrete, gears, and time — one mechanical eye still watches the ruins.',
+    accent: '#94a3b8',
+    image: '/brand/archive/figure-04.png',
+  },
+  {
+    id: 5,
+    code: '05',
+    name: 'Living Planter',
+    nameFa: 'گلدان زنده',
+    tagline: 'زندگی از ترک‌ها بیرون می‌زند.',
+    loreFa:
+      'از ترک‌های فلز و خاک، زندگی بیرون می‌زند. گلدان زنده نماد امید آرشیو است: حتی در تاریک‌ترین جعبه‌ها، چیزی رشد می‌کند — اگر به آن فضا بدهی. برگ‌هایش سرنخ‌هایی پنهان درباره چشم بنفش دارند.',
+    loreEn: 'Life pushes through metal cracks — proof that the Archive still breathes.',
+    accent: '#84cc16',
+    image: '/brand/archive/figure-05.png',
+  },
+  {
+    id: 6,
+    code: '06',
+    name: 'Gravity Breaker',
+    nameFa: 'شکننده گرانش',
+    tagline: 'وقتی زمین دیگر قانون نیست.',
+    loreFa:
+      'وقتی قوانین فیزیک دیگر پاسخ نمی‌دهند، این موجود بیدار می‌شود. شکننده گرانش در مرز زمین و آسمان زندگی می‌کند — جایی که سقوط معنا ندارد و هر پرش، داستانی تازه باز می‌کند.',
+    loreEn: 'Where physics fails, it floats — a traveler between falling and flying.',
+    accent: '#e2e8f0',
+    image: '/brand/archive/figure-06.png',
+  },
+  {
+    id: 7,
+    code: '07',
+    name: 'Echo Heads',
+    nameFa: 'سرهای پژواک',
+    tagline: 'ماسک‌هایی که صدا را نگه می‌دارند.',
+    loreFa:
+      'صداها در این ماسک‌ها گیر می‌کنند. سرهای پژواک هر کلمه‌ای را که گفته شده نگه می‌دارند — حتی آن‌هایی که نباید شنیده می‌شدند. Lore Card این موجود، پر از پژواک‌های ناتمام و رازهایی است که هنوز تمام نشده.',
+    loreEn: 'Masks that trap sound — holding words that were never meant to be heard.',
+    accent: '#38bdf8',
+    image: '/brand/archive/figure-07.png',
+  },
+  {
+    id: 8,
+    code: '08',
+    name: 'Persian Neo Myth',
+    nameFa: 'نئواسطوره پارسی',
+    tagline: 'طلا روی بال اسطوره.',
+    loreFa:
+      'اسطوره‌های کهن با طلا و سنگ بازآفرینی شده‌اند. نئواسطوره پارسی پل بین گذشته و آینده آرشیو است — بال‌هایی که همزمان به تاریخ و فردا اشاره می‌کنند و در هر پر، تکه‌ای از حقیقت پنهان جا داده شده.',
+    loreEn: 'Ancient myth reforged in gold — wings pointing at yesterday and tomorrow at once.',
+    accent: '#d4af37',
+    image: '/brand/archive/figure-08.png',
+  },
+  {
+    id: 9,
+    code: '09',
+    name: 'Broken Dimension',
+    nameFa: 'بعد شکسته',
+    tagline: 'نیمه تن، نیمه بلور.',
+    loreFa:
+      'نیمه‌اش جسم، نیمه‌اش بلور. بعد شکسته در نقطه‌ای ایستاده که واقعیت ترک خورده — و از آن ترک‌ها، نور بنفش بیرون می‌زند. هر بلوری که از بدنش جدا می‌شود، یک تکه از پازل چشم است.',
+    loreEn: 'Half flesh, half crystal — standing where reality cracked open.',
+    accent: '#c026d3',
+    image: '/brand/archive/figure-09.png',
+  },
+  {
+    id: 10,
+    code: '10',
+    name: 'Shadow Companion',
+    nameFa: 'همراه سایه',
+    tagline: 'چهره‌ای از نور در تاریکی.',
+    loreFa:
+      'در تاریک‌ترین گوشه آرشیو، همراهی زندگی می‌کند که چهره ندارد — فقط نور. سایه‌ات نیست؛ راهنمایی است که منتظر مانده تا تو، موجود دهم، جای خود را پیدا کنی و چشم آرشیو کامل شود.',
+    loreEn: 'No face — only light. Not your shadow, but the guide waiting for the tenth.',
+    accent: '#f59e0b',
+    image: '/brand/archive/figure-10.png',
+  },
 ];
 
 export const BOX_CONTENTS = [
