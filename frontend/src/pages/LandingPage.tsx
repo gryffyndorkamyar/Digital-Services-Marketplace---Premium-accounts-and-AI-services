@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ARCHIVE_01,
   BOX_CONTENTS,
   BRAND,
   COMPETITOR_EDGE,
@@ -12,19 +11,9 @@ import OvyraTrustStrip from '../components/ovyra/OvyraTrustStrip';
 import OvyraStickyCta from '../components/ovyra/OvyraStickyCta';
 import OvyraHeroRealm from '../components/ovyra/OvyraHeroRealm';
 import OvyraBrandSystemSection from '../components/ovyra/OvyraBrandSystemSection';
+import OvyraArchiveSection from '../components/ovyra/OvyraArchiveSection';
 
 const LandingPage: React.FC = () => {
-  const [active, setActive] = useState(1);
-
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setActive((prev) => (prev + 1) % ARCHIVE_01.length);
-    }, 4000);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const featured = ARCHIVE_01[active];
-
   return (
     <div className="ovyra-page relative overflow-x-hidden bg-ovyra-void pb-[calc(4.25rem+env(safe-area-inset-bottom,0px))] text-ovyra-mist md:pb-0">
       {/* ── 1. HERO (realm mockup) ── */}
@@ -36,75 +25,7 @@ const LandingPage: React.FC = () => {
       <OvyraBrandSystemSection />
 
       {/* ── 3. ARCHIVE — ten beings ── */}
-      <section id="archive" className="ovyra-section-defer ovyra-section-border relative overflow-hidden py-14 sm:py-20 md:py-28">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(157,78,221,0.18),transparent_62%)]" />
-
-        <div className="ovyra-section-shell relative">
-          <div className="ovyra-section-head">
-            <div>
-              <p className="ovyra-section-eyebrow font-display">{COPY.archive.eyebrow}</p>
-              <h2 className="ovyra-section-title font-fa-display">{COPY.archive.title}</h2>
-              <p className="ovyra-section-lead">{COPY.archive.lead}</p>
-            </div>
-            <Link
-              to="/products"
-              className="ovyra-nav-pill ovyra-section-cta-pill shrink-0 self-start"
-              style={{ '--pill-accent': '#9d4edd', '--pill-glow': 'rgba(157,78,221,0.42)' } as React.CSSProperties}
-            >
-              <span className="ovyra-nav-pill-dot" aria-hidden />
-              <span className="ovyra-nav-pill-label font-fa">{COPY.archive.shopCta}</span>
-              <span className="ovyra-nav-pill-sheen" aria-hidden />
-            </Link>
-          </div>
-
-          <div className="ovyra-archive-characters-stage mt-10">
-            <div className="ovyra-archive-characters-glow" aria-hidden />
-            <img
-              src="/brand/10character.png?v=1"
-              alt="OVYRA Archive 01 — ten characters"
-              className="ovyra-archive-characters-img"
-              loading="lazy"
-              decoding="async"
-              width={1536}
-              height={1024}
-            />
-          </div>
-
-          <div className="mt-8 grid grid-cols-2 gap-1.5 sm:grid-cols-3 sm:gap-2 md:grid-cols-5 md:gap-2.5">
-            {ARCHIVE_01.map((figure, index) => {
-              const isActive = index === active;
-              return (
-                <button
-                  key={figure.code}
-                  type="button"
-                  onClick={() => setActive(index)}
-                  className={`ovyra-figure-chip text-right ${isActive ? 'is-active' : ''}`}
-                  style={{ ['--chip-accent' as string]: figure.accent }}
-                >
-                  <div className="font-display text-[10px] tracking-[0.3em]" style={{ color: figure.accent }}>
-                    {figure.code}
-                  </div>
-                  <div className="font-fa mt-1.5 text-sm font-bold text-white sm:mt-2 sm:text-base">{figure.nameFa}</div>
-                  <div className="mt-1 truncate font-display text-[10px] tracking-wide text-ovyra-mist/50">
-                    {figure.name}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <div key={featured.code} className="ovyra-neon-panel mt-6 px-5 py-5 sm:px-8">
-            <p className="font-display text-xs tracking-[0.35em] text-ovyra-gold">
-              {featured.code} · {featured.name}
-            </p>
-            <p className="font-fa-display mt-2 text-xl text-white">{featured.nameFa}</p>
-            <p className="ovyra-hero-sub mt-2 !text-base italic">{featured.tagline}</p>
-            <Link to="/products" className="ovyra-nav-chip ovyra-hero-cta-chip mt-5 inline-flex !h-9 !px-4 !text-xs font-fa">
-              <span className="ovyra-nav-chip-label">{COPY.archive.featuredCta}</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <OvyraArchiveSection />
 
       {/* ── 4. INSIDE THE BOX ── */}
       <section className="ovyra-section-defer ovyra-section-border relative py-14 sm:py-20 md:py-24">

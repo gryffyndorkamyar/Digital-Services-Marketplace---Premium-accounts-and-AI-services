@@ -5,6 +5,7 @@ export type ArchiveFigure = {
   nameFa: string;
   tagline: string;
   accent: string;
+  image: string;
 };
 
 export const BRAND = {
@@ -96,10 +97,15 @@ export const COPY = {
   },
   archive: {
     eyebrow: 'ARCHIVE 01',
+    titleEn: 'TEN BEINGS AWAIT',
     title: 'ده موجود منتظرند',
     lead: 'هر کدام داستان خودش را دارد. یکی را انتخاب کن و اولین قطعه چشم را بردار.',
+    statsEn: '10 BEINGS. 10 STORIES. 1 SECRET.',
+    statsFa: '۱۰ موجود. ۱۰ داستان. ۱ راز',
     shopCta: 'ورود به آرشیو ۰۱',
     featuredCta: 'مشاهده در فروشگاه',
+    hoverHint: 'HOVER TO INSPECT',
+    viewLabel: 'VIEW IN SHOP',
   },
   why: {
     eyebrow: 'WHY OVYRA',
@@ -133,16 +139,16 @@ export const COPY = {
 } as const;
 
 export const ARCHIVE_01: ArchiveFigure[] = [
-  { id: 1, code: '01', name: 'Memory Parasite', nameFa: 'انگل حافظه', tagline: 'خاطراتی که مال تو نبودند.', accent: '#9b5de5' },
-  { id: 2, code: '02', name: 'Mood Totem', nameFa: 'توتم حال', tagline: 'حس بدون حافظه، هرج‌ومرج می‌آورد.', accent: '#c9a227' },
-  { id: 3, code: '03', name: 'Void Creature', nameFa: 'موجود خلأ', tagline: 'آسمان داخل قفسه سینه.', accent: '#3b82f6' },
-  { id: 4, code: '04', name: 'Urban Fossil', nameFa: 'فسیل شهری', tagline: 'بتن و چرخ‌دنده با یک چشم.', accent: '#94a3b8' },
-  { id: 5, code: '05', name: 'Living Planter', nameFa: 'گلدان زنده', tagline: 'زندگی از ترک‌ها بیرون می‌زند.', accent: '#84cc16' },
-  { id: 6, code: '06', name: 'Gravity Breaker', nameFa: 'شکننده گرانش', tagline: 'وقتی زمین دیگر قانون نیست.', accent: '#e2e8f0' },
-  { id: 7, code: '07', name: 'Echo Heads', nameFa: 'سرهای پژواک', tagline: 'ماسک‌هایی که صدا را نگه می‌دارند.', accent: '#38bdf8' },
-  { id: 8, code: '08', name: 'Persian Neo Myth', nameFa: 'نئواسطوره پارسی', tagline: 'طلا روی بال اسطوره.', accent: '#d4af37' },
-  { id: 9, code: '09', name: 'Broken Dimension', nameFa: 'بعد شکسته', tagline: 'نیمه تن، نیمه بلور.', accent: '#c026d3' },
-  { id: 10, code: '10', name: 'Shadow Companion', nameFa: 'همراه سایه', tagline: 'چهره‌ای از نور در تاریکی.', accent: '#f59e0b' },
+  { id: 1, code: '01', name: 'Memory Parasite', nameFa: 'انگل حافظه', tagline: 'خاطراتی که مال تو نبودند.', accent: '#9b5de5', image: '/brand/archive/figure-01.png' },
+  { id: 2, code: '02', name: 'Mood Totem', nameFa: 'توتم حال', tagline: 'حس بدون حافظه، هرج‌ومرج می‌آورد.', accent: '#c9a227', image: '/brand/archive/figure-02.png' },
+  { id: 3, code: '03', name: 'Void Creature', nameFa: 'موجود خلأ', tagline: 'آسمان داخل قفسه سینه.', accent: '#3b82f6', image: '/brand/archive/figure-03.png' },
+  { id: 4, code: '04', name: 'Urban Fossil', nameFa: 'فسیل شهری', tagline: 'بتن و چرخ‌دنده با یک چشم.', accent: '#94a3b8', image: '/brand/archive/figure-04.png' },
+  { id: 5, code: '05', name: 'Living Planter', nameFa: 'گلدان زنده', tagline: 'زندگی از ترک‌ها بیرون می‌زند.', accent: '#84cc16', image: '/brand/archive/figure-05.png' },
+  { id: 6, code: '06', name: 'Gravity Breaker', nameFa: 'شکننده گرانش', tagline: 'وقتی زمین دیگر قانون نیست.', accent: '#e2e8f0', image: '/brand/archive/figure-06.png' },
+  { id: 7, code: '07', name: 'Echo Heads', nameFa: 'سرهای پژواک', tagline: 'ماسک‌هایی که صدا را نگه می‌دارند.', accent: '#38bdf8', image: '/brand/archive/figure-07.png' },
+  { id: 8, code: '08', name: 'Persian Neo Myth', nameFa: 'نئواسطوره پارسی', tagline: 'طلا روی بال اسطوره.', accent: '#d4af37', image: '/brand/archive/figure-08.png' },
+  { id: 9, code: '09', name: 'Broken Dimension', nameFa: 'بعد شکسته', tagline: 'نیمه تن، نیمه بلور.', accent: '#c026d3', image: '/brand/archive/figure-09.png' },
+  { id: 10, code: '10', name: 'Shadow Companion', nameFa: 'همراه سایه', tagline: 'چهره‌ای از نور در تاریکی.', accent: '#f59e0b', image: '/brand/archive/figure-10.png' },
 ];
 
 export const BOX_CONTENTS = [

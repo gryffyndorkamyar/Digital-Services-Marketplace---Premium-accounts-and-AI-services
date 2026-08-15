@@ -968,6 +968,375 @@ textarea {
     animation: ovyraVisualFloat 7s ease-in-out infinite;
   }
 
+  /* ─── ARCHIVE 01 (ten beings) ─── */
+  .ovyra-archive {
+    background:
+      radial-gradient(ellipse at 18% 22%, rgba(157, 78, 221, 0.1) 0%, transparent 48%),
+      radial-gradient(ellipse at 82% 58%, rgba(192, 38, 211, 0.08) 0%, transparent 52%),
+      #050505;
+  }
+
+  .ovyra-archive-ambient {
+    @apply pointer-events-none absolute inset-0;
+  }
+
+  .ovyra-archive-glow-left {
+    @apply absolute;
+    top: 12%;
+    left: -6%;
+    width: min(44vw, 440px);
+    height: min(44vw, 440px);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(157, 78, 221, 0.1) 0%, transparent 68%);
+    filter: blur(20px);
+  }
+
+  .ovyra-archive-glow-center {
+    @apply absolute;
+    top: 42%;
+    left: 50%;
+    width: min(56vw, 560px);
+    height: min(30vw, 300px);
+    transform: translateX(-50%);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(192, 38, 211, 0.12) 0%, transparent 72%);
+    filter: blur(24px);
+    animation: ovyraNeonBreathe 5s ease-in-out infinite;
+  }
+
+  .ovyra-archive-inner {
+    @apply relative z-[1] mx-auto w-full max-w-[96rem] px-5 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-16;
+  }
+
+  .ovyra-archive-head {
+    @apply grid w-full items-center gap-8;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ovyra-archive-copy {
+    max-width: 24rem;
+  }
+
+  .ovyra-archive-copy-cta {
+    margin-top: 1.35rem !important;
+  }
+
+  .ovyra-archive-spotlight {
+    @apply grid items-center gap-5;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ovyra-archive-spotlight-frame {
+    @apply relative mx-auto flex items-end justify-center;
+    width: min(100%, 16rem);
+    height: 13.5rem;
+  }
+
+  .ovyra-archive-spotlight-glow {
+    @apply pointer-events-none absolute;
+    inset: 18% 8% 0;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--spot-accent, #9d4edd) 42%, transparent) 0%,
+      transparent 72%
+    );
+    filter: blur(16px);
+    animation: ovyraNeonBreathe 4s ease-in-out infinite;
+  }
+
+  .ovyra-archive-spotlight-code {
+    @apply absolute left-0 top-0 z-[2] font-display text-[10px] tracking-[0.32em];
+    color: rgba(201, 162, 39, 0.95);
+    border: 1px solid rgba(201, 162, 39, 0.45);
+    padding: 0.28rem 0.45rem;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+  }
+
+  .ovyra-archive-spotlight-figure {
+    @apply relative z-[1] block max-h-full w-auto max-w-full select-none;
+    filter:
+      drop-shadow(0 18px 36px rgba(0, 0, 0, 0.75))
+      drop-shadow(0 0 28px color-mix(in srgb, var(--spot-accent, #9d4edd) 22%, transparent));
+    animation: ovyraArchiveSpotlightIn 0.45s ease-out;
+  }
+
+  .ovyra-archive-spotlight-meta {
+    @apply text-center;
+  }
+
+  .ovyra-archive-spotlight-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .ovyra-archive-spotlight-name-fa {
+    margin-top: 0.35rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .ovyra-archive-spotlight-tagline {
+    margin-top: 0.45rem;
+    font-size: 0.92rem;
+    font-style: italic;
+    color: rgba(232, 226, 240, 0.72);
+  }
+
+  .ovyra-archive-spotlight-link {
+    @apply inline-flex items-center justify-center;
+    margin-top: 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(201, 162, 39, 0.95);
+    letter-spacing: 0.04em;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+  }
+
+  .ovyra-archive-spotlight-link:hover {
+    color: #fff;
+    text-shadow: 0 0 16px rgba(201, 162, 39, 0.45);
+  }
+
+  .ovyra-archive-grid {
+    margin-top: 2rem;
+  }
+
+  .ovyra-archive-grid-hint {
+    @apply text-center font-display;
+    font-size: 0.62rem;
+    letter-spacing: 0.38em;
+    color: rgba(232, 226, 240, 0.38);
+    margin-bottom: 1rem;
+  }
+
+  .ovyra-archive-grid-inner {
+    @apply grid gap-2.5 sm:gap-3;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ovyra-archive-cell {
+    @apply relative overflow-hidden;
+    min-height: 11.5rem;
+    border: 1px solid rgba(157, 78, 221, 0.18);
+    background:
+      linear-gradient(168deg, rgba(157, 78, 221, 0.06) 0%, rgba(5, 5, 5, 0.96) 52%, rgba(8, 4, 14, 0.94) 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(157, 78, 221, 0.08),
+      0 8px 24px rgba(0, 0, 0, 0.42);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+  }
+
+  .ovyra-archive-cell:hover,
+  .ovyra-archive-cell:focus-within,
+  .ovyra-archive-cell.is-focused {
+    border-color: color-mix(in srgb, var(--cell-accent, #9d4edd) 48%, rgba(192, 38, 211, 0.65));
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--cell-accent, #9d4edd) 18%, transparent),
+      0 0 28px color-mix(in srgb, var(--cell-accent, #9d4edd) 22%, transparent),
+      0 12px 32px rgba(0, 0, 0, 0.52);
+    transform: translateY(-2px);
+  }
+
+  .ovyra-archive-cell-pedestal {
+    @apply relative flex h-full min-h-[11.5rem] items-end justify-center px-3 pb-3 pt-8;
+  }
+
+  .ovyra-archive-cell-code {
+    @apply absolute left-2.5 top-2.5 z-[2] font-display text-[9px] tracking-[0.28em];
+    color: rgba(201, 162, 39, 0.92);
+    border: 1px solid rgba(201, 162, 39, 0.35);
+    padding: 0.22rem 0.38rem;
+    background: rgba(0, 0, 0, 0.48);
+    backdrop-filter: blur(4px);
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+
+  .ovyra-archive-cell:hover .ovyra-archive-cell-code,
+  .ovyra-archive-cell:focus-within .ovyra-archive-cell-code,
+  .ovyra-archive-cell.is-focused .ovyra-archive-cell-code {
+    color: #fff;
+    border-color: color-mix(in srgb, var(--cell-accent, #9d4edd) 55%, rgba(201, 162, 39, 0.6));
+  }
+
+  .ovyra-archive-cell-bloom {
+    @apply pointer-events-none absolute;
+    inset: 28% 12% 8%;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--cell-accent, #9d4edd) 24%, transparent) 0%,
+      transparent 72%
+    );
+    filter: blur(12px);
+    opacity: 0.55;
+    transition: opacity 0.35s ease, filter 0.35s ease;
+  }
+
+  .ovyra-archive-cell:hover .ovyra-archive-cell-bloom,
+  .ovyra-archive-cell:focus-within .ovyra-archive-cell-bloom,
+  .ovyra-archive-cell.is-focused .ovyra-archive-cell-bloom {
+    opacity: 1;
+    filter: blur(14px);
+  }
+
+  .ovyra-archive-cell-figure {
+    @apply relative z-[1] block max-h-[7.75rem] w-auto max-w-[88%] select-none;
+    filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.72));
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+
+  .ovyra-archive-cell:hover .ovyra-archive-cell-figure,
+  .ovyra-archive-cell:focus-within .ovyra-archive-cell-figure,
+  .ovyra-archive-cell.is-focused .ovyra-archive-cell-figure {
+    transform: translateY(-6px) scale(1.04);
+    filter:
+      drop-shadow(0 16px 28px rgba(0, 0, 0, 0.78))
+      drop-shadow(0 0 18px color-mix(in srgb, var(--cell-accent, #9d4edd) 28%, transparent));
+  }
+
+  .ovyra-archive-cell-panel {
+    @apply absolute inset-x-0 bottom-0 z-[3] flex flex-col px-3 pb-3 pt-8;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(5, 5, 5, 0.72) 28%,
+      rgba(5, 5, 5, 0.94) 100%
+    );
+    border-top: 1px solid rgba(157, 78, 221, 0.12);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    pointer-events: none;
+  }
+
+  .ovyra-archive-cell:hover .ovyra-archive-cell-panel,
+  .ovyra-archive-cell:focus-within .ovyra-archive-cell-panel,
+  .ovyra-archive-cell.is-focused .ovyra-archive-cell-panel {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ovyra-archive-cell-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .ovyra-archive-cell-name-fa {
+    margin-top: 0.2rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #fff;
+  }
+
+  .ovyra-archive-cell-tagline {
+    margin-top: 0.25rem;
+    font-size: 0.72rem;
+    line-height: 1.45;
+    font-style: italic;
+    color: rgba(232, 226, 240, 0.68);
+  }
+
+  .ovyra-archive-cell-cta {
+    @apply mt-2 font-display;
+    font-size: 0.52rem;
+    letter-spacing: 0.28em;
+    color: color-mix(in srgb, var(--cell-accent, #9d4edd) 78%, #fff);
+  }
+
+  .ovyra-archive-cell-link {
+    @apply absolute inset-0 z-[4];
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @keyframes ovyraArchiveSpotlightIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .ovyra-archive-grid-inner {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .ovyra-archive-cell-figure {
+      max-height: 8.25rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .ovyra-archive-head {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      column-gap: 2rem;
+    }
+
+    .ovyra-archive-spotlight {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+
+    .ovyra-archive-spotlight-frame {
+      width: min(100%, 14rem);
+      height: 15rem;
+      margin-inline: 0 auto 0 0;
+    }
+
+    .ovyra-archive-spotlight-meta {
+      text-align: left;
+    }
+
+    .ovyra-archive-grid-inner {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.65rem;
+    }
+
+    .ovyra-archive-cell {
+      min-height: 12.5rem;
+    }
+
+    .ovyra-archive-cell-pedestal {
+      min-height: 12.5rem;
+    }
+
+    .ovyra-archive-cell-figure {
+      max-height: 8.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .ovyra-archive-grid-inner {
+      gap: 0.75rem;
+    }
+
+    .ovyra-archive-cell-figure {
+      max-height: 9rem;
+    }
+  }
+
   .ovyra-archive-characters-stage {
     @apply relative;
   }
