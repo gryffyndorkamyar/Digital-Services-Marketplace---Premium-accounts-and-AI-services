@@ -11,17 +11,30 @@ fi
 PORT="${PORT:-8000}"
 
 missing=""
-for var in SECRET_KEY DB_ENGINE DB_NAME DB_USER DB_PASSWORD DB_HOST DB_PORT; do
-  eval "val=\${$var:-}"
-  if [ -z "$val" ]; then
-    missing="${missing} ${var}"
-  fi
-done
+if [ "${USE_SQLITE:-False}" = "True" ] || [ "${USE_SQLITE:-false}" = "true" ] || [ "${USE_SQLITE:-0}" = "1" ]; then
+  for var in SECRET_KEY; do
+    eval "val=\${$var:-}"
+    if [ -z "$val" ]; then
+      missing="${missing} ${var}"
+    fi
+  done
+else
+  for var in SECRET_KEY DB_ENGINE DB_NAME DB_USER DB_PASSWORD DB_HOST DB_PORT; do
+    eval "val=\${$var:-}"
+    if [ -z "$val" ]; then
+      missing="${missing} ${var}"
+    fi
+  done
+fi
 
 if [ -n "$missing" ]; then
   echo "ERROR: Missing required environment variables:${missing}" >&2
-  echo "Set them in RunFlare → Environment Variables (see deploy/runflare.env.example)." >&2
+  echo "Set them in RunFlare → Environment Variables (see deploy/RUNFLARE_FINAL.env)." >&2
   exit 1
+fi
+
+if [ "${USE_SQLITE:-False}" = "True" ] || [ "${USE_SQLITE:-false}" = "true" ] || [ "${USE_SQLITE:-0}" = "1" ]; then
+  mkdir -p media
 fi
 
 echo "==> OVYRA — starting gunicorn (WSGI/sync) on 0.0.0.0:${PORT}"

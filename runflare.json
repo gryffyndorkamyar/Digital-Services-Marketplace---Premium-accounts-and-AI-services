@@ -9,7 +9,7 @@
   },
   "build": {
     "location": "iran",
-    "command": "pip install -r requirements.txt && python manage.py migrate --noinput && python manage.py collectstatic --noinput"
+    "command": "pip install -r requirements.txt && mkdir -p media && python manage.py migrate --noinput && python manage.py collectstatic --noinput"
   },
   "args": "sh start.sh",
   "disks": [

@@ -1,0 +1,45 @@
+# ═══════════════════════════════════════════════════════════════
+# RunFlare → تنظیم متغیر محیطی
+# هر خط = یک متغیر. [...] را با مقدار واقعی خودت عوض کن.
+# SQLite لازم نیست — Postgres RunFlare درست است.
+# ═══════════════════════════════════════════════════════════════
+
+# ── ۱. ضروری (بدون این‌ها سایت بالا نمی‌آید) ──
+
+DEBUG=False
+
+SECRET_KEY=[یک رشته تصادفی طولانی — مثلاً دو GUID پشت سر هم]
+
+USE_LOCAL_DB=False
+
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=[از پنل Database → نام دیتابیس — معمولاً postgres]
+DB_USER=[از پنل Database → نام کاربر — معمولاً root]
+DB_PASSWORD=[از پنل Database → رمز عبور]
+DB_HOST=[از پنل Database → Host / آدرس — مثل xxx.liara.ir]
+DB_PORT=5432
+
+# ── ۲. دامنه (برای ovyraworld.com) ──
+
+ALLOWED_HOSTS=ovyraworld.com,www.ovyraworld.com,ovyraworld.runflare.run,ovyraword.runflare.run,ovyraworld-nd7-ovyraworld.runflare.cloud
+
+CORS_ALLOWED_ORIGINS=https://ovyraworld.com,http://ovyraworld.com,https://www.ovyraworld.com,http://www.ovyraworld.com,https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
+
+CSRF_TRUSTED_ORIGINS=https://ovyraworld.com,http://ovyraworld.com,https://www.ovyraworld.com,http://www.ovyraworld.com,https://ovyraworld.runflare.run,https://ovyraword.runflare.run,https://ovyraworld-nd7-ovyraworld.runflare.cloud
+
+# ── ۳. امنیت و Redis (همین مقادیر را بزن) ──
+
+SECURE_SSL_REDIRECT=False
+SECURE_HSTS_SECONDS=0
+USE_REDIS=False
+BUILD_FRONTEND_ON_SERVER=0
+
+# ── ۴. زرین‌پال (برای پرداخت — فعلاً می‌توانی خالی بگذاری) ──
+
+ZARINPAL_MERCHANT_ID=[کد پذیرنده زرین‌پال — یا موقتاً خالی]
+ZARINPAL_SANDBOX=False
+ZARINPAL_CURRENCY_UNIT=IRT
+FRONTEND_PAYMENT_RETURN_PATH=/orders
+
+# ── ۵. اختیاری (فقط اگر Postgres با SSL خطا داد) ──
+# DB_SSLMODE=require

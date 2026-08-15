@@ -123,10 +123,11 @@ USE_LOCAL_DB = config('USE_LOCAL_DB', default=False, cast=bool)
 USE_SQLITE = config('USE_SQLITE', default=False, cast=bool)
 
 if USE_SQLITE:
+    _sqlite_path = config('SQLITE_PATH', default='').strip()
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': Path(_sqlite_path) if _sqlite_path else BASE_DIR / 'db.sqlite3',
         }
     }
 elif USE_LOCAL_DB:
@@ -141,14 +142,21 @@ elif USE_LOCAL_DB:
         }
     }
 else:
+    _db_options = {}
+    _db_sslmode = config('DB_SSLMODE', default='').strip()
+    if _db_sslmode:
+        _db_options['sslmode'] = _db_sslmode
+
     DATABASES = {
         'default': {
-            'ENGINE': config('DB_ENGINE'),
+            'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql'),
             'NAME': config('DB_NAME'),
             'USER': config('DB_USER'),
             'PASSWORD': config('DB_PASSWORD'),
             'HOST': config('DB_HOST'),
-            'PORT': config('DB_PORT'),
+            'PORT': config('DB_PORT', default='5432'),
+            'CONN_MAX_AGE': config('DB_CONN_MAX_AGE', default=60, cast=int),
+            **({'OPTIONS': _db_options} if _db_options else {}),
         }
     }
 
