@@ -1019,10 +1019,6 @@ textarea {
     max-width: 24rem;
   }
 
-  .ovyra-archive-copy-cta {
-    margin-top: 1.1rem !important;
-  }
-
   .ovyra-archive-showcase {
     @apply grid w-full items-stretch;
     grid-template-columns: minmax(0, 1fr);
@@ -1147,10 +1143,10 @@ textarea {
 
   .ovyra-archive-dossier-name {
     margin-top: 0.65rem;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.2em;
-    color: rgba(255, 255, 255, 0.92);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .ovyra-archive-dossier-name-fa {
@@ -1162,11 +1158,19 @@ textarea {
   }
 
   .ovyra-archive-dossier-tagline {
-    margin-top: 0.35rem;
-    font-size: 0.88rem;
-    font-style: italic;
-    line-height: 1.45;
-    color: rgba(232, 226, 240, 0.72);
+    margin-top: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: rgba(232, 226, 240, 0.82);
+  }
+
+  .ovyra-archive-dossier-tagline-en {
+    margin-top: 0.28rem;
+    font-size: 0.82rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: rgba(232, 226, 240, 0.58);
   }
 
   .ovyra-archive-dossier-divider {
@@ -1181,18 +1185,16 @@ textarea {
   }
 
   .ovyra-archive-dossier-lore-fa {
-    font-size: 0.88rem;
-    line-height: 1.75;
-    color: rgba(232, 226, 240, 0.86);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: rgba(232, 226, 240, 0.88);
   }
 
   .ovyra-archive-dossier-lore-en {
-    margin-top: 0.65rem;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.62rem;
-    line-height: 1.65;
-    letter-spacing: 0.06em;
-    color: rgba(232, 226, 240, 0.52);
+    margin-top: 0.75rem;
+    font-size: 0.84rem;
+    line-height: 1.78;
+    color: rgba(232, 226, 240, 0.62);
   }
 
   .ovyra-archive-dossier-foot {
@@ -1201,20 +1203,24 @@ textarea {
   }
 
   .ovyra-archive-dossier-chip {
-    @apply font-display;
-    font-size: 0.48rem;
-    letter-spacing: 0.24em;
-    color: rgba(201, 162, 39, 0.82);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: rgba(201, 162, 39, 0.88);
   }
 
-  .ovyra-archive-dossier-link {
-    font-size: 0.82rem;
+  .ovyra-archive-dossier-story-cta {
+    font-size: 0.86rem;
     font-weight: 600;
     color: rgba(201, 162, 39, 0.95);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
     transition: color 0.25s ease, text-shadow 0.25s ease;
   }
 
-  .ovyra-archive-dossier-link:hover {
+  .ovyra-archive-dossier-story-cta:hover {
     color: #fff;
     text-shadow: 0 0 16px rgba(201, 162, 39, 0.45);
   }
@@ -1397,9 +1403,9 @@ textarea {
   }
 
   .ovyra-archive-cell-name {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.58rem;
-    letter-spacing: 0.18em;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
     color: rgba(255, 255, 255, 0.82);
   }
 
@@ -1414,15 +1420,15 @@ textarea {
   .ovyra-archive-cell-tagline {
     margin-top: 0.25rem;
     font-size: 0.72rem;
-    line-height: 1.45;
-    font-style: italic;
-    color: rgba(232, 226, 240, 0.68);
+    line-height: 1.5;
+    font-weight: 400;
+    color: rgba(232, 226, 240, 0.72);
   }
 
-  .ovyra-archive-cell-cta {
-    @apply mt-1.5 font-display;
-    font-size: 0.5rem;
-    letter-spacing: 0.26em;
+  .ovyra-archive-cell-story-cta {
+    @apply mt-1.5;
+    font-size: 0.68rem;
+    font-weight: 600;
     color: color-mix(in srgb, var(--cell-accent, #9d4edd) 78%, #fff);
   }
 
@@ -1468,10 +1474,6 @@ textarea {
     }
 
     .ovyra-archive-copy .ovyra-hero-realm-body-fa {
-      margin-inline: auto;
-    }
-
-    .ovyra-archive-copy-cta {
       margin-inline: auto;
     }
 
@@ -1561,7 +1563,11 @@ textarea {
     }
 
     .ovyra-archive-dossier-lore-fa {
-      font-size: 0.9rem;
+      font-size: 0.92rem;
+    }
+
+    .ovyra-archive-dossier-lore-en {
+      font-size: 0.86rem;
     }
 
     .ovyra-archive-grid {

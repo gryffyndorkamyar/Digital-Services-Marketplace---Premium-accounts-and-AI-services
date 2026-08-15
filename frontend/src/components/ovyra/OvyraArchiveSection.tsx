@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { ARCHIVE_01, COPY, type ArchiveFigure } from '../../brand/ovyra';
 
 const OvyraArchiveSection: React.FC = () => {
@@ -32,9 +31,6 @@ const OvyraArchiveSection: React.FC = () => {
             <p className="ovyra-hero-realm-stats-fa font-fa" dir="rtl" lang="fa">
               {archive.statsFa}
             </p>
-            <Link to="/products" className="ovyra-hero-realm-cta ovyra-archive-copy-cta">
-              <span>{archive.shopCta}</span>
-            </Link>
           </header>
 
           <aside
@@ -62,23 +58,30 @@ const OvyraArchiveSection: React.FC = () => {
                 <span className="ovyra-archive-dossier-label">{archive.dossierLabel}</span>
                 <span className="ovyra-archive-dossier-id">FIGURE {focused.code}</span>
               </div>
-              <h3 className="ovyra-archive-dossier-name">{focused.name}</h3>
+              <h3 className="ovyra-archive-dossier-name font-fa">{focused.name}</h3>
               <p className="ovyra-archive-dossier-name-fa font-fa" dir="rtl" lang="fa">
                 {focused.nameFa}
               </p>
               <p className="ovyra-archive-dossier-tagline font-fa" dir="rtl" lang="fa">
                 {focused.tagline}
               </p>
+              <p className="ovyra-archive-dossier-tagline-en font-fa" dir="ltr" lang="en">
+                {focused.taglineEn}
+              </p>
               <div className="ovyra-archive-dossier-divider" aria-hidden />
               <p className="ovyra-archive-dossier-lore-fa font-fa" dir="rtl" lang="fa">
                 {focused.loreFa}
               </p>
-              <p className="ovyra-archive-dossier-lore-en">{focused.loreEn}</p>
+              <p className="ovyra-archive-dossier-lore-en font-fa" dir="ltr" lang="en">
+                {focused.loreEn}
+              </p>
               <div className="ovyra-archive-dossier-foot">
-                <span className="ovyra-archive-dossier-chip">{archive.dossierChip}</span>
-                <Link to="/products" className="ovyra-archive-dossier-link font-fa" dir="rtl" lang="fa">
-                  {archive.featuredCta}
-                </Link>
+                <span className="ovyra-archive-dossier-chip font-fa" dir="rtl" lang="fa">
+                  {archive.storyChip}
+                </span>
+                <button type="button" className="ovyra-archive-dossier-story-cta font-fa" dir="rtl" lang="fa">
+                  {archive.storyCta}
+                </button>
               </div>
             </div>
           </aside>
@@ -124,14 +127,16 @@ const OvyraArchiveSection: React.FC = () => {
                         />
                       </div>
                       <div className="ovyra-archive-cell-panel">
-                        <p className="ovyra-archive-cell-name">{figure.name}</p>
+                        <p className="ovyra-archive-cell-name font-fa">{figure.name}</p>
                         <p className="ovyra-archive-cell-name-fa font-fa" dir="rtl" lang="fa">
                           {figure.nameFa}
                         </p>
                         <p className="ovyra-archive-cell-tagline font-fa" dir="rtl" lang="fa">
                           {figure.tagline}
                         </p>
-                        <span className="ovyra-archive-cell-cta">{archive.viewLabel}</span>
+                        <span className="ovyra-archive-cell-story-cta font-fa" dir="rtl" lang="fa">
+                          {archive.storyCta}
+                        </span>
                       </div>
                     </div>
                   </article>
