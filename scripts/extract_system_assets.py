@@ -16,7 +16,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 REGIONS = {
     "lore-card": (0.18359375, 0.5087890625, 0.3984375, 0.83984375),
     "puzzle-piece": (0.763671875, 0.251953125, 0.880859375, 0.6103515625),
-    "figure-totem": (0.492, 0.288, 0.648, 0.568),
+    "figure-totem": (0.468, 0.285, 0.658, 0.572),
 }
 
 
@@ -89,10 +89,21 @@ def crop_fraction(img: Image.Image, box: tuple[float, float, float, float]) -> I
     return img.crop((int(x0 * w), int(y0 * h), int(x1 * w), int(y1 * h)))
 
 
+def cleanup_alpha(img: Image.Image) -> Image.Image:
+    arr = np.array(img.convert("RGBA"), dtype=np.uint8)
+    alpha = arr[:, :, 3]
+    lum = (arr[:, :, 0].astype(np.int16) + arr[:, :, 1].astype(np.int16) + arr[:, :, 2].astype(np.int16)) / 3
+
+    arr[alpha < 28, 3] = 0
+    arr[(alpha > 0) & (alpha < 48) & (lum >= 175), 3] = 0
+
+    return Image.fromarray(arr, "RGBA")
+
+
 def trim_alpha(img: Image.Image, pad: int = 2) -> Image.Image:
     arr = np.array(img)
     alpha = arr[:, :, 3]
-    ys, xs = np.where(alpha > 8)
+    ys, xs = np.where(alpha > 32)
     if len(xs) == 0:
         ys, xs = np.where(np.any(arr[:, :, :3] < 250, axis=2))
     if len(xs) == 0:
@@ -106,7 +117,8 @@ def main() -> None:
     src = Image.open(SRC)
     print(f"Source {SRC.name}: {src.size}")
 
-    clean_full = flood_remove_background(src, threshold=216)
+    clean_full = flood_remove_background(src, threshold=214)
+    clean_full = cleanup_alpha(clean_full)
 
     # Sub-assets: crop from original for pixel-perfect fidelity (inside box = opaque)
     for name, box in REGIONS.items():
