@@ -39,7 +39,10 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = [h.strip() for h in config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',') if h.strip()]
 
 # OVYRA production domains (RunFlare + custom domain)
+# Leading dot = all subdomains (covers temporary RunFlare URLs like ovyraworld-b4d-....runflare.cloud)
 OVYRA_PRODUCTION_HOSTS = (
+    '.runflare.cloud',
+    '.runflare.run',
     'ovyraworld.runflare.run',
     'ovyraword.runflare.run',
     'ovyraworld-nd7-ovyraworld.runflare.cloud',
