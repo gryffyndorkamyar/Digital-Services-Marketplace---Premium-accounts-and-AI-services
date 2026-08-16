@@ -3,11 +3,12 @@ import { SEASON_02 } from '../../brand/ovyra';
 
 const OvyraComingSoonSection: React.FC = () => {
   const s = SEASON_02;
+  const imageSrc = `${process.env.PUBLIC_URL || ''}${s.image}`;
 
   return (
     <section
       id="next-chapter"
-      className="ovyra-coming-soon ovyra-coming-soon-frame ovyra-section-defer relative overflow-hidden"
+      className="ovyra-coming-soon ovyra-coming-soon-frame relative overflow-hidden"
       dir="ltr"
       aria-labelledby="coming-soon-title"
     >
@@ -20,12 +21,13 @@ const OvyraComingSoonSection: React.FC = () => {
         <div className="ovyra-coming-soon-card ovyra-fade-in">
           <div className="ovyra-coming-soon-visual">
             <img
-              src={s.image}
-              alt={s.imageAlt}
+              src={imageSrc}
+              alt=""
               className="ovyra-coming-soon-img"
               width={s.imageWidth}
               height={s.imageHeight}
-              loading="lazy"
+              loading="eager"
+              fetchPriority="high"
               decoding="async"
             />
           </div>
@@ -46,13 +48,21 @@ const OvyraComingSoonSection: React.FC = () => {
 
               <p className="ovyra-coming-soon-subtitle-en font-display">{s.subtitleEn}</p>
 
+              <p className="ovyra-coming-soon-subtitle-en font-display">{s.leadEn}</p>
+
               <p className="ovyra-hero-realm-stats-en ovyra-coming-soon-stats-en">{s.statsEn}</p>
 
               <p className="ovyra-coming-soon-whisper-en font-display">{s.whisperEn}</p>
 
+              <p className="ovyra-coming-soon-whisper-en font-display">{s.hintEn}</p>
+
               <p className="ovyra-coming-soon-pulse-en font-display">{s.pulseEn}</p>
 
-              <p className="ovyra-coming-soon-closing-en font-display">{s.closingEn}</p>
+              <p className="ovyra-coming-soon-pulse-en font-display">{s.manifestoEn}</p>
+
+              <p className="ovyra-coming-soon-whisper-en font-display">{s.verseEn}</p>
+
+              <p className="ovyra-hero-realm-stats-en ovyra-coming-soon-stats-en">{s.preClosingEn}</p>
             </div>
 
             <div className="ovyra-coming-soon-divider" aria-hidden />
@@ -69,15 +79,25 @@ const OvyraComingSoonSection: React.FC = () => {
             <div className="ovyra-coming-soon-copy-block ovyra-coming-soon-copy-block--fa font-fa" dir="rtl" lang="fa">
               <p className="ovyra-hero-realm-subtitle ovyra-coming-soon-fa-title">{s.titleFa}</p>
 
+              <p className="ovyra-coming-soon-subtitle-fa">{s.subtitleFa}</p>
+
               <p className="ovyra-hero-realm-body-fa ovyra-coming-soon-lead">{s.leadFa}</p>
 
               <p className="ovyra-coming-soon-body-fa">{s.bodyFa}</p>
 
+              <p className="ovyra-coming-soon-body-fa">{s.bodyFa2}</p>
+
               <p className="ovyra-hero-realm-stats-fa ovyra-coming-soon-stats-fa">{s.statsFa}</p>
+
+              <p className="ovyra-coming-soon-pulse-fa">{s.pulseFa}</p>
 
               <p className="ovyra-coming-soon-manifesto">{s.manifestoFa}</p>
 
+              <p className="ovyra-coming-soon-verse-fa">{s.verseFa}</p>
+
               <p className="ovyra-coming-soon-whisper-fa">{s.whisperFa}</p>
+
+              <p className="ovyra-coming-soon-closing-fa">{s.closingFa}</p>
 
               <p className="ovyra-coming-soon-seal font-display" aria-label={`${s.seal} — ${s.eyebrow}`}>
                 {s.seal}

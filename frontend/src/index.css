@@ -3347,20 +3347,20 @@ html {
   }
 
   .ovyra-coming-soon-visual {
-    aspect-ratio: var(--ovyra-coming-soon-aspect);
+    display: block;
     width: 100%;
-    min-width: 0;
-    padding-right: clamp(18rem, 24vw, 26.5rem);
+    aspect-ratio: var(--ovyra-coming-soon-aspect);
     overflow: hidden;
     background: #050005;
     line-height: 0;
-    box-sizing: border-box;
   }
 
   .ovyra-coming-soon-img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: left center;
   }
 
   .ovyra-coming-soon-copy {
@@ -3368,10 +3368,13 @@ html {
     top: 0;
     right: 0;
     bottom: 0;
-    width: clamp(18rem, 24vw, 26.5rem);
+    width: calc(clamp(18rem, 24vw, 26.5rem) + 2cm);
     max-width: 100%;
-    min-height: 0;
-    overflow: hidden;
+    z-index: 2;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(192, 38, 211, 0.45) transparent;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -3441,7 +3444,8 @@ html {
   .ovyra-coming-soon-copy-block--fa {
     align-items: center;
     text-align: center;
-    gap: clamp(0.24rem, 0.55vw, 0.38rem);
+    gap: clamp(0.18rem, 0.38vw, 0.28rem);
+    flex-shrink: 0;
   }
 
   .ovyra-coming-soon-copy-block[dir='rtl'] {
@@ -3670,7 +3674,6 @@ html {
 
   @media (max-width: 899px) {
     .ovyra-coming-soon-card {
-      grid-template-columns: 1fr;
       box-shadow: none;
     }
 
@@ -3678,7 +3681,16 @@ html {
       aspect-ratio: var(--ovyra-coming-soon-aspect);
     }
 
+    .ovyra-coming-soon-img {
+      height: auto;
+      object-fit: contain;
+    }
+
     .ovyra-coming-soon-copy {
+      position: static;
+      width: 100%;
+      max-width: none;
+      overflow: visible;
       justify-content: flex-start;
       gap: 0.75rem;
       border-left: none;
@@ -3689,12 +3701,8 @@ html {
         inset 0 0 48px rgba(192, 38, 211, 0.08);
     }
 
+    .ovyra-coming-soon-copy-block[dir='ltr'],
     .ovyra-coming-soon-copy-block[dir='rtl'] {
-      align-items: center;
-      text-align: center;
-    }
-
-    .ovyra-coming-soon-copy-block[dir='ltr'] {
       align-items: center;
       text-align: center;
     }
