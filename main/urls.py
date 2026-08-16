@@ -78,8 +78,18 @@ def serve_prod_static(request, path):
     raise Http404(f"Static file not found: {path}")
 
 
+@never_cache
+def serve_ovyra_static_build(request, path):
+    """Serve React build root files under /ovyra-static/ (logo, manifest, brand/, etc.)."""
+    file_path = settings.REACT_BUILD_DIR / path
+    if file_path.is_file():
+        return static_serve(request, path, document_root=str(settings.REACT_BUILD_DIR))
+    raise Http404(f"Build file not found: {path}")
+
+
 urlpatterns += [
     re_path(r'^ovyra-static/static/(?P<path>.*)$', serve_prod_static),
+    re_path(r'^ovyra-static/(?!static/)(?P<path>.*)$', serve_ovyra_static_build),
     re_path(r'^media/(?P<path>.*)$', static_serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 

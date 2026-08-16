@@ -3,7 +3,7 @@ import { SEASON_02 } from '../../brand/ovyra';
 
 const OvyraComingSoonSection: React.FC = () => {
   const s = SEASON_02;
-  const imageSrc = `${process.env.PUBLIC_URL || ''}${s.image}`;
+  const imageSrc = s.image;
 
   return (
     <section
