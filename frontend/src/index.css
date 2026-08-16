@@ -3282,10 +3282,23 @@ html {
   /* ─── NEXT CHAPTER — split card: art + copy panel ─── */
   .ovyra-coming-soon {
     --ovyra-coming-soon-aspect: 1920 / 819;
+    --ovyra-neon-violet: #c026d3;
+    --ovyra-neon-violet-soft: #e879f9;
     background:
-      radial-gradient(ellipse at 78% 42%, rgba(157, 78, 221, 0.08) 0%, transparent 52%),
-      #050505;
+      radial-gradient(ellipse at 78% 42%, rgba(192, 38, 211, 0.12) 0%, transparent 52%),
+      radial-gradient(ellipse at 18% 58%, rgba(157, 78, 221, 0.06) 0%, transparent 45%),
+      #050005;
     padding-block: 0;
+  }
+
+  .ovyra-coming-soon-frame {
+    border-top: 1px solid rgba(192, 38, 211, 0.72);
+    border-bottom: 1px solid rgba(192, 38, 211, 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(232, 121, 249, 0.28),
+      inset 0 -1px 0 rgba(232, 121, 249, 0.28),
+      0 0 28px rgba(192, 38, 211, 0.14),
+      0 0 64px rgba(157, 78, 221, 0.08);
   }
 
   .ovyra-coming-soon-ambient {
@@ -3294,13 +3307,24 @@ html {
 
   .ovyra-coming-soon-glow-right {
     @apply absolute;
-    top: 20%;
-    right: 8%;
-    width: min(28vw, 320px);
-    height: min(28vw, 320px);
+    top: 12%;
+    right: 6%;
+    width: min(32vw, 360px);
+    height: min(32vw, 360px);
     border-radius: 9999px;
-    background: radial-gradient(circle, rgba(192, 38, 211, 0.1) 0%, transparent 70%);
-    filter: blur(22px);
+    background: radial-gradient(circle, rgba(192, 38, 211, 0.22) 0%, transparent 68%);
+    filter: blur(28px);
+  }
+
+  .ovyra-coming-soon-glow-left {
+    @apply absolute;
+    bottom: 8%;
+    left: 42%;
+    width: min(22vw, 240px);
+    height: min(22vw, 240px);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(157, 78, 221, 0.14) 0%, transparent 70%);
+    filter: blur(24px);
   }
 
   .ovyra-coming-soon-shell {
@@ -3315,12 +3339,12 @@ html {
   .ovyra-coming-soon-card {
     display: grid;
     width: 100%;
-    grid-template-columns: minmax(0, 1fr) clamp(16rem, 21vw, 22.5rem);
+    grid-template-columns: minmax(0, 1fr) clamp(18rem, 24vw, 26.5rem);
     align-items: stretch;
     overflow: hidden;
     border-radius: 0;
     background: #050005;
-    box-shadow: none;
+    box-shadow: inset -1px 0 0 rgba(192, 38, 211, 0.18);
   }
 
   .ovyra-coming-soon-visual {
@@ -3339,19 +3363,43 @@ html {
   }
 
   .ovyra-coming-soon-copy {
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 0.65rem;
-    padding: clamp(0.7rem, 1.6vw, 1.25rem) clamp(0.8rem, 1.8vw, 1.35rem);
-    background: #050005;
-    border-left: 1px solid rgba(157, 78, 221, 0.14);
+    justify-content: space-between;
+    gap: clamp(0.45rem, 1vw, 0.7rem);
+    padding: clamp(0.75rem, 1.5vw, 1.15rem) clamp(0.85rem, 1.7vw, 1.4rem);
+    background:
+      linear-gradient(165deg, rgba(192, 38, 211, 0.14) 0%, rgba(88, 28, 135, 0.08) 38%, rgba(5, 0, 8, 0.96) 100%),
+      repeating-linear-gradient(
+        -45deg,
+        rgba(192, 38, 211, 0.025) 0,
+        rgba(192, 38, 211, 0.025) 1px,
+        transparent 1px,
+        transparent 9px
+      ),
+      #050005;
+    border-left: 1px solid rgba(192, 38, 211, 0.55);
+    box-shadow:
+      inset 1px 0 0 rgba(232, 121, 249, 0.16),
+      inset 0 0 48px rgba(192, 38, 211, 0.08),
+      -8px 0 32px rgba(192, 38, 211, 0.06);
+  }
+
+  .ovyra-coming-soon-copy::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(192, 38, 211, 0.08) 0%, transparent 22%, transparent 78%, rgba(192, 38, 211, 0.06) 100%);
   }
 
   .ovyra-coming-soon-copy-block {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.28rem;
   }
 
   .ovyra-coming-soon-copy-block[dir='rtl'] {
@@ -3359,54 +3407,171 @@ html {
     text-align: right;
   }
 
+  .ovyra-coming-soon-eyebrow {
+    color: rgba(232, 121, 249, 0.98) !important;
+    text-shadow:
+      0 0 14px rgba(192, 38, 211, 0.75),
+      0 0 28px rgba(157, 78, 221, 0.35);
+  }
+
   .ovyra-coming-soon-label {
-    color: rgba(201, 162, 39, 0.88);
+    color: rgba(201, 162, 39, 0.92);
+    text-shadow: 0 0 10px rgba(201, 162, 39, 0.35);
   }
 
   .ovyra-coming-soon-title {
-    margin-top: 0.25rem;
-    font-size: clamp(1.1rem, 1.7vw, 1.45rem);
-    line-height: 1.08;
+    margin-top: 0.15rem;
+    font-size: clamp(1.12rem, 1.75vw, 1.5rem);
+    line-height: 1.06;
+    text-shadow:
+      0 0 24px rgba(192, 38, 211, 0.22),
+      0 4px 16px rgba(0, 0, 0, 0.55);
   }
 
   .ovyra-coming-soon-fa-title {
     margin-top: 0 !important;
-    font-size: clamp(0.54rem, 0.85vw, 0.64rem) !important;
+    font-size: clamp(0.58rem, 0.88vw, 0.68rem) !important;
+    color: rgba(232, 121, 249, 0.92) !important;
+    text-shadow: 0 0 14px rgba(192, 38, 211, 0.45);
   }
 
   .ovyra-coming-soon-lead {
     margin-top: 0 !important;
-    font-size: clamp(0.7rem, 0.9vw, 0.82rem);
+    font-size: clamp(0.72rem, 0.92vw, 0.84rem);
+    line-height: 1.58;
+    max-width: none;
+    color: rgba(255, 255, 255, 0.84);
+  }
+
+  .ovyra-coming-soon-body-fa {
+    margin: 0;
+    font-size: clamp(0.66rem, 0.86vw, 0.78rem);
     line-height: 1.62;
-    max-width: 15.5rem;
+    color: rgba(255, 255, 255, 0.68);
   }
 
   .ovyra-coming-soon-stats-en {
-    margin-top: 0.15rem !important;
-    font-size: clamp(0.46rem, 0.68vw, 0.54rem) !important;
+    margin-top: 0.1rem !important;
+    font-size: clamp(0.48rem, 0.7vw, 0.56rem) !important;
+    color: rgba(232, 121, 249, 0.96) !important;
+    text-shadow:
+      0 0 16px rgba(192, 38, 211, 0.65),
+      0 0 32px rgba(157, 78, 221, 0.28);
+  }
+
+  .ovyra-coming-soon-whisper-en {
+    margin: 0.08rem 0 0;
+    font-size: clamp(0.42rem, 0.62vw, 0.5rem);
+    letter-spacing: 0.22em;
+    line-height: 1.45;
+    color: rgba(192, 38, 211, 0.82);
+    text-shadow: 0 0 12px rgba(192, 38, 211, 0.4);
+  }
+
+  .ovyra-coming-soon-divider {
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+    height: 1px;
+    margin-block: 0.05rem;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(192, 38, 211, 0.85) 18%,
+      rgba(232, 121, 249, 0.95) 50%,
+      rgba(192, 38, 211, 0.85) 82%,
+      transparent 100%
+    );
+    box-shadow:
+      0 0 10px rgba(192, 38, 211, 0.55),
+      0 0 22px rgba(157, 78, 221, 0.25);
+  }
+
+  .ovyra-coming-soon-signals {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ovyra-coming-soon-signal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.12rem;
+    padding: 0.34rem 0.2rem;
+    border: 1px solid rgba(192, 38, 211, 0.42);
+    background:
+      linear-gradient(180deg, rgba(192, 38, 211, 0.12) 0%, rgba(5, 0, 8, 0.72) 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(232, 121, 249, 0.1),
+      0 0 14px rgba(192, 38, 211, 0.14);
+  }
+
+  .ovyra-coming-soon-signal-en {
+    font-size: clamp(0.38rem, 0.58vw, 0.46rem);
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+    color: rgba(232, 121, 249, 0.96);
+    text-shadow: 0 0 10px rgba(192, 38, 211, 0.55);
+  }
+
+  .ovyra-coming-soon-signal-fa {
+    font-size: clamp(0.58rem, 0.78vw, 0.68rem);
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.62);
   }
 
   .ovyra-coming-soon-stats-fa {
     margin-top: 0 !important;
-    font-size: clamp(0.68rem, 0.9vw, 0.78rem) !important;
+    font-size: clamp(0.7rem, 0.92vw, 0.8rem) !important;
+    color: rgba(232, 121, 249, 0.94) !important;
+    text-shadow: 0 0 14px rgba(192, 38, 211, 0.5);
+  }
+
+  .ovyra-coming-soon-manifesto {
+    margin: 0;
+    font-size: clamp(0.62rem, 0.82vw, 0.74rem);
+    line-height: 1.55;
+    color: rgba(201, 162, 39, 0.82);
+    text-shadow: 0 0 10px rgba(201, 162, 39, 0.18);
+  }
+
+  .ovyra-coming-soon-whisper-fa {
+    margin: 0;
+    font-size: clamp(0.64rem, 0.84vw, 0.76rem);
+    line-height: 1.45;
+    color: rgba(192, 38, 211, 0.88);
+    text-shadow: 0 0 12px rgba(192, 38, 211, 0.35);
   }
 
   .ovyra-coming-soon-seal {
     display: inline-flex;
-    margin-top: 0.35rem;
-    padding: 0.28rem 0.54rem;
-    border: 1px solid rgba(157, 78, 221, 0.32);
-    background: rgba(0, 0, 0, 0.28);
-    font-size: 0.48rem;
-    letter-spacing: 0.3em;
-    color: rgba(201, 162, 39, 0.92);
-    text-shadow: 0 0 12px rgba(201, 162, 39, 0.25);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    align-self: flex-end;
+    margin-top: 0.15rem;
+    padding: 0.32rem 0.62rem;
+    border: 1px solid rgba(192, 38, 211, 0.62);
+    background:
+      linear-gradient(180deg, rgba(192, 38, 211, 0.16) 0%, rgba(0, 0, 0, 0.42) 100%);
+    font-size: clamp(0.46rem, 0.66vw, 0.52rem);
+    letter-spacing: 0.32em;
+    color: rgba(232, 121, 249, 0.98);
+    text-shadow:
+      0 0 14px rgba(192, 38, 211, 0.65),
+      0 0 24px rgba(157, 78, 221, 0.28);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0 18px rgba(192, 38, 211, 0.28);
   }
 
   @media (max-width: 899px) {
     .ovyra-coming-soon-card {
       grid-template-columns: 1fr;
+      box-shadow: none;
     }
 
     .ovyra-coming-soon-visual {
@@ -3414,9 +3579,14 @@ html {
     }
 
     .ovyra-coming-soon-copy {
+      justify-content: flex-start;
+      gap: 0.75rem;
       border-left: none;
-      border-top: 1px solid rgba(157, 78, 221, 0.14);
+      border-top: 1px solid rgba(192, 38, 211, 0.55);
       padding: 1.15rem 1.1rem 1.35rem;
+      box-shadow:
+        inset 0 1px 0 rgba(232, 121, 249, 0.16),
+        inset 0 0 48px rgba(192, 38, 211, 0.08);
     }
 
     .ovyra-coming-soon-copy-block[dir='rtl'] {
@@ -3429,7 +3599,12 @@ html {
       text-align: center;
     }
 
-    .ovyra-coming-soon-lead {
+    .ovyra-coming-soon-seal {
+      align-self: center;
+    }
+
+    .ovyra-coming-soon-lead,
+    .ovyra-coming-soon-body-fa {
       max-width: 22rem;
     }
   }

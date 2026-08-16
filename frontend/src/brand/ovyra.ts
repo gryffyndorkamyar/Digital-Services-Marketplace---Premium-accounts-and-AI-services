@@ -322,8 +322,18 @@ export const SEASON_02 = {
   titleFa: 'فصل بعد',
   leadFa:
     'آرشیو ۰۲ در سکوت مانده. هر کلکسیونری که چشم را یک بار کامل دیده می‌داند: درِ بعدی خودش را نشان می‌دهد.',
+  bodyFa:
+    'پشت این در، جهان تازه‌ای منتظر است. موجودات جدید، داستان‌های تازه، و تکه‌ای از چشم که هنوز نامش را نگفته‌اند.',
   statsEn: 'THE ARCHIVE STIRS AGAIN.',
   statsFa: 'آرشیو دوباره به جان می‌افتد',
+  whisperEn: 'BEYOND THE PORTAL, A NEW TRUTH WAITS.',
+  whisperFa: 'پشت پرتال، حقیقتی تازه منتظر است',
+  manifestoFa: 'هر فصل، یک آرشیو. هر آرشیو، یک راز.',
+  signals: [
+    { en: 'NEW BEINGS', fa: 'موجود تازه' },
+    { en: 'NEW LORE', fa: 'راز تازه' },
+    { en: 'ONE EYE', fa: 'یک چشم' },
+  ],
   seal: 'SEALED',
   image: '/brand/comingsoon4.png',
   imageWidth: 1920,
