@@ -69,25 +69,15 @@ const OvyraComingSoonSection: React.FC = () => {
             <div className="ovyra-coming-soon-copy-block ovyra-coming-soon-copy-block--fa font-fa" dir="rtl" lang="fa">
               <p className="ovyra-hero-realm-subtitle ovyra-coming-soon-fa-title">{s.titleFa}</p>
 
-              <p className="ovyra-coming-soon-subtitle-fa">{s.subtitleFa}</p>
-
               <p className="ovyra-hero-realm-body-fa ovyra-coming-soon-lead">{s.leadFa}</p>
 
               <p className="ovyra-coming-soon-body-fa">{s.bodyFa}</p>
 
-              <p className="ovyra-coming-soon-body-fa">{s.bodyFa2}</p>
-
               <p className="ovyra-hero-realm-stats-fa ovyra-coming-soon-stats-fa">{s.statsFa}</p>
-
-              <p className="ovyra-coming-soon-pulse-fa">{s.pulseFa}</p>
 
               <p className="ovyra-coming-soon-manifesto">{s.manifestoFa}</p>
 
-              <p className="ovyra-coming-soon-verse-fa">{s.verseFa}</p>
-
               <p className="ovyra-coming-soon-whisper-fa">{s.whisperFa}</p>
-
-              <p className="ovyra-coming-soon-closing-fa">{s.closingFa}</p>
 
               <p className="ovyra-coming-soon-seal font-display" aria-label={`${s.seal} — ${s.eyebrow}`}>
                 {s.seal}

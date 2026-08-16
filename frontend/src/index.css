@@ -3337,10 +3337,9 @@ html {
   }
 
   .ovyra-coming-soon-card {
-    display: grid;
+    position: relative;
+    display: block;
     width: 100%;
-    grid-template-columns: minmax(0, 1fr) clamp(18rem, 24vw, 26.5rem);
-    align-items: stretch;
     overflow: hidden;
     border-radius: 0;
     background: #050005;
@@ -3351,9 +3350,11 @@ html {
     aspect-ratio: var(--ovyra-coming-soon-aspect);
     width: 100%;
     min-width: 0;
+    padding-right: clamp(18rem, 24vw, 26.5rem);
     overflow: hidden;
     background: #050005;
     line-height: 0;
+    box-sizing: border-box;
   }
 
   .ovyra-coming-soon-img {
@@ -3363,10 +3364,14 @@ html {
   }
 
   .ovyra-coming-soon-copy {
-    position: relative;
-    width: 100%;
-    max-width: none;
-    min-width: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: clamp(18rem, 24vw, 26.5rem);
+    max-width: 100%;
+    min-height: 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -3465,6 +3470,21 @@ html {
       0 4px 16px rgba(0, 0, 0, 0.55);
   }
 
+  .ovyra-coming-soon-subtitle-en {
+    margin: 0.06rem 0 0;
+    font-size: clamp(0.44rem, 0.64vw, 0.52rem);
+    letter-spacing: 0.18em;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .ovyra-coming-soon-subtitle-fa {
+    margin: 0;
+    font-size: clamp(0.62rem, 0.82vw, 0.74rem);
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.76);
+  }
+
   .ovyra-coming-soon-fa-title {
     margin-top: 0 !important;
     font-size: clamp(0.58rem, 0.88vw, 0.68rem) !important;
@@ -3503,6 +3523,25 @@ html {
     line-height: 1.45;
     color: rgba(192, 38, 211, 0.82);
     text-shadow: 0 0 12px rgba(192, 38, 211, 0.4);
+  }
+
+  .ovyra-coming-soon-pulse-en {
+    margin: 0.04rem 0 0;
+    font-size: clamp(0.4rem, 0.6vw, 0.48rem);
+    letter-spacing: 0.2em;
+    line-height: 1.45;
+    color: rgba(201, 162, 39, 0.86);
+    text-shadow: 0 0 10px rgba(201, 162, 39, 0.22);
+  }
+
+  .ovyra-coming-soon-closing-en {
+    margin: auto 0 0;
+    padding-top: clamp(0.18rem, 0.45vw, 0.35rem);
+    font-size: clamp(0.4rem, 0.58vw, 0.46rem);
+    letter-spacing: 0.2em;
+    line-height: 1.45;
+    color: rgba(232, 121, 249, 0.9);
+    text-shadow: 0 0 12px rgba(192, 38, 211, 0.45);
   }
 
   .ovyra-coming-soon-divider {
@@ -3578,6 +3617,22 @@ html {
     text-shadow: 0 0 10px rgba(201, 162, 39, 0.18);
   }
 
+  .ovyra-coming-soon-pulse-fa {
+    margin: 0;
+    font-size: clamp(0.64rem, 0.84vw, 0.76rem);
+    line-height: 1.5;
+    color: rgba(201, 162, 39, 0.78);
+    text-shadow: 0 0 10px rgba(201, 162, 39, 0.16);
+  }
+
+  .ovyra-coming-soon-verse-fa {
+    margin: 0;
+    font-size: clamp(0.62rem, 0.82vw, 0.74rem);
+    line-height: 1.55;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.58);
+  }
+
   .ovyra-coming-soon-whisper-fa {
     margin: 0;
     font-size: clamp(0.64rem, 0.84vw, 0.76rem);
@@ -3586,9 +3641,17 @@ html {
     text-shadow: 0 0 12px rgba(192, 38, 211, 0.35);
   }
 
+  .ovyra-coming-soon-closing-fa {
+    margin: 0;
+    font-size: clamp(0.66rem, 0.86vw, 0.78rem);
+    line-height: 1.5;
+    color: rgba(232, 121, 249, 0.92);
+    text-shadow: 0 0 12px rgba(192, 38, 211, 0.4);
+  }
+
   .ovyra-coming-soon-seal {
     display: inline-flex;
-    align-self: flex-end;
+    align-self: center;
     margin-top: 0.15rem;
     padding: 0.32rem 0.62rem;
     border: 1px solid rgba(192, 38, 211, 0.62);
