@@ -3282,6 +3282,7 @@ html {
   /* ─── NEXT CHAPTER — split card: art + copy panel ─── */
   .ovyra-coming-soon {
     --ovyra-coming-soon-aspect: 1920 / 819;
+    --ovyra-coming-soon-copy-width: calc(clamp(18rem, 24vw, 26.5rem) + 2cm);
     --ovyra-neon-violet: #c026d3;
     --ovyra-neon-violet-soft: #e879f9;
     background:
@@ -3368,8 +3369,8 @@ html {
     top: 0;
     right: 0;
     bottom: 0;
-    width: calc(clamp(18rem, 24vw, 26.5rem) + 2cm);
-    max-width: 100%;
+    width: var(--ovyra-coming-soon-copy-width);
+    max-width: min(100%, 42rem);
     z-index: 2;
     overflow-x: hidden;
     overflow-y: auto;
@@ -3673,6 +3674,10 @@ html {
   }
 
   @media (max-width: 899px) {
+    .ovyra-coming-soon {
+      --ovyra-coming-soon-copy-width: 100%;
+    }
+
     .ovyra-coming-soon-card {
       box-shadow: none;
     }
@@ -3682,8 +3687,10 @@ html {
     }
 
     .ovyra-coming-soon-img {
+      width: 100%;
       height: auto;
       object-fit: contain;
+      object-position: center;
     }
 
     .ovyra-coming-soon-copy {
@@ -3695,13 +3702,23 @@ html {
       gap: 0.75rem;
       border-left: none;
       border-top: 1px solid rgba(192, 38, 211, 0.55);
-      padding: 1.15rem 1.1rem 1.35rem;
+      padding: 1.15rem max(1.1rem, env(safe-area-inset-right)) 1.35rem max(1.1rem, env(safe-area-inset-left));
       box-shadow:
         inset 0 1px 0 rgba(232, 121, 249, 0.16),
         inset 0 0 48px rgba(192, 38, 211, 0.08);
     }
 
-    .ovyra-coming-soon-copy-block[dir='ltr'],
+    .ovyra-coming-soon-copy-block--en {
+      flex: none;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .ovyra-coming-soon-copy-block[dir='ltr'] {
+      align-items: flex-start;
+      text-align: left;
+    }
+
     .ovyra-coming-soon-copy-block[dir='rtl'] {
       align-items: center;
       text-align: center;
@@ -3713,7 +3730,36 @@ html {
 
     .ovyra-coming-soon-lead,
     .ovyra-coming-soon-body-fa {
-      max-width: 22rem;
+      max-width: min(22rem, 100%);
+      margin-inline: auto;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .ovyra-coming-soon-signals {
+      gap: 0.25rem;
+    }
+
+    .ovyra-coming-soon-signal {
+      padding: 0.28rem 0.12rem;
+    }
+
+    .ovyra-coming-soon-signal-en {
+      font-size: clamp(0.34rem, 2.8vw, 0.42rem);
+      letter-spacing: 0.12em;
+    }
+
+    .ovyra-coming-soon-signal-fa {
+      font-size: clamp(0.52rem, 3.4vw, 0.62rem);
+    }
+
+    .ovyra-coming-soon-title {
+      font-size: clamp(1rem, 6.5vw, 1.35rem);
+    }
+
+    .ovyra-coming-soon-eyebrow {
+      font-size: clamp(0.48rem, 2.8vw, 0.58rem) !important;
+      letter-spacing: 0.28em !important;
     }
   }
 
