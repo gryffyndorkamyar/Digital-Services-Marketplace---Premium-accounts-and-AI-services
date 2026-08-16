@@ -8,6 +8,7 @@ from local_bootstrap import (
     ensure_local_migrations,
     ensure_local_postgres,
     ensure_project_venv,
+    is_local_dev_machine,
     load_env_files,
     print_dev_banner,
 )
@@ -16,11 +17,12 @@ from local_bootstrap import (
 def main():
     """Run administrative tasks."""
     load_env_files()
-    ensure_project_venv()
-    default_runserver_addrport()
-    ensure_local_postgres()
-    ensure_local_migrations()
-    print_dev_banner()
+    if is_local_dev_machine():
+        ensure_project_venv()
+        default_runserver_addrport()
+        ensure_local_postgres()
+        ensure_local_migrations()
+        print_dev_banner()
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "main.settings")
     try:

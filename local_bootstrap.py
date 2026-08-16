@@ -9,6 +9,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 
 
+def is_local_dev_machine() -> bool:
+    """True only on developer workstations — skip on RunFlare / production containers."""
+    if os.environ.get("MIGNUM_LOCAL_DEV", "").lower() in {"1", "true", "yes", "on"}:
+        return True
+    if (ROOT / ".env.local").is_file():
+        return True
+    # RunFlare/Liara: app lives at /app with panel env vars, no local venv
+    if (ROOT / "manage.py").exists() and os.environ.get("SECRET_KEY") and os.name != "nt":
+        return False
+    return os.name == "nt"
+
+
 def load_env_files() -> None:
     """Load `.env` then override with `.env.local` (local-only; not used on RunFlare)."""
 
@@ -36,6 +48,8 @@ def ensure_project_venv() -> None:
     Re-exec with project `.venv` when available.
     Creates `.venv` + installs deps on first run if missing.
     """
+    if not is_local_dev_machine():
+        return
     if os.name == "nt":
         venv_python = ROOT / ".venv" / "Scripts" / "python.exe"
         venv_pip = ROOT / ".venv" / "Scripts" / "pip.exe"
