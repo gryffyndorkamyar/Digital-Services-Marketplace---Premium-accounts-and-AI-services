@@ -3378,9 +3378,10 @@ html {
     scrollbar-color: rgba(192, 38, 211, 0.45) transparent;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: clamp(0.45rem, 1vw, 0.7rem);
-    padding: clamp(0.75rem, 1.5vw, 1.15rem) clamp(0.85rem, 1.7vw, 1.4rem);
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: clamp(0.55rem, 1.1vw, 0.85rem);
+    padding: clamp(0.85rem, 1.6vw, 1.25rem) clamp(0.95rem, 1.8vw, 1.5rem);
     background:
       linear-gradient(165deg, rgba(192, 38, 211, 0.16) 0%, rgba(88, 28, 135, 0.1) 42%, rgba(46, 16, 72, 0.92) 100%),
       repeating-linear-gradient(
@@ -3433,11 +3434,12 @@ html {
     display: flex;
     flex-direction: column;
     gap: 0.28rem;
+    flex: none;
+    flex-shrink: 0;
+    min-height: auto;
   }
 
   .ovyra-coming-soon-copy-block--en {
-    flex: 1;
-    min-height: 0;
     justify-content: flex-start;
     gap: clamp(0.22rem, 0.55vw, 0.42rem);
   }
@@ -3446,12 +3448,21 @@ html {
     align-items: center;
     text-align: center;
     gap: clamp(0.18rem, 0.38vw, 0.28rem);
-    flex-shrink: 0;
   }
 
   .ovyra-coming-soon-copy-block[dir='rtl'] {
     align-items: center;
     text-align: center;
+  }
+
+  .ovyra-coming-soon-copy .ovyra-hero-realm-eyebrow,
+  .ovyra-coming-soon-copy .ovyra-hero-realm-subtitle,
+  .ovyra-coming-soon-copy .ovyra-hero-realm-body-fa {
+    margin-top: 0;
+  }
+
+  .ovyra-coming-soon-copy .ovyra-hero-realm-body-fa {
+    max-width: none;
   }
 
   .ovyra-coming-soon-eyebrow {
@@ -3552,9 +3563,10 @@ html {
   .ovyra-coming-soon-divider {
     position: relative;
     z-index: 1;
+    flex: none;
     flex-shrink: 0;
     height: 1px;
-    margin-block: 0.05rem;
+    margin-block: 0.1rem;
     background: linear-gradient(
       90deg,
       transparent 0%,
@@ -3571,6 +3583,8 @@ html {
   .ovyra-coming-soon-signals {
     position: relative;
     z-index: 1;
+    flex: none;
+    flex-shrink: 0;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.35rem;
