@@ -316,10 +316,18 @@ export const COMPETITOR_EDGE = [
 ] as const;
 
 export const SEASON_02 = {
-  label: 'SEASON 02',
-  title: 'آرشیو بعدی به‌زودی',
-  body: 'بعد از تکمیل Archive 01 درگاه سیزن بعدی باز می‌شود.',
+  label: 'COMING SOON',
+  labelFa: 'به‌زودی',
+  archiveTag: 'ARCHIVE 02',
+  titleEn: 'THE NEXT CHAPTER',
+  titleFa: 'فصل بعد',
+  bodyEn: 'Something new is awakening.',
+  bodyFa: 'چیزی تازه در حال بیدار شدن است.',
+  seal: 'SEALED',
+  sealFa: 'مهرخورده',
   cta: 'خبرم کن',
+  image: '/brand/coming-soon-chapter.png',
+  imageAlt: 'OVYRA — The Next Chapter portal',
 } as const;
 
 export type NavPillItem = {

@@ -3279,6 +3279,214 @@ html {
     }
   }
 
+  /* ─── NEXT CHAPTER — coming soon cinematic ─── */
+  .ovyra-coming-soon {
+    position: relative;
+    isolation: isolate;
+    min-height: min(92vh, 920px);
+    background: #030008;
+  }
+
+  .ovyra-coming-soon-media {
+    @apply absolute inset-0 overflow-hidden;
+  }
+
+  .ovyra-coming-soon-bg {
+    @apply h-full w-full object-cover object-[38%_50%];
+    transform: scale(1.03);
+    filter: saturate(1.08) contrast(1.06);
+  }
+
+  .ovyra-coming-soon-vignette {
+    @apply absolute inset-0;
+    background:
+      linear-gradient(90deg, rgba(3, 0, 12, 0.92) 0%, rgba(3, 0, 12, 0.55) 38%, rgba(3, 0, 12, 0.18) 62%, rgba(3, 0, 12, 0.72) 100%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 22%, transparent 68%, rgba(0, 0, 0, 0.94) 100%);
+  }
+
+  .ovyra-coming-soon-glow-portal {
+    @apply pointer-events-none absolute;
+    top: 28%;
+    left: 34%;
+    width: min(52vw, 520px);
+    height: min(52vw, 520px);
+    transform: translate(-50%, -50%);
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(192, 38, 211, 0.34) 0%, rgba(157, 78, 221, 0.12) 45%, transparent 72%);
+    filter: blur(10px);
+    animation: ovyraNeonBreathe 5s ease-in-out infinite;
+  }
+
+  .ovyra-coming-soon-glow-floor {
+    @apply pointer-events-none absolute inset-x-0 bottom-0;
+    height: 42%;
+    background: linear-gradient(180deg, transparent 0%, rgba(157, 78, 221, 0.08) 55%, rgba(0, 0, 0, 0.85) 100%);
+  }
+
+  .ovyra-coming-soon-scan {
+    @apply pointer-events-none absolute inset-0 opacity-[0.07];
+    background: repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 3px,
+      rgba(255, 255, 255, 0.35) 3px,
+      rgba(255, 255, 255, 0.35) 4px
+    );
+    animation: ovyraComingSoonScan 8s linear infinite;
+  }
+
+  .ovyra-coming-soon-grain {
+    @apply pointer-events-none absolute inset-0 opacity-[0.04];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .ovyra-coming-soon-orbit {
+    @apply pointer-events-none absolute rounded-full;
+    border: 1px solid rgba(157, 78, 221, 0.12);
+    animation: ovyraRealmOrbit 26s linear infinite;
+  }
+
+  .ovyra-coming-soon-orbit-a {
+    width: min(88vw, 900px);
+    height: min(88vw, 900px);
+    top: 42%;
+    left: 34%;
+    transform: translate(-50%, -50%);
+  }
+
+  .ovyra-coming-soon-orbit-b {
+    width: min(68vw, 680px);
+    height: min(68vw, 680px);
+    top: 42%;
+    left: 34%;
+    transform: translate(-50%, -50%);
+    animation-direction: reverse;
+    animation-duration: 19s;
+    border-color: rgba(201, 162, 39, 0.1);
+  }
+
+  .ovyra-coming-soon-inner {
+    @apply relative z-[2] mx-auto flex min-h-[inherit] w-full max-w-[96rem] flex-col justify-end gap-8 px-5 pb-16 pt-28 sm:px-8 sm:pb-20 lg:max-w-[38rem] lg:justify-center lg:pb-24 lg:pl-12 lg:pr-6 lg:pt-32;
+  }
+
+  .ovyra-coming-soon-badge {
+    @apply relative inline-flex w-fit items-center gap-3 overflow-hidden rounded-full border border-white/10 bg-black/45 px-4 py-2 backdrop-blur-md;
+    box-shadow: 0 0 24px rgba(157, 78, 221, 0.18);
+  }
+
+  .ovyra-coming-soon-badge-pulse {
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(157, 78, 221, 0.15), transparent);
+    animation: ovyraSheen 3.5s ease-in-out infinite;
+  }
+
+  .ovyra-coming-soon-badge-dot {
+    @apply h-1 w-1 rounded-full bg-ovyra-violet;
+    box-shadow: 0 0 10px rgba(157, 78, 221, 0.95);
+    animation: ovyraNeonBreathe 2.2s ease-in-out infinite;
+  }
+
+  .ovyra-coming-soon-copy {
+    max-width: 34rem;
+  }
+
+  .ovyra-coming-soon-eyebrow {
+    @apply mb-4 text-[11px] tracking-[0.32em] text-ovyra-mist/55;
+  }
+
+  .ovyra-coming-soon-eyebrow-sep {
+    @apply mx-2 text-ovyra-violet/70;
+  }
+
+  .ovyra-coming-soon-title {
+    @apply text-[clamp(2rem,6vw,3.75rem)] font-bold leading-[0.95] tracking-[0.08em] text-white;
+    text-shadow: 0 0 40px rgba(157, 78, 221, 0.35);
+  }
+
+  .ovyra-coming-soon-lead-en {
+    @apply mt-4 text-[clamp(1rem,2.2vw,1.25rem)] font-medium tracking-[0.14em] text-ovyra-mist/80;
+  }
+
+  .ovyra-coming-soon-divider {
+    @apply my-7 flex items-center gap-3;
+  }
+
+  .ovyra-coming-soon-divider span:first-child,
+  .ovyra-coming-soon-divider span:last-child {
+    @apply h-px flex-1;
+    background: linear-gradient(90deg, transparent, rgba(157, 78, 221, 0.45), transparent);
+  }
+
+  .ovyra-coming-soon-divider-gem {
+    @apply h-2 w-2 rotate-45 border border-ovyra-violet/80;
+    box-shadow: 0 0 14px rgba(157, 78, 221, 0.65);
+  }
+
+  .ovyra-coming-soon-title-fa {
+    @apply text-[clamp(1.75rem,4.5vw,2.75rem)] font-bold leading-tight text-white/95;
+  }
+
+  .ovyra-coming-soon-lead-fa {
+    @apply mt-3 text-base leading-relaxed text-ovyra-mist/75 sm:text-lg;
+  }
+
+  .ovyra-coming-soon-actions {
+    @apply flex flex-wrap items-center gap-5;
+  }
+
+  .ovyra-coming-soon-seal {
+    @apply relative flex flex-col items-center gap-1 rounded-full border border-ovyra-gold/25 bg-black/40 px-5 py-3 backdrop-blur-sm;
+  }
+
+  .ovyra-coming-soon-seal-ring {
+    @apply pointer-events-none absolute inset-1 rounded-full border border-dashed border-ovyra-gold/20;
+    animation: ovyraRealmOrbit 18s linear infinite;
+  }
+
+  .ovyra-coming-soon-cta {
+    @apply relative overflow-hidden;
+  }
+
+  .ovyra-coming-soon-cta-shine {
+    @apply pointer-events-none absolute inset-0 -translate-x-full;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    animation: ovyraSheen 4s ease-in-out infinite;
+  }
+
+  @keyframes ovyraComingSoonScan {
+    0% {
+      transform: translateY(-8%);
+    }
+    100% {
+      transform: translateY(8%);
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .ovyra-coming-soon-bg {
+      object-position: 55% 42%;
+    }
+
+    .ovyra-coming-soon-inner {
+      @apply justify-end;
+    }
+
+    .ovyra-coming-soon-glow-portal {
+      left: 50%;
+      top: 32%;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .ovyra-coming-soon {
+      min-height: min(88vh, 760px);
+    }
+
+    .ovyra-coming-soon-title {
+      letter-spacing: 0.05em;
+    }
+  }
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
