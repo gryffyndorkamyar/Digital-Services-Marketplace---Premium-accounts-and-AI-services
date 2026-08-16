@@ -23,13 +23,14 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from common.routers import urlpatterns as common_urls
 from authenticate.routers import urlpatterns as auth_urls
 from cart.routers import urlpatterns as cart_urls
-from main.views import health_check, serve_txt_file
+from main.views import health_check, static_health, serve_txt_file
 from django.conf import settings
 from django.conf.urls.static import static
 import os
 
 urlpatterns = [
     path('health/', health_check, name='health_check'),
+    path('health/static/', static_health, name='static_health'),
     path('admin/', admin.site.urls),
     
     # JWT Token URLs

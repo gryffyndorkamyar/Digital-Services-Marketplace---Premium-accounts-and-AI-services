@@ -18,6 +18,12 @@ fi
 
 mkdir -p media staticfiles
 
+# Liara nginx may look under /usr/src/app — RunFlare uses /app
+if [ -d /app ] && [ ! -e /usr/src/app ]; then
+  mkdir -p /usr/src
+  ln -sf /app /usr/src/app
+fi
+
 echo "==> OVYRA — collectstatic"
 python manage.py collectstatic --noinput
 

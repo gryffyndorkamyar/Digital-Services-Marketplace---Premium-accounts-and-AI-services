@@ -9,6 +9,18 @@ def health_check(_request):
     return HttpResponse("ok", content_type="text/plain")
 
 
+def static_health(_request):
+    """Verify React JS is available for nginx / collectstatic."""
+    roots = [
+        Path(settings.STATIC_ROOT),
+        settings.REACT_BUILD_DIR / 'static',
+    ]
+    for root in roots:
+        if any(root.glob('js/main.*.js')):
+            return HttpResponse(f"ok js in {root}", content_type="text/plain")
+    return HttpResponse("missing main.js", content_type="text/plain", status=503)
+
+
 def serve_txt_file(request):
     """نمایش فایل 47366271.txt از root پروژه برای اینماد"""
     # مسیر فایل 47366271.txt در root پروژه

@@ -14,6 +14,26 @@ from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
 
 
+def _ensure_runflare_symlinks():
+    """Liara nginx defaults use /usr/src/app — map to RunFlare /app."""
+    app_root = Path('/app')
+    if not app_root.is_dir():
+        return
+    usr_src = Path('/usr/src/app')
+    try:
+        usr_src.parent.mkdir(parents=True, exist_ok=True)
+        if usr_src.is_symlink():
+            if usr_src.resolve() != app_root.resolve():
+                usr_src.unlink()
+                usr_src.symlink_to(app_root)
+        elif not usr_src.exists():
+            usr_src.symlink_to(app_root)
+    except OSError as exc:
+        import sys
+
+        print(f"OVYRA: symlink skipped ({exc})", file=sys.stderr)
+
+
 def _ensure_staticfiles():
     """RunFlare build may skip collectstatic — create staticfiles if missing."""
     try:
@@ -31,4 +51,5 @@ def _ensure_staticfiles():
         print(f"OVYRA: collectstatic skipped ({exc})", file=sys.stderr)
 
 
+_ensure_runflare_symlinks()
 _ensure_staticfiles()
