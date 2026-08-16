@@ -39,11 +39,11 @@ const ContactPage: React.FC = () => {
 
         <div className="ovyra-neon-panel mb-10 px-5 py-4">
           <p className="font-display text-[10px] tracking-[0.35em] text-ovyra-violet">
-            {SEASON_02.archiveTag} · {SEASON_02.label}
+            {SEASON_02.eyebrow} · {SEASON_02.label}
           </p>
           <p className="mt-2 font-display text-sm tracking-[0.12em] text-white/90">{SEASON_02.titleEn}</p>
           <p className="font-fa mt-2 text-sm text-ovyra-mist/75" dir="rtl">
-            برای اطلاع از باز شدن {SEASON_02.titleFa}، موضوع پیام را «{SEASON_02.archiveTag}» بگذارید.
+            برای اطلاع از باز شدن {SEASON_02.titleFa}، موضوع پیام را «{SEASON_02.eyebrow}» بگذارید.
           </p>
         </div>
 

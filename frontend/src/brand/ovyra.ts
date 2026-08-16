@@ -316,18 +316,23 @@ export const COMPETITOR_EDGE = [
 ] as const;
 
 export const SEASON_02 = {
+  eyebrow: 'ARCHIVE 02',
   label: 'COMING SOON',
-  labelFa: 'به‌زودی',
-  archiveTag: 'ARCHIVE 02',
   titleEn: 'THE NEXT CHAPTER',
   titleFa: 'فصل بعد',
-  bodyEn: 'Something new is awakening.',
-  bodyFa: 'چیزی تازه در حال بیدار شدن است.',
+  leadFa: 'پشت این مهر، نوری می‌تپد که هنوز اسم نگرفته.',
+  bodyFa:
+    'آرشیو ۰۲ در سکوت مانده، ولی سکوتش توخالی نیست. هر کلکسیونری که چشم را یک بار کامل دیده می‌داند: این پایان ماجرا نیست، آغاز درِ بعدی است.',
+  whisperEn: 'THE GATE REMEMBERS YOU.',
+  whisperFa: 'درگاه تو را می‌شناسد.',
+  verseFa: 'ده موجود کنار هم نشستند. حالا نوبت درِ بعدی است که خودش را نشان بدهد.',
+  statsEn: 'THE ARCHIVE STIRS AGAIN.',
+  statsFa: 'آرشیو دوباره به جان می‌افتد',
   seal: 'SEALED',
-  sealFa: 'مهرخورده',
-  cta: 'خبرم کن',
-  image: '/brand/coming-soon-chapter.png',
-  imageAlt: 'OVYRA — The Next Chapter portal',
+  image: '/brand/comingsoon3.png',
+  imageWidth: 2400,
+  imageHeight: 600,
+  imageAlt: 'OVYRA Archive 02 portal to the next chapter',
 } as const;
 
 export type NavPillItem = {

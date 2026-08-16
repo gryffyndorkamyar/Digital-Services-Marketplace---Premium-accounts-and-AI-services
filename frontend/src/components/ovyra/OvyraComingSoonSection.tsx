@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { SEASON_02 } from '../../brand/ovyra';
 
 const OvyraComingSoonSection: React.FC = () => {
@@ -8,7 +7,8 @@ const OvyraComingSoonSection: React.FC = () => {
   return (
     <section
       id="next-chapter"
-      className="ovyra-coming-soon ovyra-section-defer ovyra-section-border relative overflow-hidden"
+      className="ovyra-coming-soon ovyra-coming-soon-frame ovyra-section-defer relative"
+      dir="ltr"
       aria-labelledby="coming-soon-title"
     >
       <div className="ovyra-coming-soon-media" aria-hidden>
@@ -16,69 +16,65 @@ const OvyraComingSoonSection: React.FC = () => {
           src={s.image}
           alt=""
           className="ovyra-coming-soon-bg"
+          width={s.imageWidth}
+          height={s.imageHeight}
           loading="lazy"
           decoding="async"
         />
         <div className="ovyra-coming-soon-vignette" />
-        <div className="ovyra-coming-soon-glow-portal" />
-        <div className="ovyra-coming-soon-glow-floor" />
-        <div className="ovyra-coming-soon-scan" />
-        <div className="ovyra-coming-soon-grain" />
       </div>
 
-      <div className="ovyra-coming-soon-orbit ovyra-coming-soon-orbit-a" aria-hidden />
-      <div className="ovyra-coming-soon-orbit ovyra-coming-soon-orbit-b" aria-hidden />
-
       <div className="ovyra-coming-soon-inner">
-        <div className="ovyra-coming-soon-badge ovyra-fade-in">
-          <span className="ovyra-coming-soon-badge-pulse" aria-hidden />
-          <span className="font-display tracking-[0.28em]">{s.label}</span>
-          <span className="ovyra-coming-soon-badge-dot" aria-hidden />
-          <span className="font-display tracking-[0.22em] text-ovyra-violet">{s.archiveTag}</span>
-        </div>
-
-        <header className="ovyra-coming-soon-copy ovyra-fade-in ovyra-fade-in-delay">
-          <p className="ovyra-coming-soon-eyebrow font-display" lang="fa" dir="rtl">
-            {s.labelFa}
-            <span className="ovyra-coming-soon-eyebrow-sep" aria-hidden>
+        <header className="ovyra-coming-soon-copy ovyra-hero-realm-copy ovyra-fade-in">
+          <p className="ovyra-hero-realm-eyebrow ovyra-coming-soon-eyebrow">
+            {s.eyebrow}
+            <span className="ovyra-coming-soon-dot" aria-hidden>
               ·
             </span>
-            <span lang="en">{s.archiveTag}</span>
+            <span className="ovyra-coming-soon-label">{s.label}</span>
           </p>
 
-          <h2 id="coming-soon-title" className="ovyra-coming-soon-title font-display" lang="en">
+          <h2
+            id="coming-soon-title"
+            className="ovyra-brand-system-title ovyra-coming-soon-title ovyra-neon-white"
+          >
             {s.titleEn}
           </h2>
-          <p className="ovyra-coming-soon-lead-en font-display" lang="en">
-            {s.bodyEn}
+
+          <p
+            className="ovyra-hero-realm-subtitle font-fa ovyra-coming-soon-fa-title ovyra-neon-gold"
+            dir="rtl"
+            lang="fa"
+          >
+            {s.titleFa}
           </p>
 
-          <div className="ovyra-coming-soon-divider" aria-hidden>
-            <span />
-            <span className="ovyra-coming-soon-divider-gem" />
-            <span />
-          </div>
+          <p className="ovyra-hero-realm-body-fa font-fa ovyra-coming-soon-body" dir="rtl" lang="fa">
+            {s.leadFa}
+          </p>
 
-          <h3 className="ovyra-coming-soon-title-fa font-fa-display" lang="fa" dir="rtl">
-            {s.titleFa}
-          </h3>
-          <p className="ovyra-coming-soon-lead-fa font-fa" lang="fa" dir="rtl">
+          <p className="font-fa ovyra-coming-soon-body-secondary" dir="rtl" lang="fa">
             {s.bodyFa}
           </p>
+
+          <p className="ovyra-coming-soon-whisper-en ovyra-neon-violet">{s.whisperEn}</p>
+          <p className="font-fa ovyra-coming-soon-whisper-fa ovyra-neon-violet" dir="rtl" lang="fa">
+            {s.whisperFa}
+          </p>
+
+          <p className="font-fa ovyra-coming-soon-verse" dir="rtl" lang="fa">
+            {s.verseFa}
+          </p>
+
+          <p className="ovyra-hero-realm-stats-en ovyra-coming-soon-stats ovyra-neon-violet">{s.statsEn}</p>
+          <p
+            className="ovyra-hero-realm-stats-fa font-fa ovyra-coming-soon-stats-fa ovyra-neon-gold"
+            dir="rtl"
+            lang="fa"
+          >
+            {s.statsFa}
+          </p>
         </header>
-
-        <div className="ovyra-coming-soon-actions ovyra-fade-in ovyra-fade-in-delay-2">
-          <div className="ovyra-coming-soon-seal">
-            <span className="ovyra-coming-soon-seal-ring" aria-hidden />
-            <span className="font-display text-[10px] tracking-[0.35em] text-ovyra-gold/90">{s.seal}</span>
-            <span className="font-fa text-[11px] text-white/50">{s.sealFa}</span>
-          </div>
-
-          <Link to="/contact" className="ovyra-coming-soon-cta ovyra-hero-realm-cta">
-            <span className="font-fa">{s.cta}</span>
-            <span className="ovyra-coming-soon-cta-shine" aria-hidden />
-          </Link>
-        </div>
       </div>
     </section>
   );
