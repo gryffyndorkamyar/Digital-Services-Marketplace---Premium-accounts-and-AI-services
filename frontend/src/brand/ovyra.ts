@@ -320,18 +320,14 @@ export const SEASON_02 = {
   label: 'COMING SOON',
   titleEn: 'THE NEXT CHAPTER',
   titleFa: 'فصل بعد',
-  leadFa: 'پشت این مهر، نوری می‌تپد که هنوز اسم نگرفته.',
-  bodyFa:
-    'آرشیو ۰۲ در سکوت مانده، ولی سکوتش توخالی نیست. هر کلکسیونری که چشم را یک بار کامل دیده می‌داند: این پایان ماجرا نیست، آغاز درِ بعدی است.',
-  whisperEn: 'THE GATE REMEMBERS YOU.',
-  whisperFa: 'درگاه تو را می‌شناسد.',
-  verseFa: 'ده موجود کنار هم نشستند. حالا نوبت درِ بعدی است که خودش را نشان بدهد.',
+  leadFa:
+    'آرشیو ۰۲ در سکوت مانده. هر کلکسیونری که چشم را یک بار کامل دیده می‌داند: درِ بعدی خودش را نشان می‌دهد.',
   statsEn: 'THE ARCHIVE STIRS AGAIN.',
   statsFa: 'آرشیو دوباره به جان می‌افتد',
   seal: 'SEALED',
-  image: '/brand/comingsoon3.png',
-  imageWidth: 2400,
-  imageHeight: 600,
+  image: '/brand/comingsoon4.png',
+  imageWidth: 1920,
+  imageHeight: 819,
   imageAlt: 'OVYRA Archive 02 portal to the next chapter',
 } as const;
 
