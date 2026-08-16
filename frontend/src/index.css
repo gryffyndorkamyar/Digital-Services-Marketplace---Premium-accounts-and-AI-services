@@ -3279,6 +3279,662 @@ html {
     }
   }
 
+  /* ─── OVYRA QUEST — kids adventure finale ─── */
+  .ovyra-quest {
+    --ovyra-quest-pink: #ff2fd6;
+    --ovyra-quest-cyan: #38bdf8;
+    --ovyra-quest-violet: #a855f7;
+    --ovyra-quest-gold: #fbbf24;
+    background:
+      radial-gradient(ellipse at 14% 24%, rgba(255, 47, 214, 0.14) 0%, transparent 48%),
+      radial-gradient(ellipse at 86% 62%, rgba(56, 189, 248, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 52% 100%, rgba(168, 85, 247, 0.08) 0%, transparent 42%),
+      #050005;
+    padding-block: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .ovyra-quest-frame {
+    border-top: 1px solid rgba(255, 47, 214, 0.55);
+    border-bottom: 1px solid rgba(56, 189, 248, 0.42);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 47, 214, 0.22),
+      inset 0 -1px 0 rgba(56, 189, 248, 0.16),
+      0 0 40px rgba(255, 47, 214, 0.1),
+      0 0 72px rgba(168, 85, 247, 0.08);
+  }
+
+  .ovyra-quest-ambient {
+    @apply pointer-events-none absolute inset-0 z-[1];
+  }
+
+  .ovyra-quest-glow {
+    @apply absolute rounded-full;
+    filter: blur(32px);
+  }
+
+  .ovyra-quest-glow--pink {
+    top: 8%;
+    right: 10%;
+    width: min(36vw, 380px);
+    height: min(36vw, 380px);
+    background: radial-gradient(circle, rgba(255, 47, 214, 0.24) 0%, transparent 68%);
+    animation: ovyraNeonBreathe 4.2s ease-in-out infinite;
+  }
+
+  .ovyra-quest-glow--cyan {
+    bottom: 12%;
+    left: 6%;
+    width: min(28vw, 280px);
+    height: min(28vw, 280px);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, transparent 70%);
+    animation: ovyraNeonBreathe 5s ease-in-out infinite 0.6s;
+  }
+
+  .ovyra-quest-glow--violet {
+    top: 42%;
+    left: 44%;
+    width: min(24vw, 240px);
+    height: min(24vw, 240px);
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.16) 0%, transparent 72%);
+  }
+
+  .ovyra-quest-grid-fade {
+    @apply absolute inset-0 opacity-[0.03];
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.9) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at 50% 40%, black 15%, transparent 72%);
+  }
+
+  .ovyra-quest-inner {
+    @apply relative z-[2] mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .ovyra-quest-stage {
+    @apply grid items-center gap-8 lg:gap-12;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    .ovyra-quest-stage {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    }
+  }
+
+  .ovyra-quest-visual {
+    @apply relative mx-auto flex items-center justify-center;
+    width: min(100%, 28rem);
+    min-height: clamp(18rem, 42vw, 24rem);
+  }
+
+  @media (min-width: 1024px) {
+    .ovyra-quest-visual {
+      width: min(100%, 34rem);
+      min-height: clamp(20rem, 36vw, 26rem);
+      justify-self: center;
+    }
+  }
+
+  .ovyra-quest-char-stage {
+    @apply relative mx-auto w-full;
+    max-width: min(100%, 22rem);
+    aspect-ratio: 0.92 / 1;
+  }
+
+  .ovyra-quest-char-orbit-track {
+    @apply pointer-events-none absolute inset-0;
+    animation: ovyraSpin 52s linear infinite;
+  }
+
+  .ovyra-quest-char-orbit-slot {
+    @apply absolute;
+    left: 50%;
+    top: 50%;
+    width: clamp(2.4rem, 11vw, 3.4rem);
+    transform:
+      rotate(var(--char-angle))
+      translateY(calc(-1 * clamp(6.8rem, 30vw, 9.2rem)))
+      rotate(calc(-1 * var(--char-angle)));
+    opacity: 0.42;
+    transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
+  }
+
+  .ovyra-quest-char-orbit-slot.is-active {
+    opacity: 0.95;
+    filter: drop-shadow(0 0 14px rgba(255, 47, 214, 0.45));
+    transform:
+      rotate(var(--char-angle))
+      translateY(calc(-1 * clamp(7.2rem, 31vw, 9.6rem)))
+      rotate(calc(-1 * var(--char-angle)))
+      scale(1.12);
+  }
+
+  .ovyra-quest-char-orbit-img {
+    @apply block w-full select-none;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.65));
+    animation: ovyraQuestCharBob 3.6s ease-in-out infinite;
+    animation-delay: calc(var(--char-i, 0) * -0.32s);
+  }
+
+  .ovyra-quest-char-orbit-img.is-large {
+    transform: scale(1.08);
+  }
+
+  .ovyra-quest-char-spotlight {
+    @apply absolute inset-0 flex flex-col items-center justify-end;
+    padding-bottom: 3.4rem;
+  }
+
+  .ovyra-quest-char-spotlight-glow {
+    @apply pointer-events-none absolute;
+    inset: 18% 8% 28%;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(255, 47, 214, 0.28) 0%, rgba(56, 189, 248, 0.12) 42%, transparent 72%);
+    filter: blur(16px);
+    animation: ovyraNeonBreathe 3.4s ease-in-out infinite;
+  }
+
+  .ovyra-quest-char-code {
+    @apply relative z-[3] mb-2;
+    font-size: 0.52rem;
+    letter-spacing: 0.34em;
+    color: rgba(56, 189, 248, 0.95);
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+  }
+
+  .ovyra-quest-char-hero {
+    @apply pointer-events-none absolute;
+    left: 50%;
+    bottom: 4.8rem;
+    width: auto;
+    max-height: clamp(9rem, 34vw, 12.5rem);
+    max-width: min(72%, 11rem);
+    transform: translateX(-50%) translateY(8px) scale(0.94);
+    opacity: 0;
+    filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.75));
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ovyra-quest-char-hero.is-large {
+    max-height: clamp(10rem, 36vw, 13.5rem);
+    max-width: min(78%, 12rem);
+  }
+
+  .ovyra-quest-char-hero.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+    filter:
+      drop-shadow(0 20px 40px rgba(0, 0, 0, 0.78))
+      drop-shadow(0 0 24px rgba(255, 47, 214, 0.22));
+  }
+
+  .ovyra-quest-char-meta {
+    @apply relative z-[3] text-center;
+    min-height: 2.8rem;
+    padding-inline: 0.5rem;
+  }
+
+  .ovyra-quest-char-name {
+    font-size: clamp(0.58rem, 1.05vw, 0.68rem);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.94);
+    text-shadow: 0 0 14px rgba(255, 47, 214, 0.28);
+  }
+
+  .ovyra-quest-char-tagline {
+    margin-top: 0.22rem;
+    font-size: clamp(0.44rem, 0.82vw, 0.52rem);
+    letter-spacing: 0.16em;
+    line-height: 1.45;
+    color: rgba(56, 189, 248, 0.88);
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+  }
+
+  .ovyra-quest-char-dots {
+    @apply absolute bottom-0 left-1/2 z-[4] flex -translate-x-1/2 flex-wrap justify-center gap-1;
+    max-width: 100%;
+    padding: 0.35rem 0.25rem 0;
+  }
+
+  .ovyra-quest-char-dot {
+    @apply inline-flex h-6 min-w-[1.45rem] items-center justify-center rounded-sm px-1;
+    border: 1px solid rgba(255, 47, 214, 0.28);
+    background: rgba(0, 0, 0, 0.45);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.46rem;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition: border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  .ovyra-quest-char-dot.is-active,
+  .ovyra-quest-char-dot:hover {
+    border-color: rgba(56, 189, 248, 0.65);
+    color: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 47, 214, 0.14);
+    box-shadow: 0 0 14px rgba(255, 47, 214, 0.28);
+  }
+
+  @keyframes ovyraQuestCharBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .ovyra-quest-copy {
+    @apply flex flex-col;
+    max-width: 34rem;
+  }
+
+  @media (min-width: 1024px) {
+    .ovyra-quest-copy {
+      justify-self: end;
+      text-align: right;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .ovyra-quest-copy {
+      margin-inline: auto;
+      text-align: center;
+      align-items: center;
+    }
+  }
+
+  .ovyra-quest-eyebrow {
+    font-size: clamp(0.52rem, 1.1vw, 0.62rem);
+    letter-spacing: 0.42em;
+    background: linear-gradient(90deg, var(--ovyra-quest-pink), var(--ovyra-quest-cyan), var(--ovyra-quest-gold));
+    background-size: 180% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: ovyraKidsShine 3.2s linear infinite;
+    filter: drop-shadow(0 0 12px rgba(255, 47, 214, 0.45));
+  }
+
+  .ovyra-quest-title {
+    margin-top: 0.55rem;
+    font-size: clamp(2rem, 5.5vw, 3.35rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: 0.08em;
+    background: linear-gradient(180deg, #fff 0%, #e8e8e8 38%, #b8b8b8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 28px rgba(255, 47, 214, 0.18));
+  }
+
+  .ovyra-quest-tagline {
+    margin-top: 0.65rem;
+    font-size: clamp(0.88rem, 1.6vw, 1rem);
+    font-weight: 600;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .ovyra-quest-neon {
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .ovyra-quest-neon--pink {
+    color: var(--ovyra-quest-pink);
+    text-shadow:
+      0 0 12px rgba(255, 47, 214, 0.65),
+      0 0 28px rgba(255, 47, 214, 0.28);
+  }
+
+  .ovyra-quest-neon--cyan {
+    color: var(--ovyra-quest-cyan);
+    text-shadow:
+      0 0 12px rgba(56, 189, 248, 0.62),
+      0 0 26px rgba(56, 189, 248, 0.26);
+  }
+
+  .ovyra-quest-neon--gold {
+    color: var(--ovyra-quest-gold);
+    text-shadow:
+      0 0 12px rgba(251, 191, 36, 0.58),
+      0 0 24px rgba(251, 191, 36, 0.22);
+  }
+
+  .ovyra-quest-neon--violet {
+    color: var(--ovyra-quest-violet);
+    text-shadow:
+      0 0 12px rgba(168, 85, 247, 0.62),
+      0 0 26px rgba(168, 85, 247, 0.26);
+  }
+
+  .ovyra-quest-body {
+    @apply mt-4 flex flex-col gap-3;
+  }
+
+  .ovyra-quest-paragraph {
+    font-size: clamp(0.92rem, 1.55vw, 1.05rem);
+    line-height: 1.82;
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  .ovyra-quest-pillars {
+    @apply mt-5 grid list-none gap-2.5 p-0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .ovyra-quest-pillar {
+    @apply flex flex-col items-center gap-1;
+    padding: 0.55rem 0.35rem;
+    border: 1px solid rgba(255, 47, 214, 0.35);
+    background:
+      linear-gradient(180deg, rgba(255, 47, 214, 0.12) 0%, rgba(5, 0, 8, 0.82) 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(56, 189, 248, 0.1),
+      0 0 16px rgba(255, 47, 214, 0.12);
+  }
+
+  .ovyra-quest-pillar-en {
+    font-size: clamp(0.38rem, 0.72vw, 0.46rem);
+    letter-spacing: 0.2em;
+    color: rgba(56, 189, 248, 0.96);
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+  }
+
+  .ovyra-quest-pillar-fa {
+    font-size: clamp(0.62rem, 1vw, 0.74rem);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  .ovyra-quest-pillar-hint {
+    font-size: clamp(0.52rem, 0.85vw, 0.62rem);
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.48);
+    text-align: center;
+  }
+
+  .ovyra-quest-closing {
+    margin-top: 1.15rem;
+    font-size: clamp(1rem, 1.8vw, 1.12rem);
+    font-weight: 700;
+    line-height: 1.55;
+    color: rgba(251, 191, 36, 0.92);
+    text-shadow: 0 0 16px rgba(251, 191, 36, 0.22);
+  }
+
+  .ovyra-quest-cta {
+    @apply relative mt-5 inline-flex items-center gap-2.5 overflow-hidden;
+    padding: 0.82rem 1.35rem 0.82rem 1.15rem;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 2px;
+    background:
+      linear-gradient(135deg, rgba(255, 47, 214, 0.28) 0%, rgba(56, 189, 248, 0.18) 42%, rgba(0, 0, 0, 0.65) 100%);
+    font-size: clamp(0.88rem, 1.4vw, 0.98rem);
+    font-weight: 700;
+    color: #fff;
+    box-shadow:
+      0 0 28px rgba(255, 47, 214, 0.28),
+      0 0 48px rgba(56, 189, 248, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    cursor: pointer;
+  }
+
+  .ovyra-quest-cta::before {
+    content: '';
+    @apply pointer-events-none absolute inset-0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.14) 50%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ovyra-quest-cta:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 47, 214, 0.55);
+    box-shadow:
+      0 0 36px rgba(255, 47, 214, 0.45),
+      0 0 64px rgba(56, 189, 248, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  .ovyra-quest-cta:hover::before {
+    opacity: 1;
+  }
+
+  .ovyra-quest-cta-icon {
+    @apply h-4 w-4 shrink-0;
+    color: rgba(251, 191, 36, 0.95);
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
+  }
+
+  .ovyra-quest-cta-soon {
+    margin-right: auto;
+    padding: 0.18rem 0.42rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 9999px;
+    font-size: 0.48rem;
+    letter-spacing: 0.24em;
+    background: linear-gradient(135deg, rgba(255, 47, 214, 0.85), rgba(56, 189, 248, 0.82));
+    box-shadow: 0 0 14px rgba(255, 47, 214, 0.45);
+  }
+
+  .ovyra-quest-reveal {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    margin-top: 0;
+    transition:
+      grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.45s ease,
+      margin-top 0.45s ease;
+  }
+
+  .ovyra-quest-reveal.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .ovyra-quest-reveal > .ovyra-quest-reveal-inner {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .ovyra-quest-reveal-head {
+    @apply text-center;
+    margin-bottom: 1.25rem;
+  }
+
+  .ovyra-quest-reveal-eyebrow {
+    font-size: clamp(0.52rem, 1vw, 0.62rem);
+    letter-spacing: 0.38em;
+    color: rgba(201, 162, 39, 0.92);
+  }
+
+  .ovyra-quest-reveal-title {
+    margin-top: 0.5rem;
+    font-size: clamp(1.65rem, 3.5vw, 2.35rem);
+    color: #fff;
+  }
+
+  .ovyra-quest-box-grid {
+    @apply grid gap-3;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 640px) {
+    .ovyra-quest-box-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ovyra-quest-box-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+  }
+
+  .ovyra-quest-box-card {
+    @apply relative;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    transition-delay: calc(var(--quest-card-i, 0) * 80ms);
+  }
+
+  .ovyra-quest-reveal.is-open .ovyra-quest-box-card {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ovyra-quest-box-hook {
+    @apply pointer-events-none absolute z-[3] block rounded-full;
+    top: 0.55rem;
+    width: 0.48rem;
+    height: 0.48rem;
+    border: 1px solid rgba(255, 47, 214, 0.55);
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, transparent 100%);
+    box-shadow: 0 0 10px rgba(255, 47, 214, 0.35);
+  }
+
+  .ovyra-quest-box-hook-left {
+    left: 0.45rem;
+  }
+
+  .ovyra-quest-box-hook-right {
+    right: 0.45rem;
+  }
+
+  .ovyra-quest-box-inner {
+    @apply flex h-full flex-col overflow-hidden;
+    border: 1px solid rgba(255, 47, 214, 0.38);
+    background:
+      linear-gradient(165deg, rgba(255, 47, 214, 0.1) 0%, rgba(5, 5, 5, 0.96) 46%, rgba(8, 4, 18, 0.94) 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(56, 189, 248, 0.1),
+      0 0 24px rgba(255, 47, 214, 0.1),
+      0 8px 28px rgba(0, 0, 0, 0.45);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .ovyra-quest-box-card:hover .ovyra-quest-box-inner {
+    border-color: rgba(56, 189, 248, 0.55);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 47, 214, 0.18),
+      0 0 32px rgba(255, 47, 214, 0.22),
+      0 0 48px rgba(56, 189, 248, 0.12),
+      0 12px 32px rgba(0, 0, 0, 0.5);
+  }
+
+  .ovyra-quest-box-icon-slot {
+    @apply flex items-center justify-center;
+    height: 7.5rem;
+    border-bottom: 1px solid rgba(255, 47, 214, 0.14);
+    background:
+      radial-gradient(circle at 50% 62%, rgba(255, 47, 214, 0.14) 0%, transparent 62%),
+      repeating-linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.02) 0,
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px,
+        transparent 8px
+      );
+  }
+
+  .ovyra-quest-box-icon {
+    @apply block max-h-[4.5rem] w-auto select-none;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 16px rgba(255, 47, 214, 0.18));
+  }
+
+  .ovyra-quest-box-copy {
+    @apply flex flex-col px-4 py-4 text-center;
+  }
+
+  .ovyra-quest-box-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: rgba(251, 191, 36, 0.95);
+  }
+
+  .ovyra-quest-box-title-fa {
+    margin-top: 0.2rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ovyra-quest-box-desc {
+    margin-top: 0.55rem;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  @media (max-width: 479px) {
+    .ovyra-quest-char-stage {
+      max-width: min(100%, 19rem);
+    }
+
+    .ovyra-quest-char-orbit-slot {
+      width: clamp(2rem, 10vw, 2.75rem);
+      transform:
+        rotate(var(--char-angle))
+        translateY(calc(-1 * clamp(5.6rem, 28vw, 7.4rem)))
+        rotate(calc(-1 * var(--char-angle)));
+    }
+
+    .ovyra-quest-char-orbit-slot.is-active {
+      transform:
+        rotate(var(--char-angle))
+        translateY(calc(-1 * clamp(6rem, 29vw, 7.8rem)))
+        rotate(calc(-1 * var(--char-angle)))
+        scale(1.1);
+    }
+
+    .ovyra-quest-char-hero {
+      max-height: clamp(7.5rem, 32vw, 10rem);
+      bottom: 4.4rem;
+    }
+
+    .ovyra-quest-char-name {
+      font-size: clamp(0.5rem, 2.8vw, 0.6rem);
+    }
+
+    .ovyra-quest-char-tagline {
+      font-size: clamp(0.4rem, 2.4vw, 0.48rem);
+    }
+
+    .ovyra-quest-neon {
+      white-space: normal;
+    }
+
+    .ovyra-quest-pillars {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+    }
+
+    .ovyra-quest-pillar {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 0.45rem;
+      padding: 0.5rem 0.65rem;
+    }
+
+    .ovyra-quest-pillar-hint {
+      flex: 1 1 100%;
+    }
+
+    .ovyra-quest-cta {
+      width: 100%;
+      justify-content: center;
+    }
+  }
   /* ─── NEXT CHAPTER — split card: art + copy panel ─── */
   .ovyra-coming-soon {
     --ovyra-coming-soon-aspect: 1920 / 819;

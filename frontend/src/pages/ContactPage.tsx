@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
-import { SEASON_02 } from '../brand/ovyra';
+import { OVYRA_QUEST } from '../brand/ovyra';
 import OvyraPageShell from '../components/ovyra/OvyraPageShell';
 import OvyraPageHeader from '../components/ovyra/OvyraPageHeader';
 
@@ -39,11 +39,11 @@ const ContactPage: React.FC = () => {
 
         <div className="ovyra-neon-panel mb-10 px-5 py-4">
           <p className="font-display text-[10px] tracking-[0.35em] text-ovyra-violet">
-            {SEASON_02.eyebrow} · {SEASON_02.label}
+            {OVYRA_QUEST.eyebrow} · {OVYRA_QUEST.ctaSoon}
           </p>
-          <p className="mt-2 font-display text-sm tracking-[0.12em] text-white/90">{SEASON_02.titleEn}</p>
+          <p className="mt-2 font-display text-sm tracking-[0.12em] text-white/90">{OVYRA_QUEST.title}</p>
           <p className="font-fa mt-2 text-sm text-ovyra-mist/75" dir="rtl">
-            برای اطلاع از باز شدن {SEASON_02.titleFa}، موضوع پیام را «{SEASON_02.eyebrow}» بگذارید.
+            برای اطلاع از باز شدن {OVYRA_QUEST.tagline}، موضوع پیام را «{OVYRA_QUEST.title}» بگذارید.
           </p>
         </div>
 

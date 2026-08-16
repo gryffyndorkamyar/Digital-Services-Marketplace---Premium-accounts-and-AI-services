@@ -294,11 +294,36 @@ export const ARCHIVE_01: ArchiveFigure[] = [
 ];
 
 export const BOX_CONTENTS = [
-  { title: 'FIGURE', titleFa: 'فیگور', desc: 'شخصیت پرینت‌شده با جزئیات بالا.' },
-  { title: 'LORE CARD', titleFa: 'کارت lore', desc: 'داستان و نقل‌قول شخصیت.' },
-  { title: 'PUZZLE', titleFa: 'قطعه چشم', desc: 'یک تکه از پازل. با نُه قطعه دیگر کامل می‌شود.' },
-  { title: 'PLATE', titleFa: 'پلاک آرشیو', desc: 'پلاک شماره‌دار مخصوص این سیزن.' },
+  {
+    title: 'FIGURE',
+    titleFa: 'فیگور',
+    desc: 'شخصیت پرینت‌شده با جزئیات بالا.',
+    icon: '/brand/system/figure-totem.png',
+  },
+  {
+    title: 'LORE CARD',
+    titleFa: 'کارت lore',
+    desc: 'داستان و نقل‌قول شخصیت.',
+    icon: '/brand/system/lore-card.png',
+  },
+  {
+    title: 'PUZZLE',
+    titleFa: 'قطعه چشم',
+    desc: 'یک تکه از پازل. با نُه قطعه دیگر کامل می‌شود.',
+    icon: '/brand/system/puzzle-piece.png',
+  },
+  {
+    title: 'PLATE',
+    titleFa: 'پلاک آرشیو',
+    desc: 'پلاک شماره‌دار مخصوص این سیزن.',
+    icon: '/brand/system/chain-link.png',
+  },
 ] as const;
+
+export const QUEST_BOX_WORLD = {
+  eyebrow: 'INSIDE THE BOX',
+  title: 'هر جعبه، یک دنیا',
+} as const;
 
 export const TRUST_SIGNALS = [
   'پرینت سه‌بعدی اختصاصی',
@@ -314,6 +339,26 @@ export const COMPETITOR_EDGE = [
   'هر جعبه: فیگور + lore + پازل + پلاک',
   'تولید مستقیم از طراحی تا پرینت',
 ] as const;
+
+export const OVYRA_QUEST = {
+  eyebrow: 'OVYRA KIDS',
+  title: 'OVYRA QUEST',
+  tagline: 'ماجراجویی تعاملی برای کودکان دنیای OVYRA',
+  paragraphs: [
+    'اینجا جاییه که هر بچه می‌تونه وارد دنیایی بشه که هیچ‌کس هنوز کشفش نکرده.',
+    'معماها رو حل کن، موجودات عجیب OVYRA رو پیدا کن و رازهایی رو کشف کن که بزرگ‌ترها ازشون خبر ندارن.',
+    'هر انتخاب تو، بخشی از داستان رو تغییر می‌ده…',
+  ],
+  closing: 'آماده‌ای اولین مأموریتت رو شروع کنی؟',
+  pillars: [
+    { en: 'SOLVE', fa: 'معماها', hint: 'هر پازل، یک قدم به سمت حقیقت' },
+    { en: 'DISCOVER', fa: 'موجودات', hint: 'موجودات عجیب منتظر کشف‌اند' },
+    { en: 'UNCOVER', fa: 'رازها', hint: 'رازهایی که بزرگ‌ترها نمی‌دانند' },
+  ],
+  ctaLabel: 'شروع اولین مأموریت',
+  ctaSoon: 'SOON',
+  ctaToast: 'OVYRA QUEST به زودی باز می‌شود — اولین مأموریت در راه است!',
+} as const;
 
 export const SEASON_02 = {
   eyebrow: 'ARCHIVE 02',
@@ -382,7 +427,7 @@ export const NAV_PILLS: NavPillItem[] = [
   {
     id: 'kids',
     label: 'KIDS',
-    comingSoon: true,
+    to: '/#ovyra-quest',
     accent: '#ff2fd6',
     glow: 'rgba(255,47,214,0.7)',
     variant: 'kids',

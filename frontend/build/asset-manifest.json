@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/ovyra-static/static/css/main.e641f3ba.css",
-    "main.js": "/ovyra-static/static/js/main.d3279ce3.js",
+    "main.css": "/ovyra-static/static/css/main.f882faef.css",
+    "main.js": "/ovyra-static/static/js/main.259d2b74.js",
     "static/js/765.c39904ec.chunk.js": "/ovyra-static/static/js/765.c39904ec.chunk.js",
     "static/js/301.d6f79420.chunk.js": "/ovyra-static/static/js/301.d6f79420.chunk.js",
-    "static/js/535.71f559e8.chunk.js": "/ovyra-static/static/js/535.71f559e8.chunk.js",
+    "static/js/535.eb00550e.chunk.js": "/ovyra-static/static/js/535.eb00550e.chunk.js",
     "static/js/679.75981e41.chunk.js": "/ovyra-static/static/js/679.75981e41.chunk.js",
     "static/js/817.96718bde.chunk.js": "/ovyra-static/static/js/817.96718bde.chunk.js",
     "static/js/794.02ce26c1.chunk.js": "/ovyra-static/static/js/794.02ce26c1.chunk.js",
@@ -20,11 +20,11 @@
     "static/js/856.691d080d.chunk.js": "/ovyra-static/static/js/856.691d080d.chunk.js",
     "static/js/575.de42530c.chunk.js": "/ovyra-static/static/js/575.de42530c.chunk.js",
     "index.html": "/ovyra-static/index.html",
-    "main.e641f3ba.css.map": "/ovyra-static/static/css/main.e641f3ba.css.map",
-    "main.d3279ce3.js.map": "/ovyra-static/static/js/main.d3279ce3.js.map",
+    "main.f882faef.css.map": "/ovyra-static/static/css/main.f882faef.css.map",
+    "main.259d2b74.js.map": "/ovyra-static/static/js/main.259d2b74.js.map",
     "765.c39904ec.chunk.js.map": "/ovyra-static/static/js/765.c39904ec.chunk.js.map",
     "301.d6f79420.chunk.js.map": "/ovyra-static/static/js/301.d6f79420.chunk.js.map",
-    "535.71f559e8.chunk.js.map": "/ovyra-static/static/js/535.71f559e8.chunk.js.map",
+    "535.eb00550e.chunk.js.map": "/ovyra-static/static/js/535.eb00550e.chunk.js.map",
     "679.75981e41.chunk.js.map": "/ovyra-static/static/js/679.75981e41.chunk.js.map",
     "817.96718bde.chunk.js.map": "/ovyra-static/static/js/817.96718bde.chunk.js.map",
     "794.02ce26c1.chunk.js.map": "/ovyra-static/static/js/794.02ce26c1.chunk.js.map",
@@ -41,7 +41,7 @@
     "575.de42530c.chunk.js.map": "/ovyra-static/static/js/575.de42530c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e641f3ba.css",
-    "static/js/main.d3279ce3.js"
+    "static/css/main.f882faef.css",
+    "static/js/main.259d2b74.js"
   ]
 }

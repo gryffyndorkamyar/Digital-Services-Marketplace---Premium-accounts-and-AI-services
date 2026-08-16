@@ -26,8 +26,7 @@ const OvyraComingSoonSection: React.FC = () => {
               className="ovyra-coming-soon-img"
               width={s.imageWidth}
               height={s.imageHeight}
-              loading="eager"
-              fetchPriority="high"
+              loading="lazy"
               decoding="async"
             />
           </div>
