@@ -17,7 +17,10 @@ def static_health(_request):
     ]
     for root in roots:
         if any(root.glob('js/main.*.js')):
-            return HttpResponse(f"ok js in {root}", content_type="text/plain")
+            return HttpResponse(
+                f"ok js in {root} — use /ovyra-static/static/js/",
+                content_type='text/plain',
+            )
     return HttpResponse("missing main.js", content_type="text/plain", status=503)
 
 

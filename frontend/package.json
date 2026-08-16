@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Frontend for Mignum Digital Services Marketplace",
   "private": true,
+  "homepage": "/ovyra-static",
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",

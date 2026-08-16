@@ -52,4 +52,4 @@ def _ensure_staticfiles():
 
 
 _ensure_runflare_symlinks()
-_ensure_staticfiles()
+# collectstatic runs in RunFlare build — skip at boot to save RAM on 512MB pods

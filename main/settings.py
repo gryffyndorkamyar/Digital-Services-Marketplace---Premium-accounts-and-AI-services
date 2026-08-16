@@ -198,7 +198,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
+# RunFlare nginx 404s on /static/ — serve via Django at /ovyra-static/static/
+STATIC_URL = '/ovyra-static/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # React Build Directory
@@ -218,11 +219,13 @@ STORAGES = {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
     },
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
+        # No gzip at collectstatic — saves RAM on 512MB RunFlare pods
+        'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage',
     },
 }
 WHITENOISE_USE_FINDERS = config('WHITENOISE_USE_FINDERS', default=True, cast=bool)
 WHITENOISE_AUTOREFRESH = DEBUG
+WHITENOISE_SKIP_COMPRESS = True
 
 # Media files (Uploaded files)
 MEDIA_URL = '/media/'

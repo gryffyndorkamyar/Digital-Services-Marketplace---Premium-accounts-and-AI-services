@@ -32,7 +32,7 @@ echo "==> OVYRA — starting gunicorn (WSGI/sync) on 0.0.0.0:${PORT}"
 exec gunicorn main.wsgi:application \
   -c gunicorn.conf.py \
   --bind "0.0.0.0:${PORT}" \
-  --workers 2 \
+  --workers 1 \
   --worker-class sync \
   --timeout 120 \
   --access-logfile - \

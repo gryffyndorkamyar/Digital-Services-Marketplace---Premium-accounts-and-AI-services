@@ -60,8 +60,26 @@ def serve_react(request):
 
 # Media must be served explicitly in production (WhiteNoise does not serve MEDIA)
 from django.views.static import serve as static_serve
+from pathlib import Path
+from django.http import Http404
+
+
+@never_cache
+def serve_prod_static(request, path):
+    """Serve JS/CSS when RunFlare nginx blocks /static/ — uses /ovyra-static/static/."""
+    roots = [
+        Path(settings.STATIC_ROOT),
+        settings.REACT_BUILD_DIR / 'static',
+    ]
+    for root in roots:
+        file_path = root / path
+        if file_path.is_file():
+            return static_serve(request, path, document_root=str(root))
+    raise Http404(f"Static file not found: {path}")
+
 
 urlpatterns += [
+    re_path(r'^ovyra-static/static/(?P<path>.*)$', serve_prod_static),
     re_path(r'^media/(?P<path>.*)$', static_serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 
@@ -76,6 +94,9 @@ if settings.REACT_BUILD_DIR.exists():
         """Serve files from React build root, excluding index.html"""
         if path == 'index.html':
             return serve_react(request)
+        # homepage=/ovyra-static — strip prefix for files under build/
+        if path.startswith('ovyra-static/'):
+            path = path[len('ovyra-static/') :]
         file_path = settings.REACT_BUILD_DIR / path
         if file_path.exists() and file_path.is_file():
             return static_serve(request, path, document_root=str(settings.REACT_BUILD_DIR))
@@ -83,10 +104,13 @@ if settings.REACT_BUILD_DIR.exists():
 
     # Serve React app and build files for all non-API routes
     urlpatterns += [
-        re_path(r'^(?!admin|api|media|static|health|txt|47366271\.txt)(?P<path>.*)$', serve_build_files),
+        re_path(
+            r'^(?!admin|api|media|static|ovyra-static|health|txt|47366271\.txt)(?P<path>.*)$',
+            serve_build_files,
+        ),
     ]
 else:
     # Serve React app for all non-API routes
     urlpatterns += [
-        re_path(r'^(?!admin|api|media|static|health|txt|47366271\.txt).*', serve_react),
+        re_path(r'^(?!admin|api|media|static|ovyra-static|health|txt|47366271\.txt).*', serve_react),
     ]
