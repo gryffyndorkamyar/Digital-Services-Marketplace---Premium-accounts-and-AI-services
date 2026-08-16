@@ -3364,13 +3364,16 @@ html {
 
   .ovyra-coming-soon-copy {
     position: relative;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: clamp(0.45rem, 1vw, 0.7rem);
     padding: clamp(0.75rem, 1.5vw, 1.15rem) clamp(0.85rem, 1.7vw, 1.4rem);
     background:
-      linear-gradient(165deg, rgba(192, 38, 211, 0.14) 0%, rgba(88, 28, 135, 0.08) 38%, rgba(5, 0, 8, 0.96) 100%),
+      linear-gradient(165deg, rgba(192, 38, 211, 0.16) 0%, rgba(88, 28, 135, 0.1) 42%, rgba(46, 16, 72, 0.92) 100%),
       repeating-linear-gradient(
         -45deg,
         rgba(192, 38, 211, 0.025) 0,
@@ -3378,7 +3381,7 @@ html {
         transparent 1px,
         transparent 9px
       ),
-      #050005;
+      linear-gradient(90deg, #0a0012 0%, #160024 100%);
     border-left: 1px solid rgba(192, 38, 211, 0.55);
     box-shadow:
       inset 1px 0 0 rgba(232, 121, 249, 0.16),
@@ -3391,7 +3394,28 @@ html {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(180deg, rgba(192, 38, 211, 0.08) 0%, transparent 22%, transparent 78%, rgba(192, 38, 211, 0.06) 100%);
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(192, 38, 211, 0.06) 72%, rgba(192, 38, 211, 0.14) 100%),
+      linear-gradient(180deg, rgba(192, 38, 211, 0.08) 0%, transparent 22%, transparent 78%, rgba(192, 38, 211, 0.08) 100%);
+  }
+
+  .ovyra-coming-soon-copy::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 3px;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(232, 121, 249, 0.55) 0%,
+      rgba(192, 38, 211, 0.85) 50%,
+      rgba(232, 121, 249, 0.55) 100%
+    );
+    box-shadow:
+      0 0 12px rgba(192, 38, 211, 0.65),
+      0 0 28px rgba(157, 78, 221, 0.35);
   }
 
   .ovyra-coming-soon-copy-block {
@@ -3402,9 +3426,22 @@ html {
     gap: 0.28rem;
   }
 
+  .ovyra-coming-soon-copy-block--en {
+    flex: 1;
+    min-height: 0;
+    justify-content: flex-start;
+    gap: clamp(0.22rem, 0.55vw, 0.42rem);
+  }
+
+  .ovyra-coming-soon-copy-block--fa {
+    align-items: center;
+    text-align: center;
+    gap: clamp(0.24rem, 0.55vw, 0.38rem);
+  }
+
   .ovyra-coming-soon-copy-block[dir='rtl'] {
-    align-items: flex-end;
-    text-align: right;
+    align-items: center;
+    text-align: center;
   }
 
   .ovyra-coming-soon-eyebrow {

@@ -319,16 +319,25 @@ export const SEASON_02 = {
   eyebrow: 'ARCHIVE 02',
   label: 'COMING SOON',
   titleEn: 'THE NEXT CHAPTER',
+  subtitleEn: 'WHEN THE PORTAL OPENS, THE COLLECTOR RETURNS.',
   titleFa: 'فصل بعد',
+  subtitleFa: 'وقتی در باز شود، کلکسیونر برمی‌گردد',
   leadFa:
     'آرشیو ۰۲ در سکوت مانده. هر کلکسیونری که چشم را یک بار کامل دیده می‌داند: درِ بعدی خودش را نشان می‌دهد.',
   bodyFa:
     'پشت این در، جهان تازه‌ای منتظر است. موجودات جدید، داستان‌های تازه، و تکه‌ای از چشم که هنوز نامش را نگفته‌اند.',
+  bodyFa2:
+    'هر جعبه جدید یک موجود تازه. هر موجود یک تکه از پازل. هر تکه، یک قدم نزدیک‌تر به چشم.',
   statsEn: 'THE ARCHIVE STIRS AGAIN.',
   statsFa: 'آرشیو دوباره به جان می‌افتد',
+  pulseEn: 'FIGURE. LORE. PUZZLE. ONE TRUTH.',
+  pulseFa: 'فیگور. کارت. پازل. یک حقیقت.',
   whisperEn: 'BEYOND THE PORTAL, A NEW TRUTH WAITS.',
   whisperFa: 'پشت پرتال، حقیقتی تازه منتظر است',
+  verseFa: 'سکوت تمام نمی‌شود. فقط عمیق‌تر می‌شود.',
   manifestoFa: 'هر فصل، یک آرشیو. هر آرشیو، یک راز.',
+  closingEn: 'THE EYE REMEMBERS WHAT COMES NEXT.',
+  closingFa: 'چشم، آنچه در راه است را به یاد می‌آورد.',
   signals: [
     { en: 'NEW BEINGS', fa: 'موجود تازه' },
     { en: 'NEW LORE', fa: 'راز تازه' },
