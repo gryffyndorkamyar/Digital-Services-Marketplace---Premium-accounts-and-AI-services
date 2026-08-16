@@ -221,7 +221,7 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
-WHITENOISE_USE_FINDERS = DEBUG
+WHITENOISE_USE_FINDERS = config('WHITENOISE_USE_FINDERS', default=True, cast=bool)
 WHITENOISE_AUTOREFRESH = DEBUG
 
 # Media files (Uploaded files)
