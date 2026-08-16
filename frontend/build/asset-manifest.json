@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/ovyra-static/static/css/main.5cc7581f.css",
-    "main.js": "/ovyra-static/static/js/main.c84d7e92.js",
+    "main.css": "/ovyra-static/static/css/main.e84eb1a4.css",
+    "main.js": "/ovyra-static/static/js/main.61b7df7a.js",
     "static/js/765.c39904ec.chunk.js": "/ovyra-static/static/js/765.c39904ec.chunk.js",
     "static/js/301.d6f79420.chunk.js": "/ovyra-static/static/js/301.d6f79420.chunk.js",
     "static/js/535.71f559e8.chunk.js": "/ovyra-static/static/js/535.71f559e8.chunk.js",
@@ -20,8 +20,8 @@
     "static/js/856.691d080d.chunk.js": "/ovyra-static/static/js/856.691d080d.chunk.js",
     "static/js/575.de42530c.chunk.js": "/ovyra-static/static/js/575.de42530c.chunk.js",
     "index.html": "/ovyra-static/index.html",
-    "main.5cc7581f.css.map": "/ovyra-static/static/css/main.5cc7581f.css.map",
-    "main.c84d7e92.js.map": "/ovyra-static/static/js/main.c84d7e92.js.map",
+    "main.e84eb1a4.css.map": "/ovyra-static/static/css/main.e84eb1a4.css.map",
+    "main.61b7df7a.js.map": "/ovyra-static/static/js/main.61b7df7a.js.map",
     "765.c39904ec.chunk.js.map": "/ovyra-static/static/js/765.c39904ec.chunk.js.map",
     "301.d6f79420.chunk.js.map": "/ovyra-static/static/js/301.d6f79420.chunk.js.map",
     "535.71f559e8.chunk.js.map": "/ovyra-static/static/js/535.71f559e8.chunk.js.map",
@@ -41,7 +41,7 @@
     "575.de42530c.chunk.js.map": "/ovyra-static/static/js/575.de42530c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5cc7581f.css",
-    "static/js/main.c84d7e92.js"
+    "static/css/main.e84eb1a4.css",
+    "static/js/main.61b7df7a.js"
   ]
 }
